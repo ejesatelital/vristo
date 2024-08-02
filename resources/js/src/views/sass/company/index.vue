@@ -45,7 +45,7 @@
                     <div class="mb-5">
                         <div class="flex flex-col justify-center items-center">
                             <img src="/assets/images/profile-34.jpeg" alt="" class="w-24 h-24 rounded-full object-cover mb-5" />
-                            <p class="font-semibold text-primary text-xl">{{ data.name || '' }}</p>
+                            <p class="font-semibold text-primary text-xl">{{ data?.name || '' }}</p>
                         </div>
                         <ul class="mt-5 flex flex-col max-w-[160px] m-auto space-y-4 font-semibold text-white-dark">
                             <li class="flex items-center gap-2">
@@ -58,7 +58,7 @@
                                     />
                                     <circle cx="12" cy="10" r="3" stroke="currentColor" stroke-width="1.5" />
                                 </svg>
-                                {{ data.address || ''  }}
+                                {{ data?.address || ''  }}
                             </li>
                             <li>
                                 <a href="javascript:;" class="flex items-center gap-2">
@@ -76,7 +76,7 @@
                                             stroke-linecap="round"
                                         />
                                     </svg>
-                                    <span class="text-primary truncate">{{ data.email || '' }}</span></a
+                                    <span class="text-primary truncate">{{ data?.email || '' }}</span></a
                                 >
                             </li>
                             <li class="flex items-center gap-2">
@@ -100,7 +100,7 @@
                                         stroke-linecap="round"
                                     />
                                 </svg>
-                                <span class="whitespace-nowrap" dir="ltr">{{ data.phone || '' }}</span>
+                                <span class="whitespace-nowrap" dir="ltr">{{ data?.phone || '' }}</span>
                             </li>
                         </ul>
                     </div>
@@ -457,12 +457,14 @@
     </div>
 </template>
 <script lang="ts" setup>
-    import { ref, onMounted } from 'vue';
+    import { ref, onMounted, reactive } from 'vue';
     import { useAppStore } from '@/stores/index';
     import { useMeta } from '@/composables/use-meta';
-    import axios from 'axios';
     import Vue3Datatable from '@bhplugin/vue3-datatable';
     import Swal from 'sweetalert2';
+
+    import { API } from '@/services/api';
+    const api = new API();
 
     useMeta({ title: 'Setting company' });
 
@@ -485,24 +487,13 @@
     const data = ref();
     const getCompanyData = async () => {
         try {
-            const userKey = "cece83ce-909f-45be-8a60-4641c0bf3980";
-            const response = await axios.get(`https://apps.ejesatelital.com/api/sass/v1/companies/1`, {
-                headers: {
-                    'Authorization': `Bearer ${userKey}`,
-                    'Content-Type': 'application/json'
-                }
-            });
-
-            if (response.status === 200) {
-                    data.value = response.data.data;
-                } else {
-                throw new Error('Hubo un problema al obtener la lista de vehículos desde el API.');
-            }
+            const response = await api.get(`sass/v1/companies/1`);
+            data.value = response.data;
         } catch (error) {
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
-                text: 'Error updating status: ' + error.response,
+                text: 'Error opteniendo datos: ' + error.response,
                 padding: '2em',
                 customClass: 'sweet-alerts',
             });

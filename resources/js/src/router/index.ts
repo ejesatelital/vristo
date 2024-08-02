@@ -23,9 +23,10 @@ import ShowCompany from '../views/sass/company/show.vue';
 
 // Roles
 import IndexRoles from '../views/roles/index.vue';
-// import CreateRoles from '../views/roles/create.vue';
-// import EditRoles from '../views/roles/edit.vue';
+import CreateRoles from '../views/roles/create.vue';
+import EditRoles from '../views/roles/edit.vue';
 
+import Device from '../views/devices/index.vue';
 
 import Error404 from '../views/pages/error404.vue';
 
@@ -40,8 +41,8 @@ const routes: RouteRecordRaw[] = [
     { path: '/users/profile/:id', name: 'profile', component: () => import('../views/users/profile.vue') },
 
     { path: '/user/roles', name: 'roles.index', component: IndexRoles},
-    // { path: '/user/roles/create', name: 'roles.create', component: CreateRoles},
-    // { path: '/user/roles/:id/edit', name: 'roles.edit', component: EditRoles},
+    { path: '/user/roles/create', name: 'roles.create', component: CreateRoles},
+    { path: '/user/roles/:id/edit', name: 'roles.edit', component: EditRoles},
 
     { path: '/companies', name: 'companies.index', component: IndexSass},
     { path: '/companie/:id/edit', name: 'companies.edit', component: EditSass },
@@ -49,6 +50,8 @@ const routes: RouteRecordRaw[] = [
 
     { path: '/company/:id', name: 'company.index', component: IndexCompany},
     { path: '/company/:id/edit', name: 'company.show', component: ShowCompany},
+
+    { path: '/devices', name: 'devices', component: Device },
 
     { path: '/:pathMatch(.*)*', component: Error404 },
 

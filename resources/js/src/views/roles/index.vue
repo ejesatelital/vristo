@@ -10,10 +10,10 @@
         </ul>
 
         <div class="panel pb-1.5 mt-6">
-
-            <div class="">
-                <button type="button" class="btn btn-info" v-tippy:edit @click="redirectToCreate()">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <div class="flex justify-between mb-5 ltr:ml-auto rtl:mr-auto">
+                <h6 class="text-xl font-bold">Roles</h6>
+                <button type="button" class="btn btn-sm btn-info gap-5" @click="redirectToCreate()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="mr-1">
                         <path d="M2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C22 4.92893 22 7.28595 22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12Z" stroke="currentColor" stroke-width="1.5"/>
                         <path d="M15 12L12 12M12 12L9 12M12 12L12 9M12 12L12 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
                     </svg>
@@ -36,7 +36,7 @@
                 >
 
                     <template #actions="data">
-                        <div class="flex items-center">
+                        <div class="flex items-center justify-center">
                             <button type="button" class="btn btn-info" v-tippy:edit @click="redirectToEdit(data.value.id)">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5">
                                     <path
@@ -67,9 +67,10 @@
     import Vue3Datatable from '@bhplugin/vue3-datatable';
     import { useMeta } from '@/composables/use-meta';
     import { useRouter } from 'vue-router';
-    import axios from 'axios';
+    import { API } from '@/services/api';
+    const api = new API();
 
-    useMeta({ title: 'Devices' });
+    useMeta({ title: 'Roles' });
 
     const router = useRouter();
 
@@ -86,26 +87,18 @@
     const cols = ref([
     { field: 'id', title: 'Id' },
     { field: 'name', title: 'Nombre' },
-    { field: 'updated_at', title: 'Creado el' },
+    { field: 'created_at', title: 'Creado el', type:'date' },
     { field: 'actions', title: 'Actions', sort: false, headerClass: 'justify-center' },
-    
+
   ]);
 
     const rows = ref<Record<string, unknown>[]>([]);
 
     async function getData() {
         try {
-            const route = `https://apps.ejesatelital.com/api/user/roles`;
-            const userKey = "cece83ce-909f-45be-8a60-4641c0bf3980";
-            const response = await axios.get(route, {
-                headers: {
-                    'Authorization': `Bearer ${userKey}`,
-                    'Content-Type': 'application/json',
-                }
-            });
-
-            if (Array.isArray(response.data.data)) {
-                rows.value = response.data.data;
+            const response = await api.get('user/roles');
+            if (Array.isArray(response.data)) {
+                rows.value = response?.data;
             } else {
                 console.error('Error: Response data is not an array');
             }

@@ -7,6 +7,7 @@
     @show
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="user-api-token" content="{{ $currentUser?$currentUser->getFirstApiKey():'' }}">
     <title>@section('title')@setting('core::site-name')@show</title>
     @foreach($alternate as $alternateLocale=>$alternateSlug)
         <link rel="alternate" hreflang="{{$alternateLocale}}" href="{{url($alternateLocale.'/'.$alternateSlug)}}">
