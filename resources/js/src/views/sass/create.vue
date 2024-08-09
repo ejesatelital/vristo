@@ -185,7 +185,7 @@
                                                             <button type="button" class="btn btn-primary mb-5">Generate
                                                                 Token</button>
                                                             <div class="mb-5">
-                                                                <label for="user_api_hash">API ID</label>
+                                                                <label for="user_api_hash">User Api Hash</label>
                                                                 <div class="flex">
                                                                     <input id="user_api_hash" type="password"
                                                                         placeholder="Enter Password"
@@ -203,8 +203,17 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
 
+                                                            <div class="mb-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                                                <div>
+                                                                    <label for="user_api_devices">Dispositivos</label>
+                                                                    <label class="inline-flex">
+                                                                        <input type="checkbox" class="form-checkbox  text-success" v-model="companyData.settings.user_api_devices"/>
+                                                                        <span>Mostrar detalles</span>
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </vue-collapsible>
                                             </div>
@@ -357,8 +366,6 @@
 
                                         </div>
                                     </div>
-
-
                                 </div>
                             </div>
                         </TabPanel>
@@ -378,11 +385,13 @@
 
     import { useI18n } from 'vue-i18n';
     import { useMeta } from '@/composables/use-meta';
-    import axios from 'axios';
     import VueCollapsible from 'vue-height-collapsible/vue3';
     import FileUploadWithPreview from 'file-upload-with-preview';
     import { useRouter } from 'vue-router';
     import Swal from 'sweetalert2';
+
+    import { API } from '@/services/api';
+    const api = new API();
 
     const router = useRouter();
 
@@ -405,6 +414,7 @@
                 user_tracking: null,
                 password_tracking: null,
                 user_api_hash: null,
+                user_api_devices: false,
                 email_host: null,
                 email_port: null,
                 email_username: null,
@@ -422,22 +432,13 @@
             }
         }
     );
-    // const RUTA_API = import.meta.env.VUE_APP_RUTA_API;
-    // console.log('Ruta api'+RUTA_API);
 
     const createCompany = async () => {
         loading.value = true;
 
         const jsonData = JSON.stringify(companyData);
         try {
-            const userKey = "cece83ce-909f-45be-8a60-4641c0bf3980";
-            const response = await axios.post(`https://apps.ejesatelital.com/api/sass/v1/companies`,
-            jsonData, {
-                headers: {
-                    'Authorization': `Bearer ${userKey}`,
-                    'Content-Type': 'application/json',
-                }
-            });
+            const response = await api.post(`sass/v1/companies`, jsonData);
 
             loading.value = false;
             Swal.fire({

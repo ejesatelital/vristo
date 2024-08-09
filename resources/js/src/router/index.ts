@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 import { useAppStore } from '@/stores/index';
 import appSetting from '@/app-setting';
+import { useUserStore } from '../stores/user-store';
 
 
 // Marketplace
@@ -29,6 +30,7 @@ import EditRoles from '../views/roles/edit.vue';
 import Device from '../views/devices/index.vue';
 
 import Error404 from '../views/pages/error404.vue';
+import Login from '../views/auth/login.vue';
 
 const routes: RouteRecordRaw[] = [
     // dashboard
@@ -45,8 +47,8 @@ const routes: RouteRecordRaw[] = [
     { path: '/user/roles/:id/edit', name: 'roles.edit', component: EditRoles},
 
     { path: '/companies', name: 'companies.index', component: IndexSass},
-    { path: '/companie/:id/edit', name: 'companies.edit', component: EditSass },
-    { path: '/companie/create', name: 'companies.create', component: CreateSass },
+    { path: '/companies/:id/edit', name: 'companies.edit', component: EditSass },
+    { path: '/companies/create', name: 'companies.create', component: CreateSass },
 
     { path: '/company/:id', name: 'company.index', component: IndexCompany},
     { path: '/company/:id/edit', name: 'company.show', component: ShowCompany},
@@ -54,6 +56,10 @@ const routes: RouteRecordRaw[] = [
     { path: '/devices', name: 'devices', component: Device },
 
     { path: '/:pathMatch(.*)*', component: Error404 },
+
+    { path: '/auth/login', name: 'login', component: Login, meta: { layout: 'auth' },},
+    // { path: '/', name: 'home', component: HomeView },
+
 
 ];
 

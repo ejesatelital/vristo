@@ -295,7 +295,7 @@ const editPassword = async () => {
     userData.password_confirmation = confirmPassword.value;
 
     const jsonData = JSON.stringify(userData);
-    console.log(jsonData);
+    
     try {
         const userKey = 'cece83ce-909f-45be-8a60-4641c0bf3980';
 

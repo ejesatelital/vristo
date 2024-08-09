@@ -99,7 +99,6 @@
 
                     <TabPanel>
                         <div class="panel pb-1.5">
-                            {{  rolData }}
                             <Permission :rolData="rolData"/>
                             <div class="flex flex-wrap justify-end gap-2 my-5">
                                 <button type="submit" class="btn btn-primary" :disabled="loading">Guardar</button>

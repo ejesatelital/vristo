@@ -1,4 +1,4 @@
-{{-- <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head lang="{{ LaravelLocalization::setLocale() }}">
     <meta charset="UTF-8">
@@ -24,10 +24,10 @@
 
 <div id="app"></div>
 
-{{-- @stack('js-stack')
+ @stack('js-stack')
 </body>
-</html> --}}
-<!DOCTYPE html>
+</html>
+{{-- <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
@@ -74,4 +74,4 @@
     });
 </script>
 </body>
-</html>
+</html> --}}

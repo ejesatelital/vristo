@@ -2,7 +2,9 @@
     <div>
         <ul class="flex space-x-2 rtl:space-x-reverse">
             <li>
-                <a href="javascript:;" class="text-primary hover:underline">Users</a>
+                <router-link to="/user/users" class="text-primary hover:underline">
+                    Users
+                </router-link>
             </li>
             <li class="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">
                 <span>Account Settings</span>
@@ -135,10 +137,9 @@
                                             <div class="custom-file-container__image-preview"></div>
                                         </div>
                                     </div> -->
-                                        <div class="flex flex-wrap justify-end gap-2 mt-4">
-                                            <button type="submit" class="btn btn-primary"
-                                                :disabled="loading">Save</button>
-                                        </div>
+                                    <div class="flex flex-wrap justify-end gap-2 mt-4">
+                                        <button type="submit" class="btn btn-primary" :disabled="loading">Save</button>
+                                    </div>
                                     </div>
                                 </div>
                             </form>
@@ -148,13 +149,9 @@
                     <TabPanel>
                         <div>
                             <div class="panel pb-1.5 mt-6">
-                                <div class="border border-[#ebedf2] dark:border-[#191e3a] rounded-md p-4 mb-2 bg-white dark:bg-[#0e1726]">
-                                    <h6 class="text-lg font-bold mb-5">Permissions</h6>
-                                    <div class="flex flex-col sm:flex-row">
-                                        <div class="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-5">
-
-                                        </div>
-                                    </div>
+                                <Permission :rolData="rolData"/>
+                                <div class="flex flex-wrap justify-end gap-2 my-5">
+                                    <button type="submit" class="btn btn-primary" :disabled="loading">Guardar</button>
                                 </div>
                             </div>
                         </div>
