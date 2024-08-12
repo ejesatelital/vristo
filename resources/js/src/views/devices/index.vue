@@ -101,7 +101,6 @@
 
     const syncData = async () =>  {
         try {
-            const userKey = "cece83ce-909f-45be-8a60-4641c0bf3980";
             const response = await api.get(`devices`);
             Swal.fire({
                 icon: 'success',

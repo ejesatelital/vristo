@@ -16,7 +16,16 @@
             >
                 <div class="relative flex flex-col justify-center rounded-md bg-white/60 backdrop-blur-lg dark:bg-black/50 px-6 lg:min-h-[758px] py-20">
                     <div class="absolute top-6 end-6">
-                        <div class="dropdown">
+                        <router-link to="/" class="uppercase text-primary underline transition hover:text-black dark:hover:text-white">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M22 22H2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                                <path d="M20 22V11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                                <path d="M4 22V11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                                <path d="M16.5278 2H7.47214C6.26932 2 5.66791 2 5.18461 2.2987C4.7013 2.5974 4.43234 3.13531 3.89443 4.21114L2.49081 7.75929C2.16652 8.57905 1.88279 9.54525 2.42867 10.2375C2.79489 10.7019 3.36257 11 3.99991 11C5.10448 11 5.99991 10.1046 5.99991 9C5.99991 10.1046 6.89534 11 7.99991 11C9.10448 11 9.99991 10.1046 9.99991 9C9.99991 10.1046 10.8953 11 11.9999 11C13.1045 11 13.9999 10.1046 13.9999 9C13.9999 10.1046 14.8953 11 15.9999 11C17.1045 11 17.9999 10.1046 17.9999 9C17.9999 10.1046 18.8953 11 19.9999 11C20.6373 11 21.205 10.7019 21.5712 10.2375C22.1171 9.54525 21.8334 8.57905 21.5091 7.75929L20.1055 4.21114C19.5676 3.13531 19.2986 2.5974 18.8153 2.2987C18.332 2 17.7306 2 16.5278 2Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                                <path d="M9.5 21.5V18.5C9.5 17.5654 9.5 17.0981 9.70096 16.75C9.83261 16.522 10.022 16.3326 10.25 16.201C10.5981 16 11.0654 16 12 16C12.9346 16 13.4019 16 13.75 16.201C13.978 16.3326 14.1674 16.522 14.299 16.75C14.5 17.0981 14.5 17.5654 14.5 18.5V21.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </router-link>
+                        <!-- <div class="dropdown">
                             <Popper :placement="store.rtlClass === 'rtl' ? 'bottom-start' : 'bottom-end'" offsetDistance="8">
                                 <button
                                     type="button"
@@ -57,16 +66,16 @@
                                     </ul>
                                 </template>
                             </Popper>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="mx-auto w-full max-w-[440px]">
                         <div class="mb-10">
-                            <h1 class="text-3xl font-extrabold uppercase !leading-snug text-primary md:text-4xl">Sign Up</h1>
-                            <p class="text-base font-bold leading-normal text-white-dark">Enter your email and password to register</p>
+                            <h1 class="text-3xl font-extrabold uppercase !leading-snug text-primary md:text-4xl">REGÍSTRATE</h1>
+                            <p class="text-base font-bold leading-normal text-white-dark">Ingresa tu correo y contraseña para registrarte</p>
                         </div>
                         <form class="space-y-5 dark:text-white" @submit.prevent="router.push('/')">
                             <div>
-                                <label for="Name">Name</label>
+                                <label for="Name">Nombre</label>
                                 <div class="relative text-white-dark">
                                     <input id="Name" type="text" placeholder="Enter Name" class="form-input ps-10 placeholder:text-white-dark" />
                                     <span class="absolute start-4 top-1/2 -translate-y-1/2">
@@ -82,7 +91,7 @@
                                 </div>
                             </div>
                             <div>
-                                <label for="Email">Email</label>
+                                <label for="Email">Correo</label>
                                 <div class="relative text-white-dark">
                                     <input id="Email" type="email" placeholder="Enter Email" class="form-input ps-10 placeholder:text-white-dark" />
                                     <span class="absolute start-4 top-1/2 -translate-y-1/2">
@@ -101,9 +110,25 @@
                                 </div>
                             </div>
                             <div>
-                                <label for="Password">Password</label>
+                                <label for="Password">Contraseña</label>
                                 <div class="relative text-white-dark">
-                                    <input id="Password" type="password" placeholder="Enter Password" class="form-input ps-10 placeholder:text-white-dark" />
+                                    <div class="flex">
+                                        <input id="Password" name="password" :type="showPasswords.password ? 'text' : 'password'"
+                                            placeholder="Enter Password"
+                                            class="form-input ps-10 placeholder:text-white-dark" v-model="password"/>
+                                        <div
+                                            class="bg-[#eee] flex justify-center items-center ltr:rounded-r-md rtl:rounded-l-md px-3 font-semibold border ltr:border-l-0 rtl:border-r-0 border-[#e0e6ed] dark:border-[#17263c] dark:bg-[#1b2e4b]">
+                                            <label
+                                                class="w-7 h-4 relative cursor-pointer mb-0">
+                                                <input type="checkbox"
+                                                    v-model="showPasswords.password"
+                                                    class="peer absolute w-full h-full opacity-0 z-10 focus:ring-0 focus:outline-none cursor-pointer"
+                                                    id="user_api_hash_check" />
+                                                <span
+                                                    class="rounded-full border border-[#adb5bd] bg-white peer-checked:bg-primary peer-checked:border-primary dark:bg-dark block h-full before:absolute ltr:before:left-0.5 rtl:before:right-0.5 ltr:peer-checked:before:left-3.5 rtl:peer-checked:before:right-3.5 peer-checked:before:bg-white before:bg-[#adb5bd] dark:before:bg-white-dark before:bottom-[2px] before:w-3 before:h-3 before:rounded-full before:transition-all before:duration-300"></span>
+                                            </label>
+                                        </div>
+                                    </div>
                                     <span class="absolute start-4 top-1/2 -translate-y-1/2">
                                         <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
                                             <path
@@ -131,21 +156,21 @@
                                     </span>
                                 </div>
                             </div>
-                            <div>
+                            <!-- <div>
                                 <label class="flex cursor-pointer items-center">
                                     <input type="checkbox" class="form-checkbox bg-white dark:bg-black" />
                                     <span class="text-white-dark">Subscribe to weekly newsletter</span>
                                 </label>
-                            </div>
+                            </div> -->
                             <button type="submit" class="btn btn-gradient !mt-6 w-full border-0 uppercase shadow-[0_10px_20px_-10px_rgba(67,97,238,0.44)]">
-                                Sign Up
+                                Registrarme
                             </button>
                         </form>
                         <div class="relative my-7 text-center md:mb-9">
                             <span class="absolute inset-x-0 top-1/2 h-px w-full -translate-y-1/2 bg-white-light dark:bg-white-dark"></span>
-                            <span class="relative bg-white px-2 font-bold uppercase text-white-dark dark:bg-dark dark:text-white-light">or</span>
+                            <span class="relative bg-white px-2 font-bold uppercase text-white-dark dark:bg-dark dark:text-white-light">o</span>
                         </div>
-                        <div class="mb-10 md:mb-[60px]">
+                        <!-- <div class="mb-10 md:mb-[60px]">
                             <ul class="flex justify-center gap-3.5">
                                 <li>
                                     <a
@@ -232,11 +257,11 @@
                                     </a>
                                 </li>
                             </ul>
-                        </div>
+                        </div> -->
                         <div class="text-center dark:text-white">
-                            Already have an account ?
-                            <router-link to="/auth/boxed-signin" class="uppercase text-primary underline transition hover:text-black dark:hover:text-white">
-                                SIGN IN
+                            Ya tienes una cuenta?
+                            <router-link to="/auth/login" class="uppercase text-primary underline transition hover:text-black dark:hover:text-white">
+                                INICIAR SESIÓN
                             </router-link>
                         </div>
                     </div>
@@ -246,14 +271,19 @@
     </div>
 </template>
 <script lang="ts" setup>
-    import { computed, reactive } from 'vue';
+    import { computed, reactive, ref } from 'vue';
     import { useI18n } from 'vue-i18n';
     import appSetting from '@/app-setting';
     import { useAppStore } from '@/stores/index';
     import { useRouter } from 'vue-router';
     import { useMeta } from '@/composables/use-meta';
-    useMeta({ title: 'Register Boxed' });
+    useMeta({ title: 'Registrarme' });
     const router = useRouter();
+    const showPasswords = ref({
+      password: false,
+    });
+    const email = ref('');
+    const password = ref('');
 
     const store = useAppStore();
     // multi language

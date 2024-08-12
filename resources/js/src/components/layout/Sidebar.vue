@@ -3,7 +3,7 @@
         <nav class="sidebar fixed min-h-screen h-full top-0 bottom-0 w-[260px] shadow-[5px_0_25px_0_rgba(94,92,154,0.1)] z-50 transition-all duration-300">
             <div class="bg-white dark:bg-[#0e1726] h-full">
                 <div class="flex justify-between items-center px-4 py-3">
-                    <router-link to="/" class="main-logo flex items-center shrink-0">
+                    <router-link to="/dashboard" class="main-logo flex items-center shrink-0">
                         <img class="w-8 ml-[5px] flex-none" src="/assets/images/logo.svg" alt="" />
                         <span class="text-2xl ltr:ml-1.5 rtl:mr-1.5 font-semibold align-middle lg:inline dark:text-white-light">Eje Satelital</span>
                     </router-link>
@@ -36,11 +36,13 @@
                         <li class="menu nav-item">
                             <a href="javascript:;" class="nav-link">
                                 <div class="flex items-center">
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="shrink-0">
-                                        <path d="M12 22.0003C17.5228 22.0003 22 19.9856 22 17.5003C22 16.2337 20.837 15.0892 18.9654 14.2715C17.8233 16.3673 16.0817 18.1738 13.8695 19.1192C12.6804 19.6274 11.3196 19.6274 10.1305 19.1192C7.91828 18.1738 6.17666 16.3673 5.03458 14.2715C3.16295 15.0892 2 16.2337 2 17.5003C2 19.9856 6.47715 22.0003 12 22.0003Z" fill="#FFFFFF"/>
-                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M5 8.51464C5 4.9167 8.13401 2 12 2C15.866 2 19 4.9167 19 8.51464C19 12.0844 16.7658 16.2499 13.2801 17.7396C12.4675 18.0868 11.5325 18.0868 10.7199 17.7396C7.23416 16.2499 5 12.0844 5 8.51464ZM12 11C13.1046 11 14 10.1046 14 9C14 7.89543 13.1046 7 12 7C10.8954 7 10 7.89543 10 9C10 10.1046 10.8954 11 12 11Z" fill="#FFFFFF"/>
+                                    <svg class="group-hover:!text-primary shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" >
+                                        <path opacity="0.5" d="M6.22209 4.60105C6.66665 4.304 7.13344 4.04636 7.6171 3.82976C8.98898 3.21539 9.67491 2.9082 10.5875 3.4994C11.5 4.09061 11.5 5.06041 11.5 7.00001V8.50001C11.5 10.3856 11.5 11.3284 12.0858 11.9142C12.6716 12.5 13.6144 12.5 15.5 12.5H17C18.9396 12.5 19.9094 12.5 20.5006 13.4125C21.0918 14.3251 20.7846 15.011 20.1702 16.3829C19.9536 16.8666 19.696 17.3334 19.399 17.7779C18.3551 19.3402 16.8714 20.5578 15.1355 21.2769C13.3996 21.9959 11.4895 22.184 9.64665 21.8175C7.80383 21.4509 6.11109 20.5461 4.78249 19.2175C3.45389 17.8889 2.5491 16.1962 2.18254 14.3534C1.81598 12.5105 2.00412 10.6004 2.72315 8.86451C3.44218 7.12861 4.65982 5.64492 6.22209 4.60105Z"
+                                            fill="currentColor" />
+                                        <path d="M21.446 7.06901C20.6342 5.00831 18.9917 3.36579 16.931 2.55398C15.3895 1.94669 14 3.34316 14 5.00002V9.00002C14 9.5523 14.4477 10 15 10H19C20.6569 10 22.0533 8.61055 21.446 7.06901Z"
+                                            fill="currentColor" />
                                     </svg>
-                                    <span class="px-2"><router-link to="/">{{ $t('Marketplace') }}</router-link></span>
+                                    <span class="px-2"><router-link to="/dashboard">{{ $t('Dashboard') }}</router-link></span>
                                 </div>
                             </a>
                         </li>

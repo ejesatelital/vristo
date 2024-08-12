@@ -3,8 +3,8 @@
         <div class="shadow-sm">
             <div class="relative bg-white flex w-full items-center px-5 py-2.5 dark:bg-[#0e1726]">
                 <div class="horizontal-logo flex lg:hidden justify-between items-center ltr:mr-2 rtl:ml-2">
-                    <router-link to="/" class="main-logo flex items-center shrink-0">
-                        <img class="w-8 ltr:-ml-1 rtl:-mr-1 inline" src="/assets/images/logo.svg" alt="" />
+                    <router-link to="/dashboard" class="main-logo flex items-center shrink-0">
+                        <img class="w-8 ltr:-ml-1 rtl:-mr-1 inline bg-dark" src="/assets/images/logo.svg" alt="" />
                         <span
                             class="text-2xl ltr:ml-1.5 rtl:mr-1.5 font-semibold align-middle hidden md:inline dark:text-white-light transition-all duration-300"
                             >Eje Satelital</span
@@ -473,7 +473,6 @@
                             </template>
                         </Popper>
                     </div>
-
                     <div class="dropdown shrink-0">
                         <Popper :placement="store.rtlClass === 'rtl' ? 'bottom-end' : 'bottom-start'" offsetDistance="8" class="!block">
                             <button type="button" class="relative group block">
@@ -558,49 +557,8 @@
                                             Devices
                                         </router-link>
                                     </li>
-                                    <li>
-                                        <router-link to="/auth/boxed-lockscreen" class="dark:hover:text-white" @click="close()">
-                                            <svg
-                                                class="w-4.5 h-4.5 ltr:mr-2 rtl:ml-2 shrink-0"
-                                                width="18"
-                                                height="18"
-                                                viewBox="0 0 24 24"
-                                                fill="none"
-                                                xmlns="http://www.w3.org/2000/svg"
-                                            >
-                                                <path
-                                                    d="M2 16C2 13.1716 2 11.7574 2.87868 10.8787C3.75736 10 5.17157 10 8 10H16C18.8284 10 20.2426 10 21.1213 10.8787C22 11.7574 22 13.1716 22 16C22 18.8284 22 20.2426 21.1213 21.1213C20.2426 22 18.8284 22 16 22H8C5.17157 22 3.75736 22 2.87868 21.1213C2 20.2426 2 18.8284 2 16Z"
-                                                    stroke="currentColor"
-                                                    stroke-width="1.5"
-                                                />
-                                                <path
-                                                    opacity="0.5"
-                                                    d="M6 10V8C6 4.68629 8.68629 2 12 2C15.3137 2 18 4.68629 18 8V10"
-                                                    stroke="currentColor"
-                                                    stroke-width="1.5"
-                                                    stroke-linecap="round"
-                                                />
-                                                <g opacity="0.5">
-                                                    <path
-                                                        d="M9 16C9 16.5523 8.55228 17 8 17C7.44772 17 7 16.5523 7 16C7 15.4477 7.44772 15 8 15C8.55228 15 9 15.4477 9 16Z"
-                                                        fill="currentColor"
-                                                    />
-                                                    <path
-                                                        d="M13 16C13 16.5523 12.5523 17 12 17C11.4477 17 11 16.5523 11 16C11 15.4477 11.4477 15 12 15C12.5523 15 13 15.4477 13 16Z"
-                                                        fill="currentColor"
-                                                    />
-                                                    <path
-                                                        d="M17 16C17 16.5523 16.5523 17 16 17C15.4477 17 15 16.5523 15 16C15 15.4477 15.4477 15 16 15C16.5523 15 17 15.4477 17 16Z"
-                                                        fill="currentColor"
-                                                    />
-                                                </g>
-                                            </svg>
-
-                                            Lock Screen
-                                        </router-link>
-                                    </li>
                                     <li class="border-t border-white-light dark:border-white-light/10">
-                                        <router-link to="/auth/boxed-signin" class="text-danger !py-3" @click="close()">
+                                        <router-link to="/auth/login" class="text-danger !py-3" @click="logout()">
                                             <svg
                                                 class="w-4.5 h-4.5 ltr:mr-2 rtl:ml-2 rotate-90 shrink-0"
                                                 width="18"
@@ -624,8 +582,7 @@
                                                     stroke-linejoin="round"
                                                 />
                                             </svg>
-
-                                            Sign Out
+                                            Cerrar Sesión
                                         </router-link>
                                     </li>
                                 </ul>
@@ -635,85 +592,6 @@
                 </div>
             </div>
 
-            <!-- horizontal menu -->
-            <ul
-                class="horizontal-menu hidden py-1.5 font-semibold px-6 lg:space-x-1.5 xl:space-x-8 rtl:space-x-reverse bg-white border-t border-[#ebedf2] dark:border-[#191e3a] dark:bg-[#0e1726] text-black dark:text-white-dark"
-            >
-                <li class="menu nav-item relative">
-                    <a href="javascript:;" class="nav-link">
-                        <router-link to="/">
-                        <div class="flex items-center">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="shrink-0">
-                                <path d="M12 22.0003C17.5228 22.0003 22 19.9856 22 17.5003C22 16.2337 20.837 15.0892 18.9654 14.2715C17.8233 16.3673 16.0817 18.1738 13.8695 19.1192C12.6804 19.6274 11.3196 19.6274 10.1305 19.1192C7.91828 18.1738 6.17666 16.3673 5.03458 14.2715C3.16295 15.0892 2 16.2337 2 17.5003C2 19.9856 6.47715 22.0003 12 22.0003Z" fill="currentColor"/>
-                                <path fill-rule="evenodd" clip-rule="evenodd" d="M5 8.51464C5 4.9167 8.13401 2 12 2C15.866 2 19 4.9167 19 8.51464C19 12.0844 16.7658 16.2499 13.2801 17.7396C12.4675 18.0868 11.5325 18.0868 10.7199 17.7396C7.23416 16.2499 5 12.0844 5 8.51464ZM12 11C13.1046 11 14 10.1046 14 9C14 7.89543 13.1046 7 12 7C10.8954 7 10 7.89543 10 9C10 10.1046 10.8954 11 12 11Z" fill="currentColor"/>
-                            </svg>
-                            <span class="px-2">{{ $t('Marketplace') }}</span>
-                        </div>
-                    </router-link>
-                    </a>
-                </li>
-
-                <li class="menu nav-item relative">
-                    <a href="javascript:;" class="nav-link">
-                        <router-link to="/companies">
-                            <div class="flex items-center">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M22 22L2 22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                                    <path d="M17 22V6C17 4.11438 17 3.17157 16.4142 2.58579C15.8284 2 14.8856 2 13 2H11C9.11438 2 8.17157 2 7.58579 2.58579C7 3.17157 7 4.11438 7 6V22" stroke="currentColor" stroke-width="1.5"/>
-                                    <path d="M21 22V11.5C21 10.0955 21 9.39331 20.6629 8.88886C20.517 8.67048 20.3295 8.48298 20.1111 8.33706C19.6067 8 18.9045 8 17.5 8" stroke="currentColor" stroke-width="1.5"/>
-                                    <path d="M3 22V11.5C3 10.0955 3 9.39331 3.33706 8.88886C3.48298 8.67048 3.67048 8.48298 3.88886 8.33706C4.39331 8 5.09554 8 6.5 8" stroke="currentColor" stroke-width="1.5"/>
-                                    <path d="M12 22V19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                                    <path d="M10 5H14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                                    <path d="M10 8H14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                                    <path d="M10 11H14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                                    <path d="M10 14H14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                                </svg>
-
-                                <span class="px-2">{{ $t('Companies') }}</span>
-                            </div>
-                        </router-link>
-                    </a>
-                </li>
-
-                <li class="menu nav-item relative">
-                    <a href="javascript:;" class="nav-link">
-                        <div class="flex items-center">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="shrink-0">
-                                <path
-                                    d="M8.42229 20.6181C10.1779 21.5395 11.0557 22.0001 12 22.0001V12.0001L2.63802 7.07275C2.62423 7.09491 2.6107 7.11727 2.5974 7.13986C2 8.15436 2 9.41678 2 11.9416V12.0586C2 14.5834 2 15.8459 2.5974 16.8604C3.19479 17.8749 4.27063 18.4395 6.42229 19.5686L8.42229 20.6181Z"
-                                    fill="currentColor"
-                                />
-                                <path
-                                    opacity="0.7"
-                                    d="M17.5774 4.43152L15.5774 3.38197C13.8218 2.46066 12.944 2 11.9997 2C11.0554 2 10.1776 2.46066 8.42197 3.38197L6.42197 4.43152C4.31821 5.53552 3.24291 6.09982 2.6377 7.07264L11.9997 12L21.3617 7.07264C20.7564 6.09982 19.6811 5.53552 17.5774 4.43152Z"
-                                    fill="currentColor"
-                                />
-                                <path
-                                    opacity="0.5"
-                                    d="M21.4026 7.13986C21.3893 7.11727 21.3758 7.09491 21.362 7.07275L12 12.0001V22.0001C12.9443 22.0001 13.8221 21.5395 15.5777 20.6181L17.5777 19.5686C19.7294 18.4395 20.8052 17.8749 21.4026 16.8604C22 15.8459 22 14.5834 22 12.0586V11.9416C22 9.41678 22 8.15436 21.4026 7.13986Z"
-                                    fill="currentColor"
-                                />
-                            </svg>
-                            <span class="px-2">{{ $t('users') }}</span>
-                        </div>
-                        <div class="right_arrow">
-                            <svg class="w-4 h-4 rotate-90" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M9 5L15 12L9 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                        </div>
-                    </a>
-                    <ul class="sub-menu">
-                        <li>
-                            <router-link to="/user/users">{{ $t('users') }}</router-link>
-                        </li>
-                        <li>
-                            <router-link to="/user/roles">{{ $t('roles') }}</router-link>
-                        </li>
-                    </ul>
-                </li>
-
-
-            </ul>
         </div>
     </header>
 </template>
@@ -721,15 +599,17 @@
 <script lang="ts" setup>
     import { ref, onMounted, computed, reactive, watch } from 'vue';
     import { useI18n } from 'vue-i18n';
-
     import appSetting from '@/app-setting';
-
-    import { useRoute } from 'vue-router';
+    import { useUserStore } from '../../stores/user-store';
+    import { useRoute, useRouter } from 'vue-router';
     import { useAppStore } from '@/stores/index';
+    const userStore = useUserStore();
+    const router = useRouter();
     const store = useAppStore();
     const route = useRoute();
     const search = ref(false);
-    import axios from 'axios';
+    import { API } from '@/services/api';
+    const api = new API();
 
     // multi language
     const i18n = reactive(useI18n());
@@ -737,6 +617,7 @@
         i18n.locale = item.code;
         appSetting.toggleLanguage(item);
     };
+
     const currentFlag = computed(() => {
         return `/assets/images/flags/${i18n.locale.toUpperCase()}.svg`;
     });
@@ -830,7 +711,6 @@
         setActiveDropdown();
     });
 
-
     const companies = ref([
         {
             id: 1,
@@ -861,4 +741,37 @@
             time: '5days',
         },
     ]);
+
+    const loading = ref(false);
+    const logout = async () =>{
+
+        console.log("Cerrando sesion");
+
+        await useUserStore.logout();
+        await api.get("/auth/logout");
+
+        // let timerInterval;
+        // Swal.fire({
+        // title: "Auto close alert!",
+        // html: "I will close in <b></b> milliseconds.",
+        // timer: 2000,
+        // timerProgressBar: true,
+        // didOpen: () => {
+        //     Swal.showLoading();
+
+
+        //     const timer = Swal.getPopup().querySelector("b");
+        //     timerInterval = setInterval(() => {
+        //     timer.textContent = `${Swal.getTimerLeft()}`;
+        //     }, 100);
+        // },
+        // willClose: () => {
+        //     clearInterval(timerInterval);
+        // }
+        // }).then((result) => {
+        //     if (result.dismiss === Swal.DismissReason.timer) {
+        //         router.push('/');
+        //     }
+        // });
+    }
 </script>

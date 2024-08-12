@@ -1,8 +1,6 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 import { useAppStore } from '@/stores/index';
 import appSetting from '@/app-setting';
-import { useUserStore } from '../stores/user-store';
-
 
 // Marketplace
 import HomeView from '../views/index.vue';
@@ -31,11 +29,16 @@ import Device from '../views/devices/index.vue';
 
 import Error404 from '../views/pages/error404.vue';
 import Login from '../views/auth/login.vue';
+import Register from '../views/auth/register.vue';
+
+import DashBoard from '../views/dashboard.vue';
 
 const routes: RouteRecordRaw[] = [
     // dashboard
-    { path: '/', name: 'home', component: HomeView },
-    { path: '/detail', name: 'detail', component: Detail },
+    { path: '/', name: 'home', component: HomeView, meta: { layout: 'store' }},
+    { path: '/detail', name: 'detail', component: Detail,  meta: { layout: 'store' }},
+
+    { path: '/dashboard', name: 'dashboard', component: DashBoard},
 
     { path: '/user/users', name: 'users.index', component: IndexUsers},
     { path: '/users/:id/edit', name: 'users.edit', component: EditUsers },
@@ -57,7 +60,9 @@ const routes: RouteRecordRaw[] = [
 
     { path: '/:pathMatch(.*)*', component: Error404 },
 
-    { path: '/auth/login', name: 'login', component: Login, meta: { layout: 'auth' },},
+    { path: '/auth/login', name: 'login', component: Login, meta: { layout: 'auth' }},
+    { path: '/auth/register', name: 'register', component: Register, meta: { layout: 'auth' }},
+
     // { path: '/', name: 'home', component: HomeView },
 
 
@@ -79,9 +84,15 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
     const store = useAppStore();
 
-    if (to?.meta?.layout == 'auth') {
+    console.log(to?.meta?.layout);
+
+    if (to?.meta?.layout == 'store') {
+        store.setMainLayout('store');
+    }
+    else if (to?.meta?.layout == 'auth') {
         store.setMainLayout('auth');
-    } else {
+    }
+    else {
         store.setMainLayout('app');
     }
     next(true);

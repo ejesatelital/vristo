@@ -10,6 +10,7 @@
 <script lang="ts" setup>
     import { computed } from 'vue';
 
+    import storeLayout from '@/layouts/store-layout.vue';
     import appLayout from '@/layouts/app-layout.vue';
     import authLayout from '@/layouts/auth-layout.vue';
 
@@ -19,9 +20,20 @@
     const store = useAppStore();
 
     // meta
-    useMeta({ title: 'Sales Admin' });
-
+    useMeta({ title: 'Eje Satelital SAS' });
+    var viewLayout = '';
     const mainLayout = computed(() => {
-        return store.mainLayout === 'auth' ? authLayout : appLayout;
+        switch (store.mainLayout) {
+            case 'auth':
+                viewLayout = authLayout
+                break;
+            case 'store':
+                viewLayout = storeLayout
+                break;
+            case 'app':
+                viewLayout = appLayout
+                break;
+        }
+        return viewLayout;
     });
 </script>

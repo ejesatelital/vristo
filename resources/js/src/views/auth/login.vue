@@ -15,8 +15,17 @@
                 class="relative w-full max-w-[870px] rounded-md bg-[linear-gradient(45deg,#fff9f9_0%,rgba(255,255,255,0)_25%,rgba(255,255,255,0)_75%,_#fff9f9_100%)] p-2 dark:bg-[linear-gradient(52.22deg,#0E1726_0%,rgba(14,23,38,0)_18.66%,rgba(14,23,38,0)_51.04%,rgba(14,23,38,0)_80.07%,#0E1726_100%)]"
             >
                 <div class="relative flex flex-col justify-center rounded-md bg-white/60 backdrop-blur-lg dark:bg-black/50 px-6 lg:min-h-[758px] py-20">
-                    <!-- <div class="absolute top-6 end-6">
-                        <div class="dropdown">
+                    <div class="absolute top-6 end-6">
+                        <router-link to="/" class="uppercase text-primary underline transition hover:text-black dark:hover:text-white">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M22 22H2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                                <path d="M20 22V11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                                <path d="M4 22V11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                                <path d="M16.5278 2H7.47214C6.26932 2 5.66791 2 5.18461 2.2987C4.7013 2.5974 4.43234 3.13531 3.89443 4.21114L2.49081 7.75929C2.16652 8.57905 1.88279 9.54525 2.42867 10.2375C2.79489 10.7019 3.36257 11 3.99991 11C5.10448 11 5.99991 10.1046 5.99991 9C5.99991 10.1046 6.89534 11 7.99991 11C9.10448 11 9.99991 10.1046 9.99991 9C9.99991 10.1046 10.8953 11 11.9999 11C13.1045 11 13.9999 10.1046 13.9999 9C13.9999 10.1046 14.8953 11 15.9999 11C17.1045 11 17.9999 10.1046 17.9999 9C17.9999 10.1046 18.8953 11 19.9999 11C20.6373 11 21.205 10.7019 21.5712 10.2375C22.1171 9.54525 21.8334 8.57905 21.5091 7.75929L20.1055 4.21114C19.5676 3.13531 19.2986 2.5974 18.8153 2.2987C18.332 2 17.7306 2 16.5278 2Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                                <path d="M9.5 21.5V18.5C9.5 17.5654 9.5 17.0981 9.70096 16.75C9.83261 16.522 10.022 16.3326 10.25 16.201C10.5981 16 11.0654 16 12 16C12.9346 16 13.4019 16 13.75 16.201C13.978 16.3326 14.1674 16.522 14.299 16.75C14.5 17.0981 14.5 17.5654 14.5 18.5V21.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </router-link>
+                        <!-- <div class="dropdown">
                             <Popper :placement="store.rtlClass === 'rtl' ? 'bottom-start' : 'bottom-end'" offsetDistance="8">
                                 <button
                                     type="button"
@@ -57,12 +66,12 @@
                                     </ul>
                                 </template>
                             </Popper>
-                        </div>
-                    </div> -->
+                        </div> -->
+                    </div>
                     <div class="mx-auto w-full max-w-[440px]">
                         <div class="mb-10">
-                            <h1 class="text-3xl font-extrabold uppercase !leading-snug text-primary md:text-4xl">Sign in</h1>
-                            <p class="text-base font-bold leading-normal text-white-dark">Enter your email and password to login</p>
+                            <h1 class="text-3xl font-extrabold uppercase !leading-snug text-primary md:text-4xl">Iniciar sesión</h1>
+                            <p class="text-base font-bold leading-normal text-white-dark">Ingresa tu correo y contraseña para ingresar</p>
                         </div>
                         <form class="space-y-5 dark:text-white" @submit.prevent="login" method="POST">
                             <div>
@@ -131,21 +140,21 @@
                                     </span>
                                 </div>
                             </div>
-                            <div>
+                            <!-- <div>
                                 <label class="flex cursor-pointer items-center">
                                     <input type="checkbox" class="form-checkbox bg-white dark:bg-black" />
                                     <span class="text-white-dark">Recordarme</span>
                                 </label>
-                            </div>
+                            </div> -->
                             <button type="submit" class="btn btn-gradient !mt-6 w-full border-0 uppercase shadow-[0_10px_20px_-10px_rgba(67,97,238,0.44)]">
                                 Iniciar Sesión
                             </button>
                         </form>
                         <div class="relative my-7 text-center md:mb-9">
                             <span class="absolute inset-x-0 top-1/2 h-px w-full -translate-y-1/2 bg-white-light dark:bg-white-dark"></span>
-                            <span class="relative bg-white px-2 font-bold uppercase text-white-dark dark:bg-dark dark:text-white-light">or</span>
+                            <span class="relative bg-white px-2 font-bold uppercase text-white-dark dark:bg-dark dark:text-white-light">o</span>
                         </div>
-                        <div class="mb-10 md:mb-[60px]">
+                       <!--  <div class="mb-10 md:mb-[60px]">
                             <ul class="flex justify-center gap-3.5">
                                 <li>
                                     <a
@@ -232,11 +241,11 @@
                                     </a>
                                 </li>
                             </ul>
-                        </div>
+                        </div> -->
                         <div class="text-center dark:text-white">
-                            Don't have an account ?
-                            <router-link to="/auth/boxed-signup" class="uppercase text-primary underline transition hover:text-black dark:hover:text-white">
-                                SIGN UP
+                            No tienes una cuenta?
+                            <router-link to="/auth/register" class="uppercase text-primary underline transition hover:text-black dark:hover:text-white">
+                                REGÍSTRATE AHORA
                             </router-link>
                         </div>
                     </div>
@@ -253,13 +262,11 @@
     import { useRouter } from 'vue-router';
     import { useMeta } from '@/composables/use-meta';
     import { useUserStore } from '../../stores/user-store';
-    import { API } from '@/services/api';
+    import axios from 'axios';
     useMeta({ title: 'Iniciar Sesión' });
     const router = useRouter();
-
     const store = useAppStore();
     const userStore = useUserStore();
-    const api = new API();
     // multi language
     const i18n = reactive(useI18n());
     const changeLanguage = (item: any) => {
@@ -278,11 +285,16 @@
     const login = async () => {
         try {
             await userStore.login(email, password);
-            await api.post('/auth/login', {
-                email: email.value,
-                password: password.value
-            });
-            // router.push('/');
+            await axios.post('/auth/login', {
+                    email: email.value,
+                    password: password.value
+                },{
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                }
+            );
+            router.push('/dashboard');
         } catch (error) {
             console.error('Error fetching data', error);
         }

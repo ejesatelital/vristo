@@ -33,7 +33,7 @@ export const useUserStore = defineStore('user', {
   actions: {
     async login (email: any, password: any) {
       try {
-        const companyStore = useCompanyStore()
+        const companyStore = useCompanyStore();
         await axios.post('https://apps.ejesatelital.com/api/auth/login',{
             email: email.value,
             password: password.value
@@ -91,6 +91,7 @@ export const useUserStore = defineStore('user', {
       this.last_login = null
       this.roles = []
       this.api_token = null
+      this.isAuthenticated = false
     }
   },
   persist: true
