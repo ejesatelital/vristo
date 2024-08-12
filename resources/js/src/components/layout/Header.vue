@@ -745,9 +745,7 @@
     const loading = ref(false);
     const logout = async () =>{
 
-        console.log("Cerrando sesion");
-
-        await useUserStore.logout();
+        await userStore.logout();
         await api.get("/auth/logout");
 
         // let timerInterval;

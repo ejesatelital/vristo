@@ -146,7 +146,7 @@
                                     <span class="text-white-dark">Recordarme</span>
                                 </label>
                             </div> -->
-                            <button type="submit" class="btn btn-gradient !mt-6 w-full border-0 uppercase shadow-[0_10px_20px_-10px_rgba(67,97,238,0.44)]">
+                            <button type="submit" class="btn btn-gradient !mt-6 w-full border-0 uppercase shadow-[0_10px_20px_-10px_rgba(67,97,238,0.44)]" :disabled="loading">
                                 Iniciar Sesión
                             </button>
                         </form>
@@ -264,6 +264,7 @@
     import { useUserStore } from '../../stores/user-store';
     import axios from 'axios';
     useMeta({ title: 'Iniciar Sesión' });
+    const loading = ref(false);
     const router = useRouter();
     const store = useAppStore();
     const userStore = useUserStore();
@@ -283,6 +284,7 @@
     const password = ref('');
 
     const login = async () => {
+        loading.value = true;
         try {
             await userStore.login(email, password);
             await axios.post('/auth/login', {
@@ -297,6 +299,9 @@
             router.push('/dashboard');
         } catch (error) {
             console.error('Error fetching data', error);
+        } finally
+        {
+            loading.value = false;
         }
     }
 </script>

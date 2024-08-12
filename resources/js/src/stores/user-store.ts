@@ -1,6 +1,10 @@
-import { defineStore } from 'pinia';
+import { defineStore, createPinia } from 'pinia';
 import axios from 'axios';
 import { useCompanyStore } from './company-store';
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
+const pinia = createPinia()
+pinia.use(piniaPluginPersistedstate)
+
 export const useUserStore = defineStore('user', {
   state: () => ({
     id: null,
@@ -14,7 +18,7 @@ export const useUserStore = defineStore('user', {
     last_login: null,
     roles: [],
     api_token: null,
-    companies: <any>[]
+    companies: []
   }),
   getters: {
     getId: (state) => state.id,

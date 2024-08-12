@@ -84,8 +84,6 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
     const store = useAppStore();
 
-    console.log(to?.meta?.layout);
-
     if (to?.meta?.layout == 'store') {
         store.setMainLayout('store');
     }

@@ -81,9 +81,20 @@
     import Footer from '@/components/layout/Footer.vue';
     import Setting from '@/components/ThemeCustomizer.vue';
     import appSetting from '@/app-setting';
-
     import { useAppStore } from '@/stores/index';
+    import { useUserStore } from '@/stores/user-store';
+    import { useCompanyStore } from '@/stores/company-store';
+
     const store = useAppStore();
+    const userStore = useUserStore();
+    const companyStore = useCompanyStore();
+
+    console.log(userStore.id);
+
+    console.log(userStore.companies);
+    console.log(companyStore.companies);
+
+
     const showTopButton = ref(false);
     onMounted(() => {
         window.onscroll = () => {

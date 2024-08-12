@@ -240,7 +240,7 @@
                             <div>
                                 <label for="whatsapp_token">WhatsApp Token</label>
                                 <div class="flex">
-                                    <input id="password_tracking" :type="showPasswords.whatsapp_token ? 'text' : 'password'"
+                                    <input id="whatsapp_token" :type="showPasswords.whatsapp_token ? 'text' : 'password'"
                                         placeholder="Enter WhatsApp Token"
                                         class="form-input ltr:rounded-r-none rtl:rounded-l-none" v-model="companyData.settings.whatsapp_token"/>
                                     <div

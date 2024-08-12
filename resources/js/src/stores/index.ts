@@ -2,6 +2,9 @@ import { defineStore } from 'pinia';
 import i18n from '@/i18n';
 import appSetting from '@/app-setting';
 
+import { useUserStore } from './user-store';
+import { useCompanyStore } from './company-store';
+
 export const useAppStore = defineStore('app', {
     state: () => ({
         isDarkMode: false,
@@ -33,10 +36,7 @@ export const useAppStore = defineStore('app', {
             { code: 'ae', name: 'Arabic' },
         ],
         isShowMainLoader: true,
-        semidark: false,
-        user:[],
-        companies:[],
-        company: null
+        semidark: false
     }),
 
     actions: {

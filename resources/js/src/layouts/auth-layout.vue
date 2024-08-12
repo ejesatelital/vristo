@@ -58,7 +58,6 @@
                 showTopButton.value = false;
             }
         };
-
         store.toggleMainLoader();
     });
 
