@@ -61,11 +61,11 @@
 
                                 <div class="col-span-2">
                                     <Select
-                                    :options="dynamicOptions"
-                                    v-model="selectedTags"
+                                    :options="companies"
+                                    v-model="companiesSelected"
                                     :multiple="true"
                                     />
-                                    <pre class="language-json"><code>{{ selectedTags }}</code></pre>
+                                    <pre class="language-json"><code>{{ companiesSelected }}</code></pre>
 
                                 </div>
 
@@ -114,91 +114,80 @@
 
     const companyStore = useCompanyStore();
 
-    const dynamicOptions = ref(companyStore.companyOptions);
+    const companies = ref(companyStore.companyOptions);
 
-    const selectedTags = ref([]);
+    const companiesSelected = ref([]);
 
-    const handleSelection = (value) => {
-        console.log(value);
-        // if (value.value === 0) {
-        //     const companyIds = options.value.map(option => option.value).join(',');
-        //     console.log(companyIds);
-        //     companyStore.setCompaniesSelect(companyIds);
-        // } else {
-        //     companyStore.setCompaniesSelect(value.value);
-        // }
+    const loading = ref(false);
+
+    const isDisabled = computed(() => {
+    return loading.value || !!passwordError.value || !!confirmPasswordError.value;
+    });
+
+    const userData = reactive(
+        {
+            first_name: null,
+            last_name: null,
+            identification: null,
+            email: null,
+            address: null,
+            phone: null,
+            avatar: null,
+            is_activated: true,
+            last_login: "2024-07-15 12:21:09",
+            password: '',
+            password_confirmation: ''
+        }
+    );
+
+    const createUser = async () => {
+        loading.value = true;
+        try {
+            const response = await api.post(`user/users`, userData);
+            loading.value = false;
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: 'Updating...',
+                padding: '2em',
+                customClass: 'sweet-alerts',
+            });
+        } catch (error) {
+            console.error(error.response)
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Error updating: ' + error.response,
+                padding: '2em',
+                customClass: 'sweet-alerts',
+            });
+            loading.value = false;
+        }
+    }
+
+    // Data properties
+    const newPassword = ref('');
+    const confirmPassword = ref('');
+    const passwordError = ref('');
+    const confirmPasswordError = ref('');
+
+    const validatePassword = () => {
+        if (newPassword.value.length < 8) {
+            passwordError.value = 'Password must be at least 8 characters long.';
+        } else {
+            passwordError.value = '';
+        }
+        validateConfirmPassword();
     };
 
-const loading = ref(false);
-
-const isDisabled = computed(() => {
-  return loading.value || !!passwordError.value || !!confirmPasswordError.value;
-});
-
-const userData = reactive(
-    {
-        first_name: null,
-        last_name: null,
-        identification: null,
-        email: null,
-        address: null,
-        phone: null,
-        avatar: null,
-        is_activated: true,
-        last_login: "2024-07-15 12:21:09",
-        password: '',
-        password_confirmation: ''
-    }
-);
-
-const createUser = async () => {
-    loading.value = true;
-    try {
-        const response = await api.post(`user/users`, userData);
-        loading.value = false;
-        Swal.fire({
-            icon: 'success',
-            title: 'Success',
-            text: 'Updating...',
-            padding: '2em',
-            customClass: 'sweet-alerts',
-        });
-    } catch (error) {
-        console.error(error.response)
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'Error updating: ' + error.response,
-            padding: '2em',
-            customClass: 'sweet-alerts',
-        });
-        loading.value = false;
-    }
-}
-
-// Data properties
-const newPassword = ref('');
-const confirmPassword = ref('');
-const passwordError = ref('');
-const confirmPasswordError = ref('');
-
-const validatePassword = () => {
-    if (newPassword.value.length < 8) {
-        passwordError.value = 'Password must be at least 8 characters long.';
-    } else {
-        passwordError.value = '';
-    }
-    validateConfirmPassword();
-};
-
-const validateConfirmPassword = () => {
-    if (confirmPassword.value !== newPassword.value) {
-        confirmPasswordError.value = 'Passwords do not match.';
-    } else {
-        confirmPasswordError.value = '';
-        userData.password = newPassword.value;
-        userData.password_confirmation = confirmPassword.value;
-    }
-};
+    const validateConfirmPassword = () => {
+        if (confirmPassword.value !== newPassword.value) {
+            confirmPasswordError.value = 'Passwords do not match.';
+        } else {
+            confirmPasswordError.value = '';
+            userData.password = newPassword.value;
+            userData.password_confirmation = confirmPassword.value;
+        }
+    };
 
 </script>

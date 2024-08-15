@@ -299,8 +299,6 @@
             );
             router.push('/dashboard');
         } catch (error) {
-            console.log(error);
-
             Swal.fire({
                 toast: true,
                 position: <any>('top'),

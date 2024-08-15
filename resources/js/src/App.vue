@@ -3,17 +3,12 @@
         class="main-section antialiased relative font-nunito text-sm font-normal"
         :class="[store.sidebar ? 'toggle-sidebar' : '', store.menu, store.layout, store.rtlClass]"
     >
-        <component v-bind:is="mainLayout"></component>
+        <router-view></router-view>
+
     </div>
 </template>
 
 <script lang="ts" setup>
-    import { computed } from 'vue';
-
-    import storeLayout from '@/layouts/store-layout.vue';
-    import appLayout from '@/layouts/app-layout.vue';
-    import authLayout from '@/layouts/auth-layout.vue';
-
     import { useAppStore } from '@/stores/index';
     import { useMeta } from '@/composables/use-meta';
 
@@ -21,19 +16,5 @@
 
     // meta
     useMeta({ title: 'Eje Satelital SAS' });
-    var viewLayout = '';
-    const mainLayout = computed(() => {
-        switch (store.mainLayout) {
-            case 'auth':
-                viewLayout = authLayout
-                break;
-            case 'store':
-                viewLayout = storeLayout
-                break;
-            case 'app':
-                viewLayout = appLayout
-                break;
-        }
-        return viewLayout;
-    });
+
 </script>

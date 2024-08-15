@@ -11,6 +11,7 @@ import Detail from '../views/detail.vue';
 import IndexUsers from '../views/users/index.vue';
 import EditUsers from '../views/users/edit.vue';
 import CreateUsers from '../views/users/create.vue';
+import ProfileUsers from '../views/users/profile.vue';
 
 // Sass
 import IndexSass from '../views/sass/index.vue';
@@ -32,39 +33,82 @@ import Login from '../views/auth/login.vue';
 import Register from '../views/auth/register.vue';
 
 import DashBoard from '../views/dashboard.vue';
+import storeLayout from '../layouts/store-layout.vue';
+import appLayout from '../layouts/app-layout.vue';
+import authLayout from '../layouts/auth-layout.vue';
+
+import { useUserStore } from '../stores/user-store';
+
 
 const routes: RouteRecordRaw[] = [
     // dashboard
-    { path: '/', name: 'home', component: HomeView, meta: { layout: 'store' }},
-    { path: '/detail', name: 'detail', component: Detail,  meta: { layout: 'store' }},
+    {
+        path: '/',
+        component: storeLayout,
+        children: [
+            { path: '/', name: 'home', component: HomeView},
+            { path: '/detail', name: 'detail', component: Detail},
+        ]
+    },
 
-    { path: '/dashboard', name: 'dashboard', component: DashBoard},
+    { path: '/dashboard', name: 'dashboard', component: DashBoard, meta: { requiresAuth: true }},
 
-    { path: '/user/users', name: 'users.index', component: IndexUsers},
-    { path: '/users/:id/edit', name: 'users.edit', component: EditUsers },
-    { path: '/users/create', name: 'users.create', component: CreateUsers },
-    { path: '/users/profile/:id', name: 'profile', component: () => import('../views/users/profile.vue') },
+    {
+        path: '/user',
+        component: appLayout,
+        children: [
+            { path: '/users', name: 'users.index', component: IndexUsers},
+            { path: '/roles', name: 'roles.index', component: IndexRoles},
+            { path: '/roles/create', name: 'roles.create', component: CreateRoles},
+            { path: '/roles/:id/edit', name: 'roles.edit', component: EditRoles},
+        ],
+        meta: { requiresAuth: true }
+    },
 
-    { path: '/user/roles', name: 'roles.index', component: IndexRoles},
-    { path: '/user/roles/create', name: 'roles.create', component: CreateRoles},
-    { path: '/user/roles/:id/edit', name: 'roles.edit', component: EditRoles},
+    {
+        path: '/users',
+        component: appLayout,
+        children: [
+            { path: '/:id/edit', name: 'users.edit', component: EditUsers },
+            { path: '/create', name: 'users.create', component: CreateUsers },
+            { path: '/profile/:id', name: 'profile', component: ProfileUsers }
+        ],
+        meta: { requiresAuth: true }
+    },
 
-    { path: '/companies', name: 'companies.index', component: IndexSass},
-    { path: '/companies/:id/edit', name: 'companies.edit', component: EditSass },
-    { path: '/companies/create', name: 'companies.create', component: CreateSass },
+    {
+        path: '/companies',
+        component: appLayout,
+        children: [
+            { path: '/', name: 'companies.index', component: IndexSass},
+            { path: '/:id/edit', name: 'companies.edit', component: EditSass },
+            { path: '/create', name: 'companies.create', component: CreateSass }
+        ],
+        meta: { requiresAuth: true }
+    },
 
-    { path: '/company/:id', name: 'company.index', component: IndexCompany},
-    { path: '/company/:id/edit', name: 'company.show', component: ShowCompany},
+    {
+        path: '/company',
+        component: appLayout,
+        children: [
+            { path: '/:id', name: 'company.index', component: IndexCompany},
+            { path: '/:id/edit', name: 'company.show', component: ShowCompany},
+        ],
+        meta: { requiresAuth: true }
+    },
 
     { path: '/devices', name: 'devices', component: Device },
 
     { path: '/:pathMatch(.*)*', component: Error404 },
 
-    { path: '/auth/login', name: 'login', component: Login, meta: { layout: 'auth' }},
-    { path: '/auth/register', name: 'register', component: Register, meta: { layout: 'auth' }},
-
-    // { path: '/', name: 'home', component: HomeView },
-
+    {
+        path: '/auth',
+        component: authLayout,
+        children: [
+            { path: '/login', name: 'login', component: Login},
+            { path: '/register', name: 'register', component: Register},
+        ],
+    },
 
 ];
 
@@ -83,16 +127,21 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
     const store = useAppStore();
+    const userStore = useUserStore();
+    const tokenElement = document.querySelector('meta[name="user-api-token"]');
+    const token = tokenElement?.getAttribute('content');
 
-    if (to?.meta?.layout == 'store') {
-        store.setMainLayout('store');
+   if(to?.meta?.requiresAuth)
+    { if (token && !userStore.api_token)
+        {
+            userStore.loginToken(token);
+        }
+        else if (!token && userStore.api_token)
+        {
+            userStore.logout().then(router.push('/auth/login'))
+        }
     }
-    else if (to?.meta?.layout == 'auth') {
-        store.setMainLayout('auth');
-    }
-    else {
-        store.setMainLayout('app');
-    }
+
     next(true);
 });
 router.afterEach((to, from, next) => {

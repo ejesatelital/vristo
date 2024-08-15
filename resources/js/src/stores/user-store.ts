@@ -5,7 +5,7 @@ import { useCompanyStore } from './company-store';
 export const useUserStore = defineStore('user', {
   state: () => ({
     id: null,
-    firts_name: null,
+    first_name: null,
     last_name: null,
     full_name: null,
     email: null,
@@ -18,7 +18,7 @@ export const useUserStore = defineStore('user', {
   }),
   getters: {
     getId: (state) => state.id,
-    getFirstName: (state) => state.firts_name,
+    getFirstName: (state) => state.first_name,
     getLastName: (state) => state.last_name,
     getFullName: (state) => state.full_name,
     getEmail: (state) => state.email,
@@ -47,9 +47,7 @@ export const useUserStore = defineStore('user', {
                 companyStore.setCompany(user.companies[0]);
                 companyStore.setCompaniesSelect(user.companies[0].value);
             }
-            // else {
-            //     companyStore.setCompaniesSelect(companyStore.companyOptions.value.map(option => option.value).join(','));
-            // }
+
             companyStore.setCompanies(user.companies);
             companyStore.setCompanyOptions(user.companies);
         })
@@ -59,6 +57,34 @@ export const useUserStore = defineStore('user', {
             }
         }
     },
+    async loginToken (token: any) {
+        try {
+          const companyStore = useCompanyStore();
+          await axios.post('https://apps.ejesatelital.com/api/auth/login-token',{
+              token: token
+            },{
+              headers: {
+                  'Content-Type': 'application/json',
+              }}
+          ).then(response => {
+            console.log(response);
+
+              const user = response.data.data;
+              this.setUser(user);
+              if (user.companies.length === 1) {
+                  companyStore.setCompany(user.companies[0]);
+                  companyStore.setCompaniesSelect(user.companies[0].value);
+              }
+
+              companyStore.setCompanies(user.companies);
+              companyStore.setCompanyOptions(user.companies);
+          })
+          } catch (e) {
+              if (e) {
+              throw e
+              }
+          }
+      },
     async logout () {
       try {
         const companyStore = useCompanyStore();
@@ -71,7 +97,7 @@ export const useUserStore = defineStore('user', {
     },
     setUser (payload: any) {
       if (payload.id) this.id = payload.id
-      if (payload.first_name) this.firts_name = payload.first_name
+      if (payload.first_name) this.first_name = payload.first_name
       if (payload.last_name) this.last_name = payload.last_name
       if (payload.full_name) this.full_name = payload.full_name
       if (payload.email) this.email = payload.email
@@ -84,7 +110,7 @@ export const useUserStore = defineStore('user', {
     },
     clearUser () {
       this.id = null
-      this.firts_name = null
+      this.first_name = null
       this.last_name = null
       this.full_name = null
       this.email = null
