@@ -59,6 +59,16 @@
                                     <span v-if="confirmPasswordError" class="text-red-500">{{ confirmPasswordError }}</span>
                                 </div>
 
+                                <div class="col-span-2">
+                                    <Select
+                                    :options="dynamicOptions"
+                                    v-model="selectedTags"
+                                    :multiple="true"
+                                    />
+                                    <pre class="language-json"><code>{{ selectedTags }}</code></pre>
+
+                                </div>
+
                             </div>
                         </div>
                         <div class="flex flex-wrap justify-end gap-2 mt-5">
@@ -91,16 +101,34 @@
     </div>
 </template>
 <script lang="ts" setup>
-import { ref, reactive, onMounted, computed } from 'vue';
-import { useAppStore } from '@/stores/index';
-import { useMeta } from '@/composables/use-meta';
-import axios from 'axios';
-import Swal from 'sweetalert2';
-import { useRoute } from 'vue-router';
-const route = useRoute();
-useMeta({ title: 'Account Setting' });
+    import { ref, reactive, onMounted, computed } from 'vue';
+    import { useAppStore } from '@/stores/index';
+    import { useMeta } from '@/composables/use-meta';
+    import Swal from 'sweetalert2';
+    import { API } from '@/services/api';
+    import Select from '@/components/partials/Select.vue';
+    import { useCompanyStore } from '@/stores/company-store';
+    useMeta({ title: 'Create User' });
+    const api = new API();
+    const store = useAppStore();
 
-const store = useAppStore();
+    const companyStore = useCompanyStore();
+
+    const dynamicOptions = ref(companyStore.companyOptions);
+
+    const selectedTags = ref([]);
+
+    const handleSelection = (value) => {
+        console.log(value);
+        // if (value.value === 0) {
+        //     const companyIds = options.value.map(option => option.value).join(',');
+        //     console.log(companyIds);
+        //     companyStore.setCompaniesSelect(companyIds);
+        // } else {
+        //     companyStore.setCompaniesSelect(value.value);
+        // }
+    };
+
 const loading = ref(false);
 
 const isDisabled = computed(() => {
@@ -123,25 +151,10 @@ const userData = reactive(
     }
 );
 
-
 const createUser = async () => {
     loading.value = true;
-    const jsonData = JSON.stringify(userData);
-    console.log(jsonData);
-
     try {
-        const userKey = 'cece83ce-909f-45be-8a60-4641c0bf3980';
-
-        // const response = await axios.post(
-        //     `https://apps.ejesatelital.com/api/user/users`,
-        //     jsonData,
-        //     {
-        //         headers: {
-        //             'Authorization': `Bearer ${userKey}`,
-        //             'Content-Type': 'application/json',
-        //         },
-        //     }
-        // );
+        const response = await api.post(`user/users`, userData);
         loading.value = false;
         Swal.fire({
             icon: 'success',

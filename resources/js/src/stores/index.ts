@@ -2,9 +2,6 @@ import { defineStore } from 'pinia';
 import i18n from '@/i18n';
 import appSetting from '@/app-setting';
 
-import { useUserStore } from './user-store';
-import { useCompanyStore } from './company-store';
-
 export const useAppStore = defineStore('app', {
     state: () => ({
         isDarkMode: false,
@@ -41,7 +38,7 @@ export const useAppStore = defineStore('app', {
 
     actions: {
         setMainLayout(payload: any = null) {
-            this.mainLayout = payload; //app , auth
+            this.mainLayout = payload; //app , auth, store
         },
         toggleTheme(payload: any = null) {
             payload = payload || this.theme; // light|dark|system

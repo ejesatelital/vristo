@@ -166,9 +166,10 @@ import { ref, reactive, onMounted, computed } from 'vue';
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/vue';
 import { useAppStore } from '@/stores/index';
 import { useMeta } from '@/composables/use-meta';
-import axios from 'axios';
 import Swal from 'sweetalert2';
 import { useRoute } from 'vue-router';
+import { API } from '@/services/api';
+const api = new API();
 const route = useRoute();
 useMeta({ title: 'Account Setting' });
 
@@ -188,22 +189,13 @@ const userData = reactive(
         address: null,
         phone: null,
         avatar: null,
-        is_activated: true,
-        last_login: "2024-07-15 12:21:09",
-        password: '',
-        password_confirmation: ''
+        is_activated: true
     }
 );
 
 const getData = async () => {
     try {
-        const userKey = "cece83ce-909f-45be-8a60-4641c0bf3980";
-        const response = await axios.post(`https://apps.ejesatelital.com/api/user/users/find/${route.params.id}`, '',{
-            headers: {
-                'Authorization': `Bearer ${userKey}`,
-                'Content-Type': 'application/json',
-            }
-        });
+        const response = await api.post(`user/users/find/${route.params.id}`, '');
 
         if (response.status === 200) {
             const data = response.data.data;
@@ -228,20 +220,9 @@ const getData = async () => {
 
 const editData = async () => {
     loading.value = true;
-    const jsonData = JSON.stringify(userData);
     try {
-        const userKey = 'cece83ce-909f-45be-8a60-4641c0bf3980';
+        const response = await api.post(`user/users/${route.params.id}/edit`, userData);
 
-        const response = await axios.post(
-            `https://apps.ejesatelital.com/api/user/users/${route.params.id}/edit`,
-            jsonData,
-            {
-                headers: {
-                    'Authorization': `Bearer ${userKey}`,
-                    'Content-Type': 'application/json',
-                },
-            }
-        );
         loading.value = false;
         Swal.fire({
             icon: 'success',
@@ -284,6 +265,7 @@ const validateConfirmPassword = () => {
     } else {
         confirmPasswordError.value = '';
     }
+
 };
 
 const editPassword = async () => {
@@ -291,50 +273,13 @@ const editPassword = async () => {
         return;
     }
     loading.value = true;
-    userData.password = newPassword.value;
-    userData.password_confirmation = confirmPassword.value;
-
-    const jsonData = JSON.stringify(userData);
-    
-    try {
-        const userKey = 'cece83ce-909f-45be-8a60-4641c0bf3980';
-
-        const response = await axios.post(
-            `https://apps.ejesatelital.com/api/user/users/${route.params.id}/edit`,
-            jsonData,
-            {
-                headers: {
-                    'Authorization': `Bearer ${userKey}`,
-                    'Content-Type': 'application/json',
-                },
-            }
-        );
-        loading.value = false;
-        Swal.fire({
-            icon: 'success',
-            title: 'Success',
-            text: 'Updating...',
-            padding: '2em',
-            customClass: 'sweet-alerts',
-        });
-    }catch (error) {
-        console.error(error.response)
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'Error updating: ' + error.response,
-            padding: '2em',
-            customClass: 'sweet-alerts',
-        });
-        loading.value = false;
-    } finally {
-        loading.value = false;
-    }
+    Object.assign(userData, { password: newPassword.value, password_confirmation: confirmPassword.value});
+    editData();
 };
 
 const sendResetPassword = async () => {
     try {
-        const response = await axios.get('/admin/user/user/sendResetPassword/{userId}');
+        const response = await api.get(`user/users/sendResetPassword/${route.params.id}`);
         console.log(response.data);
         // Handle success
     } catch (error) {

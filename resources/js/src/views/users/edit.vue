@@ -7,7 +7,7 @@
                 </router-link>
             </li>
             <li class="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">
-                <span>Account Settings</span>
+                <span>Edit</span>
             </li>
         </ul>
         <div class="pt-5">
@@ -212,170 +212,140 @@
     </div>
 </template>
 <script lang="ts" setup>
-import { ref, reactive, onMounted, computed } from 'vue';
-import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/vue';
-import { useAppStore } from '@/stores/index';
-import { useMeta } from '@/composables/use-meta';
-import axios from 'axios';
-import Swal from 'sweetalert2';
-import { useRoute } from 'vue-router';
-const route = useRoute();
-useMeta({ title: 'Account Setting' });
+    import { ref, reactive, onMounted, computed } from 'vue';
+    import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/vue';
+    import { useAppStore } from '@/stores/index';
+    import { useMeta } from '@/composables/use-meta';
+    import Swal from 'sweetalert2';
+    import { useRoute } from 'vue-router';
+    import { API } from '@/services/api';
+    useMeta({ title: 'User Edit' });
+    const route = useRoute();
+    const store = useAppStore();
+    const api = new API();
+    const loading = ref(false);
 
-const store = useAppStore();
-const loading = ref(false);
+    const isDisabled = computed(() => {
+        return loading.value || !!passwordError.value || !!confirmPasswordError.value;
+    });
 
-const isDisabled = computed(() => {
-  return loading.value || !!passwordError.value || !!confirmPasswordError.value;
-});
-
-const userData = reactive(
-    {
-        first_name: null,
-        last_name: null,
-        identification: null,
-        email: null,
-        address: null,
-        phone: null,
-        avatar: null,
-        is_activated: true,
-        last_login: "2024-07-15 12:21:09",
-    }
-);
-
-const getData = async () => {
-    try {
-        const userKey = "cece83ce-909f-45be-8a60-4641c0bf3980";
-        const response = await axios.post(`https://apps.ejesatelital.com/api/user/users/find/${route.params.id}`, '',{
-            headers: {
-                'Authorization': `Bearer ${userKey}`,
-                'Content-Type': 'application/json',
-            }
-        });
-
-        if (response.status === 200) {
-            const data = response.data.data;
-
-            Object.assign(userData,
-                {
-                    first_name: data.first_name,
-                    last_name: data.last_name,
-                    identification: data.identification,
-                    email: data.email,
-                    // address: data.address,
-                    // phone: data.phone,
-                    avatar: data.avatar,
-                    is_activated: data.is_activated,
-                    last_login: data.last_login,
-                });
-
-        } else {
-            throw new Error('Hubo un problema al obtener la lista de vehículos desde el API.');
+    const userData = reactive(
+        {
+            first_name: null,
+            last_name: null,
+            identification: null,
+            email: null,
+            address: null,
+            phone: null,
+            avatar: null,
+            is_activated: true
         }
-    } catch (error) {
-        console.error(error.response);
-    }
-};
+    );
 
-const editData = async () => {
-    loading.value = true;
-    const jsonData = JSON.stringify(userData);
-    try {
-        const userKey = 'cece83ce-909f-45be-8a60-4641c0bf3980';
+    const getData = async () => {
+        try {
+            const response = await api.post(`user/users/find/${route.params.id}`, '');
 
-        const response = await axios.post(
-            `https://apps.ejesatelital.com/api/user/users/${route.params.id}/edit`,
-            jsonData,
-            {
-                headers: {
-                    'Authorization': `Bearer ${userKey}`,
-                    'Content-Type': 'application/json',
-                },
+            if (response.status === 200) {
+                const data = response.data.data;
+
+                Object.assign(userData,
+                    {
+                        first_name: data.first_name,
+                        last_name: data.last_name,
+                        identification: data.identification,
+                        email: data.email,
+                        // address: data.address,
+                        // phone: data.phone,
+                        avatar: data.avatar,
+                        is_activated: data.is_activated,
+                        last_login: data.last_login,
+                    });
+
+            } else {
+                throw new Error('Hubo un problema al obtener la lista de vehículos desde el API.');
             }
-        );
-        loading.value = false;
-        Swal.fire({
-            icon: 'success',
-            title: 'Success',
-            text: 'Updating...',
-            padding: '2em',
-            customClass: 'sweet-alerts',
-        });
-    } catch (error) {
-        console.error(error.response)
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'Error updating: ' + error.response,
-            padding: '2em',
-            customClass: 'sweet-alerts',
-        });
-        loading.value = false;
-    }
-}
+        } catch (error) {
+            console.error(error.response);
+        }
+    };
 
-// Data properties
-const newPassword = ref('');
-const confirmPassword = ref('');
-const passwordError = ref('');
-const confirmPasswordError = ref('');
-
-const validatePassword = () => {
-    if (newPassword.value.length < 8) {
-        passwordError.value = 'Password must be at least 8 characters long.';
-    } else {
-        passwordError.value = '';
-    }
-    validateConfirmPassword();
-};
-
-const validateConfirmPassword = () => {
-    if (confirmPassword.value !== newPassword.value) {
-        confirmPasswordError.value = 'Passwords do not match.';
-    } else {
-        confirmPasswordError.value = '';
-    }
-};
-
-const editPassword = async () => {
-    if (passwordError.value || confirmPasswordError.value) {
-        return;
+    const editData = async () => {
+        loading.value = true;
+        try {
+            const response = await api.post(`user/users/${route.params.id}/edit`,userData);
+            loading.value = false;
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: 'Updating...',
+                padding: '2em',
+                customClass: 'sweet-alerts',
+            });
+        } catch (error) {
+            console.error(error.response)
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Error updating: ' + error.response,
+                padding: '2em',
+                customClass: 'sweet-alerts',
+            });
+            loading.value = false;
+        }
     }
 
-    loading.value = true;
-    try {
-        const response = await axios.put('/your-api-endpoint', {
-            newPassword: newPassword.value,
-        });
-        console.log(response.data);
-        // Handle successful password change
-    } catch (error) {
-        console.error(error);
-        // Handle error
-    } finally {
-        loading.value = false;
-    }
-};
+    // Data properties
+    const newPassword = ref('');
+    const confirmPassword = ref('');
+    const passwordError = ref('');
+    const confirmPasswordError = ref('');
 
-const sendResetPassword = async () => {
-    try {
-        const response = await axios.get('/admin/user/user/sendResetPassword/{userId}');
-        console.log(response.data);
-        // Handle success
-    } catch (error) {
-        console.error(error);
-        // Handle error
-    }
-};
+    const validatePassword = () => {
+        if (newPassword.value.length < 8) {
+            passwordError.value = 'Password must be at least 8 characters long.';
+        } else {
+            passwordError.value = '';
+        }
+        validateConfirmPassword();
+    };
 
-onMounted(() => {
-    getData();
-    // single image upload
-    // new FileUploadWithPreview('myFirstImage', {
-    //     images: {
-    //         baseImage: '/assets/images/file-preview.svg',
-    //         backgroundImage: '',
-    //     },
-    // });
-});
+    const validateConfirmPassword = () => {
+        if (confirmPassword.value !== newPassword.value) {
+            confirmPasswordError.value = 'Passwords do not match.';
+        } else {
+            confirmPasswordError.value = '';
+        }
+    };
+
+    const editPassword = async () => {
+        if (passwordError.value || confirmPasswordError.value) {
+            return;
+        }
+        loading.value = true;
+        Object.assign(userData, { password: newPassword.value, password_confirmation: confirmPassword.value});
+        editData();
+    };
+
+    const sendResetPassword = async () => {
+        try {
+            const response = await api.get('user/user/sendResetPassword/{userId}');
+            console.log(response.data);
+            // Handle success
+        } catch (error) {
+            console.error(error);
+            // Handle error
+        }
+    };
+
+    onMounted(() => {
+        getData();
+        // single image upload
+        // new FileUploadWithPreview('myFirstImage', {
+        //     images: {
+        //         baseImage: '/assets/images/file-preview.svg',
+        //         backgroundImage: '',
+        //     },
+        // });
+    });
 </script>

@@ -3,22 +3,24 @@ export const useCompanyStore = defineStore('company', {
   state: () => ({
     id: null,
     name: null,
-    settings: <any>[],
     companies: <any>[],
-    companyOptions: <any>[]
+    companyOptions: <any>[],
+    companiesSelect: null
   }),
   getters: {
     getId: (state) => state.id,
     getName: (state) => state.name,
-    getSettings: (state) => state.settings,
     getCompanies: state => state.companies,
-    getCompanyOptions: state => state.companyOptions
+    getCompanyOptions: state => state.companyOptions,
+    getCompaniesSelect: state => state.companiesSelect
   },
   actions: {
+    setCompaniesSelect (payload: any) {
+        if (payload) this.companiesSelect = payload
+    },
     setCompany (payload: any) {
       if (payload.id) this.id = payload.id
       if (payload.name) this.name = payload.name
-      if (payload.settings) this.settings = payload.settings
     },
     setCompanyOptions (payload: []) {
       if (payload.length) {
@@ -36,11 +38,11 @@ export const useCompanyStore = defineStore('company', {
     clearCompany () {
       this.id = null
       this.name = null
-      this.settings = []
     },
     clearCompanies () {
       this.companies = []
       this.companyOptions = []
+      this.companiesSelect = []
     }
   },
   persist: true

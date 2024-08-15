@@ -183,72 +183,42 @@
                         </Popper>
                     </div> -->
 
-                    <div class="dropdown shrink-0">
-                        <Popper :placement="store.rtlClass === 'rtl' ? 'bottom-start' : 'bottom-end'" offsetDistance="8">
-                            <button
-                                type="button"
-                                class="block p-2 rounded-full bg-white-light/40 dark:bg-dark/40 hover:text-primary hover:bg-white-light/90 dark:hover:bg-dark/60"
+                    <div class="sm:ltr:mr-auto sm:rtl:ml-auto">
+                        <div v-if="options.length>1">
+                            <multiselect
+                                v-model="selectedOption"
+                                :options="displayOptions"
+                                class="custom-multiselect"
+                                :preselect-first="true"
+                                :searchable="true"
+                                :allow-empty="true"
+                                placeholder="Seleccionar una empresa"
+                                value="value"
+                                label="label"
+                                selected-label=""
+                                select-label=""
+                                deselect-label=""
+                                @select="handleSelection"
                             >
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M22 22L2 22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                                    <path d="M17 22V6C17 4.11438 17 3.17157 16.4142 2.58579C15.8284 2 14.8856 2 13 2H11C9.11438 2 8.17157 2 7.58579 2.58579C7 3.17157 7 4.11438 7 6V22" stroke="currentColor" stroke-width="1.5"/>
-                                    <path d="M21 22V11.5C21 10.0955 21 9.39331 20.6629 8.88886C20.517 8.67048 20.3295 8.48298 20.1111 8.33706C19.6067 8 18.9045 8 17.5 8" stroke="currentColor" stroke-width="1.5"/>
-                                    <path d="M3 22V11.5C3 10.0955 3 9.39331 3.33706 8.88886C3.48298 8.67048 3.67048 8.48298 3.88886 8.33706C4.39331 8 5.09554 8 6.5 8" stroke="currentColor" stroke-width="1.5"/>
-                                    <path d="M12 22V19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                                    <path d="M10 5H14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                                    <path d="M10 8H14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                                    <path d="M10 11H14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                                    <path d="M10 14H14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                                    <circle cx="19" cy="5" r="3" stroke="currentColor" stroke-width="1.5" />
-                                </svg>
-                            </button>
-                            <template #content="{ close }">
-                                <ul class="top-11 !py-0 text-dark dark:text-white-dark w-[300px] sm:w-[375px] text-xs">
-                                    <li class="mb-2">
-                                        <div class="overflow-hidden relative rounded-t-md !p-5 text-white">
-                                            <div
-                                                class="absolute h-full w-full bg-[url('/assets/images/menu-heade.jpg')] bg-no-repeat bg-center bg-cover inset-0"
-                                            ></div>
-                                            <h4 class="font-semibold relative z-10 text-lg">Companies</h4>
-                                        </div>
-                                    </li>
-                                    <template v-for="msg in messages" :key="msg.id">
-                                        <li>
-                                            <div class="flex items-center py-3 px-5">
-                                                <div v-html="msg.image"></div>
-                                                <span class="px-3 dark:text-gray-500">
-                                                    <div class="font-semibold text-sm dark:text-white-light/90" v-text="msg.title"></div>
-                                                </span>
-                                            </div>
-                                        </li>
-                                    </template>
-                                    <template v-if="!messages.length">
-                                        <li class="mb-5">
-                                            <div class="!grid place-content-center hover:!bg-transparent text-lg min-h-[200px]">
-                                                <div class="mx-auto ring-4 ring-primary/30 rounded-full mb-4 text-primary">
-                                                    <svg width="40" height="40" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <path
-                                                            opacity="0.5"
-                                                            d="M20 10C20 4.47715 15.5228 0 10 0C4.47715 0 0 4.47715 0 10C0 15.5228 4.47715 20 10 20C15.5228 20 20 15.5228 20 10Z"
-                                                            fill="currentColor"
-                                                        />
-                                                        <path
-                                                            d="M10 4.25C10.4142 4.25 10.75 4.58579 10.75 5V11C10.75 11.4142 10.4142 11.75 10 11.75C9.58579 11.75 9.25 11.4142 9.25 11V5C9.25 4.58579 9.58579 4.25 10 4.25Z"
-                                                            fill="currentColor"
-                                                        />
-                                                        <path
-                                                            d="M10 15C10.5523 15 11 14.5523 11 14C11 13.4477 10.5523 13 10 13C9.44772 13 9 13.4477 9 14C9 14.5523 9.44772 15 10 15Z"
-                                                            fill="currentColor"
-                                                        />
-                                                    </svg>
-                                                </div>
-                                                No data available.
-                                            </div>
-                                        </li>
-                                    </template>
-                                </ul>
-                            </template>
-                        </Popper>
+                            </multiselect>
+                        </div>
+                        <div v-else>
+                            <multiselect
+                                v-model="selectedOption"
+                                :options="options"
+                                class="custom-multiselect"
+                                value="value"
+                                label="label"
+                                :allow-empty="false"
+                                :preselect-first="true"
+                                selected-label=""
+                                select-label=""
+                                deselect-label=""
+                                @select="handleSelection"
+                                hideSelect
+                            >
+                            </multiselect>
+                        </div>
                     </div>
 
                     <div class="dropdown shrink-0">
@@ -362,7 +332,6 @@
                             </template>
                         </Popper>
                     </div>
-
                     <div class="dropdown shrink-0">
                         <Popper :placement="store.rtlClass === 'rtl' ? 'bottom-end' : 'bottom-start'" offsetDistance="8">
                             <button
@@ -470,6 +439,8 @@
                                         </li>
                                     </template>
                                 </ul>
+
+
                             </template>
                         </Popper>
                     </div>
@@ -483,7 +454,7 @@
                                 />
                             </button>
                             <template #content="{ close }">
-                                <ul class="text-dark dark:text-white-dark !py-0 w-[230px] font-semibold dark:text-white-light/90">
+                                <ul class="text-dark dark:text-white-dark !py-0 w-[250px] font-semibold dark:text-white-light/90">
                                     <li>
                                         <div class="flex items-center px-4 py-4">
                                             <div class="flex-none">
@@ -491,16 +462,16 @@
                                             </div>
                                             <div class="ltr:pl-4 rtl:pr-4 truncate">
                                                 <h4 class="text-base">
-                                                    John Doe<span class="text-xs bg-success-light rounded text-success px-1 ltr:ml-2 rtl:ml-2">Pro</span>
+                                                    {{userStore.firts_name}}<span class="text-xs bg-success-light rounded text-success px-1 ltr:ml-2 rtl:ml-2">{{userStore.roles[0].name}}</span>
                                                 </h4>
                                                 <a class="text-black/60 hover:text-primary dark:text-dark-light/60 dark:hover:text-white" href="javascript:;"
-                                                    >johndoe@gmail.com</a
+                                                    >{{userStore.email}}</a
                                                 >
                                             </div>
                                         </div>
                                     </li>
                                     <li>
-                                        <router-link to="/users/profile/2" class="dark:hover:text-white" @click="close()">
+                                        <router-link :to="`/users/profile/${userStore.id}`" class="dark:hover:text-white" @click="close()">
                                             <svg
                                                 class="w-4.5 h-4.5 ltr:mr-2 rtl:ml-2 shrink-0"
                                                 width="18"
@@ -517,12 +488,11 @@
                                                     stroke-width="1.5"
                                                 />
                                             </svg>
-
-                                            Profile
+                                            Perfil
                                         </router-link>
                                     </li>
                                     <li>
-                                        <router-link to="/company/1" class="dark:hover:text-white" @click="close()">
+                                        <router-link :to="`/company/${companyStore.companiesSelect}`" class="dark:hover:text-white" @click="close()">
                                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"  class="w-4.5 h-4.5 ltr:mr-2 rtl:ml-2 shrink-0">
                                                 <path d="M22 22L2 22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
                                                 <path d="M17 22V6C17 4.11438 17 3.17157 16.4142 2.58579C15.8284 2 14.8856 2 13 2H11C9.11438 2 8.17157 2 7.58579 2.58579C7 3.17157 7 4.11438 7 6V22" stroke="currentColor" stroke-width="1.5"/>
@@ -535,8 +505,7 @@
                                                 <path d="M10 14H14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
                                                 <circle cx="19" cy="5" r="3" stroke="currentColor" stroke-width="1.5" />
                                             </svg>
-
-                                            Company setting
+                                            Configurar Empresa
                                         </router-link>
                                     </li>
                                     <li>
@@ -554,7 +523,7 @@
                                                     fill="currentColor"
                                                 />
                                             </svg>
-                                            Devices
+                                            Dispositivos
                                         </router-link>
                                     </li>
                                     <li class="border-t border-white-light dark:border-white-light/10">
@@ -600,17 +569,36 @@
     import { ref, onMounted, computed, reactive, watch } from 'vue';
     import { useI18n } from 'vue-i18n';
     import appSetting from '@/app-setting';
-    import { useUserStore } from '../../stores/user-store';
-    import { useRoute, useRouter } from 'vue-router';
+    import { useUserStore } from '@/stores/user-store';
+    import { useCompanyStore } from '@/stores/company-store';
+    import { useRoute } from 'vue-router';
     import { useAppStore } from '@/stores/index';
-    const userStore = useUserStore();
-    const router = useRouter();
+    import { API } from '@/services/api';
+    import Multiselect from '@suadelabs/vue3-multiselect';
+    import '@suadelabs/vue3-multiselect/dist/vue3-multiselect.css';
+
     const store = useAppStore();
     const route = useRoute();
     const search = ref(false);
-    import { API } from '@/services/api';
     const api = new API();
+    const companyStore = useCompanyStore();
+    const userStore = useUserStore();
 
+    const options = ref(companyStore.companyOptions);
+    const displayOptions = computed(() => [
+        { label: 'Ver Todas', value: 0 },
+        ...options.value
+    ]);
+    const selectedOption = ref();
+
+    const handleSelection = (value) => {
+        if (value.value === 0) {
+            const companyIds = options.value.map(option => option.value).join(',');
+            companyStore.setCompaniesSelect(companyIds);
+        } else {
+            companyStore.setCompaniesSelect(value.value);
+        }
+    };
     // multi language
     const i18n = reactive(useI18n());
     const changeLanguage = (item: any) => {
@@ -711,65 +699,10 @@
         setActiveDropdown();
     });
 
-    const companies = ref([
-        {
-            id: 1,
-            image: '<span class="grid place-content-center w-9 h-9 rounded-full bg-success-light dark:bg-success text-success dark:text-success-light"><svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></span>',
-            title: 'Congratulations!',
-            message: 'Your OS has been updated.',
-            time: '1hr',
-        },
-        {
-            id: 2,
-            image: '<span class="grid place-content-center w-9 h-9 rounded-full bg-info-light dark:bg-info text-info dark:text-info-light"><svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></span>',
-            title: 'Did you know?',
-            message: 'You can switch between artboards.',
-            time: '2hr',
-        },
-        {
-            id: 3,
-            image: '<span class="grid place-content-center w-9 h-9 rounded-full bg-danger-light dark:bg-danger text-danger dark:text-danger-light"> <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></span>',
-            title: 'Something went wrong!',
-            message: 'Send Reposrt',
-            time: '2days',
-        },
-        {
-            id: 4,
-            image: '<span class="grid place-content-center w-9 h-9 rounded-full bg-warning-light dark:bg-warning text-warning dark:text-warning-light"><svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">    <circle cx="12" cy="12" r="10"></circle>    <line x1="12" y1="8" x2="12" y2="12"></line>    <line x1="12" y1="16" x2="12.01" y2="16"></line></svg></span>',
-            title: 'Warning',
-            message: 'Your password strength is low.',
-            time: '5days',
-        },
-    ]);
-
-    const loading = ref(false);
     const logout = async () =>{
 
         await userStore.logout();
         await api.get("/auth/logout");
 
-        // let timerInterval;
-        // Swal.fire({
-        // title: "Auto close alert!",
-        // html: "I will close in <b></b> milliseconds.",
-        // timer: 2000,
-        // timerProgressBar: true,
-        // didOpen: () => {
-        //     Swal.showLoading();
-
-
-        //     const timer = Swal.getPopup().querySelector("b");
-        //     timerInterval = setInterval(() => {
-        //     timer.textContent = `${Swal.getTimerLeft()}`;
-        //     }, 100);
-        // },
-        // willClose: () => {
-        //     clearInterval(timerInterval);
-        // }
-        // }).then((result) => {
-        //     if (result.dismiss === Swal.DismissReason.timer) {
-        //         router.push('/');
-        //     }
-        // });
     }
 </script>

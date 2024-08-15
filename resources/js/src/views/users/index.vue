@@ -68,10 +68,13 @@
     import { useI18n } from 'vue-i18n';
     import { useMeta } from '@/composables/use-meta';
     import { useRouter } from 'vue-router';
-    import axios from 'axios';
+    import { API } from '@/services/api';
+    import { useAppStore } from '@/stores/index';
+    const store = useAppStore();
 
-    useMeta({ title: 'Devices' });
+    useMeta({ title: 'Usuarios' });
 
+    const api = new API();
     const router = useRouter();
     const selectedRow = ref({});
     const info = ref(null);
@@ -89,31 +92,19 @@
     const search = ref('');
 
     const cols = ref([
-    { field: 'id', title: 'Id' },
-    { field: 'fullname', title: 'Nombre' },
-    { field: 'email', title: 'Correo' },
-    { field: 'created_at', title: 'Creado el' },
-    { field: 'actions', title: 'Actions', sort: false, headerClass: 'justify-center' },
-  ]);
+        { field: 'id', title: 'Id' },
+        { field: 'fullname', title: 'Nombre' },
+        { field: 'email', title: 'Correo' },
+        { field: 'created_at', title: 'Creado el' },
+        { field: 'actions', title: 'Actions', sort: false, headerClass: 'justify-center' },
+    ]);
 
     const rows = ref<Record<string, unknown>[]>([]);
 
     async function getData() {
         try {
-            const route = `https://apps.ejesatelital.com/api/user/users`;
-            const userKey = "cece83ce-909f-45be-8a60-4641c0bf3980";
-            const response = await axios.get(route, {
-                headers: {
-                    'Authorization': `Bearer ${userKey}`,
-                    'Content-Type': 'application/json',
-                }
-            });
-
-            if (Array.isArray(response.data.data)) {
-                rows.value = response.data.data;
-            } else {
-                console.error('Error: Response data is not an array');
-            }
+            const response = await api.get('user/users');
+            rows.value = response.data;
         } catch (error) {
             console.error('Error fetching data', error);
         }

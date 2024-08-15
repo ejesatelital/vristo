@@ -1,9 +1,6 @@
-import { defineStore, createPinia } from 'pinia';
+import { defineStore } from 'pinia';
 import axios from 'axios';
 import { useCompanyStore } from './company-store';
-import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
-const pinia = createPinia()
-pinia.use(piniaPluginPersistedstate)
 
 export const useUserStore = defineStore('user', {
   state: () => ({
@@ -17,8 +14,7 @@ export const useUserStore = defineStore('user', {
     permissions: [],
     last_login: null,
     roles: [],
-    api_token: null,
-    companies: []
+    api_token: null
   }),
   getters: {
     getId: (state) => state.id,
@@ -32,7 +28,6 @@ export const useUserStore = defineStore('user', {
     getLastLogin: (state) => state.last_login,
     getRoles: (state) => state.roles,
     getToken: (state) => state.api_token,
-    getCompanies: (state) => state.companies
   },
   actions: {
     async login (email: any, password: any) {
@@ -46,19 +41,23 @@ export const useUserStore = defineStore('user', {
                 'Content-Type': 'application/json',
             }}
         ).then(response => {
-          const user = response.data;
-          this.setUser(user);
-          if (user.companies.length === 1) {
-            companyStore.setCompany(user.companies[0]);
-          } else if (user.userData.companies.length > 1) {
+            const user = response.data;
+            this.setUser(user);
+            if (user.companies.length === 1) {
+                companyStore.setCompany(user.companies[0]);
+                companyStore.setCompaniesSelect(user.companies[0].value);
+            }
+            // else {
+            //     companyStore.setCompaniesSelect(companyStore.companyOptions.value.map(option => option.value).join(','));
+            // }
             companyStore.setCompanies(user.companies);
-          }
+            companyStore.setCompanyOptions(user.companies);
         })
-      } catch (e) {
-        if (e) {
-          throw e
+        } catch (e) {
+            if (e) {
+            throw e
+            }
         }
-      }
     },
     async logout () {
       try {

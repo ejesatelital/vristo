@@ -77,7 +77,7 @@
                             <div>
                                 <label for="Email">Correo</label>
                                 <div class="relative text-white-dark">
-                                    <input id="Email" type="email" name="email" placeholder="Enter Email" class="form-input ps-10 placeholder:text-white-dark"  v-model="email" />
+                                    <input id="Email" type="email" name="email" placeholder="Enter Email" class="form-input ps-10 placeholder:text-white-dark"  v-model="email" required/>
                                     <span class="absolute start-4 top-1/2 -translate-y-1/2">
                                         <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
                                             <path
@@ -99,7 +99,7 @@
                                     <div class="flex">
                                         <input id="Password" name="password" :type="showPasswords.password ? 'text' : 'password'"
                                             placeholder="Enter Password"
-                                            class="form-input ps-10 placeholder:text-white-dark" v-model="password"/>
+                                            class="form-input ps-10 placeholder:text-white-dark" v-model="password" required/>
                                         <div
                                             class="bg-[#eee] flex justify-center items-center ltr:rounded-r-md rtl:rounded-l-md px-3 font-semibold border ltr:border-l-0 rtl:border-r-0 border-[#e0e6ed] dark:border-[#17263c] dark:bg-[#1b2e4b]">
                                             <label
@@ -258,16 +258,17 @@
     import { computed, reactive, ref } from 'vue';
     import { useI18n } from 'vue-i18n';
     import appSetting from '@/app-setting';
-    import { useAppStore } from '@/stores/index';
     import { useRouter } from 'vue-router';
     import { useMeta } from '@/composables/use-meta';
     import { useUserStore } from '../../stores/user-store';
+    import Swal from 'sweetalert2';
+
     import axios from 'axios';
     useMeta({ title: 'Iniciar Sesión' });
     const loading = ref(false);
     const router = useRouter();
-    const store = useAppStore();
     const userStore = useUserStore();
+
     // multi language
     const i18n = reactive(useI18n());
     const changeLanguage = (item: any) => {
@@ -298,7 +299,19 @@
             );
             router.push('/dashboard');
         } catch (error) {
-            console.error('Error fetching data', error);
+            console.log(error);
+
+            Swal.fire({
+                toast: true,
+                position: <any>('top'),
+                showConfirmButton: false,
+                timer: 3000,
+                showCloseButton: true,
+                customClass: {
+                    popup: `color-danger`
+                },
+                text: error.response.data.errors || 'An error occurred. Please try again.',
+            });
         } finally
         {
             loading.value = false;

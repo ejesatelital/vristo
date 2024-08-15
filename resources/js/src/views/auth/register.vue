@@ -77,7 +77,7 @@
                             <div>
                                 <label for="Name">Nombre</label>
                                 <div class="relative text-white-dark">
-                                    <input id="Name" type="text" placeholder="Enter Name" class="form-input ps-10 placeholder:text-white-dark" />
+                                    <input id="Name" type="text" placeholder="Enter Name" class="form-input ps-10 placeholder:text-white-dark" required />
                                     <span class="absolute start-4 top-1/2 -translate-y-1/2">
                                         <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
                                             <circle cx="9" cy="4.5" r="3" fill="#888EA8" />
@@ -93,7 +93,7 @@
                             <div>
                                 <label for="Email">Correo</label>
                                 <div class="relative text-white-dark">
-                                    <input id="Email" type="email" placeholder="Enter Email" class="form-input ps-10 placeholder:text-white-dark" />
+                                    <input id="Email" type="email" placeholder="Enter Email" class="form-input ps-10 placeholder:text-white-dark" required />
                                     <span class="absolute start-4 top-1/2 -translate-y-1/2">
                                         <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
                                             <path
@@ -115,7 +115,7 @@
                                     <div class="flex">
                                         <input id="Password" name="password" :type="showPasswords.password ? 'text' : 'password'"
                                             placeholder="Enter Password"
-                                            class="form-input ps-10 placeholder:text-white-dark" v-model="password"/>
+                                            class="form-input ps-10 placeholder:text-white-dark" v-model="password" required />
                                         <div
                                             class="bg-[#eee] flex justify-center items-center ltr:rounded-r-md rtl:rounded-l-md px-3 font-semibold border ltr:border-l-0 rtl:border-r-0 border-[#e0e6ed] dark:border-[#17263c] dark:bg-[#1b2e4b]">
                                             <label
