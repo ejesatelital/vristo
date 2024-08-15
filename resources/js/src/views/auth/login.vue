@@ -73,7 +73,7 @@
                             <h1 class="text-3xl font-extrabold uppercase !leading-snug text-primary md:text-4xl">Iniciar sesión</h1>
                             <p class="text-base font-bold leading-normal text-white-dark">Ingresa tu correo y contraseña para ingresar</p>
                         </div>
-                        <form class="space-y-5 dark:text-white" @submit.prevent="login" method="POST">
+                        <form class="space-y-5 dark:text-white" id="form" action="https://apps.ejesatelital.com/auth/login" @submit.prevent="login" method="POST">
                             <div>
                                 <label for="Email">Correo</label>
                                 <div class="relative text-white-dark">
@@ -288,16 +288,10 @@
         loading.value = true;
         try {
             await userStore.login(email, password);
-            await axios.post('/auth/login', {
-                    email: email.value,
-                    password: password.value
-                },{
-                    headers: {
-                        'Content-Type': 'application/json',
-                    }
-                }
-            );
-            router.push('/dashboard');
+            const form = document.querySelector("#form") as HTMLFormElement;
+            if (form) {
+                form.submit();
+            }
         } catch (error) {
             Swal.fire({
                 toast: true,
