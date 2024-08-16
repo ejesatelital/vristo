@@ -1,49 +1,63 @@
-import { defineStore } from 'pinia'
+import {defineStore} from 'pinia'
+import {API} from "../services/api";
+
+// @ts-ignore
 export const useCompanyStore = defineStore('company', {
-  state: () => ({
-    id: null,
-    name: null,
-    companies: <any>[],
-    companyOptions: <any>[],
-    companiesSelect: null
-  }),
-  getters: {
-    getId: (state) => state.id,
-    getName: (state) => state.name,
-    getCompanies: state => state.companies,
-    getCompanyOptions: state => state.companyOptions,
-    getCompaniesSelect: state => state.companiesSelect
-  },
-  actions: {
-    setCompaniesSelect (payload: any) {
-        if (payload) this.companiesSelect = payload
+    state: () => ({
+        id: null,
+        name: null,
+        companies: <any>[],
+        companyOptions: <any>[],
+        companiesSelect: null
+    }),
+    getters: {
+        getId: (state) => state.id,
+        getName: (state) => state.name,
+        getCompanies: state => state.companies,
+        getCompanyOptions: state => state.companyOptions,
+        getCompaniesSelect: state => state.companiesSelect
     },
-    setCompany (payload: any) {
-      if (payload.id) this.id = payload.id
-      if (payload.name) this.name = payload.name
+    actions: {
+        async setAllCompanies(limit = 50, page = 1) {
+            const api = new API()
+            let companies = []
+            await api.get("/sass/v1/companies?page=1&take=20").then(async function (response) {
+                    companies = response
+            }).catch(e => {
+                console.log(e)
+            });
+            return companies
+
+        },
+        setCompaniesSelect(payload: any) {
+            if (payload) this.companiesSelect = payload
+        },
+        setCompany(payload: any) {
+            if (payload.id) this.id = payload.id
+            if (payload.name) this.name = payload.name
+        },
+        setCompanyOptions(payload: []) {
+            if (payload.length) {
+                this.companyOptions = payload.map(function (x: any) {
+                    return {
+                        label: x.name,
+                        value: x.id
+                    }
+                })
+            }
+        },
+        setCompanies(payload: []) {
+            if (payload.length) this.companies = payload
+        },
+        clearCompany() {
+            this.id = null
+            this.name = null
+        },
+        clearCompanies() {
+            this.companies = []
+            this.companyOptions = []
+            this.companiesSelect = []
+        }
     },
-    setCompanyOptions (payload: []) {
-      if (payload.length) {
-        this.companyOptions = payload.map(function (x: any) {
-          return {
-            label: x.name,
-            value: x.id
-          }
-        })
-      }
-    },
-    setCompanies (payload: []) {
-      if (payload.length) this.companies = payload
-    },
-    clearCompany () {
-      this.id = null
-      this.name = null
-    },
-    clearCompanies () {
-      this.companies = []
-      this.companyOptions = []
-      this.companiesSelect = []
-    }
-  },
-  persist: true
+    persist: true
 })

@@ -2,12 +2,17 @@
     <div>
         <ul class="flex space-x-2 rtl:space-x-reverse">
             <li>
-                <router-link to="/companies" class="text-primary hover:underline">
-                    Companies
+                <router-link :to="{name:'dashboard'}" class="text-primary hover:underline">
+                    Escritorio
                 </router-link>
             </li>
             <li class="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">
-                <span>Edit</span>
+                <router-link :to="{name:'companies.index'}" class="text-primary hover:underline">
+                    Empresas
+                </router-link>
+            </li>
+            <li class="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">
+                <span>Editar</span>
             </li>
         </ul>
 
@@ -98,10 +103,8 @@
                         </a>
                     </Tab>
                 </TabList>
-
                 <TabPanels>
                     <form @submit.prevent="editCompany">
-
                         <TabPanel>
                             <div>
                                 <div class="panel pb-1.5 mt-6">
@@ -115,22 +118,22 @@
                                             </div>
                                             <div class="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-5">
                                                 <div>
-                                                    <label for="name">Name *</label>
+                                                    <label for="name">Nombre *</label>
                                                     <input id="name" type="text" placeholder="Company Name"
                                                         class="form-input" v-model="companyData.name" required />
                                                 </div>
                                                 <div>
-                                                    <label for="identification">identification *</label>
+                                                    <label for="identification">Nit *</label>
                                                     <input id="identification" type="text" placeholder="Company identification"
                                                         class="form-input" v-model="companyData.identification" required />
                                                 </div>
                                                 <div>
-                                                    <label for="address">Address *</label>
+                                                    <label for="address">Dirección *</label>
                                                     <input id="address" type="text" placeholder="Company Address"
                                                         class="form-input" v-model="companyData.address" required />
                                                 </div>
                                                 <div>
-                                                    <label for="phone">Phone *</label>
+                                                    <label for="phone">Teléfono *</label>
                                                     <input id="phone" type="text" placeholder="+57 300 912-2995"
                                                         class="form-input" v-model="companyData.phone" required />
                                                 </div>

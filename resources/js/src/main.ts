@@ -1,8 +1,6 @@
 import { createApp } from 'vue';
 import App from '@/App.vue';
-
 const app = createApp(App);
-
 // pinia store
 import { createPinia } from 'pinia';
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
@@ -10,6 +8,7 @@ const pinia = createPinia();
 pinia.use(piniaPluginPersistedstate)
 app.use(pinia);
 
+// @ts-ignore
 import router from '@/router';
 app.use(router);
 
@@ -26,10 +25,12 @@ const head = createHead();
 app.use(head);
 
 // set default settings
+// @ts-ignore
 import appSetting from '@/app-setting';
 appSetting.init();
 
 //vue-i18n
+// @ts-ignore
 import i18n from '@/i18n';
 app.use(i18n);
 

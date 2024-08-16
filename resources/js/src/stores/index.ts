@@ -1,5 +1,7 @@
 import { defineStore } from 'pinia';
+// @ts-ignore
 import i18n from '@/i18n';
+// @ts-ignore
 import appSetting from '@/app-setting';
 
 export const useAppStore = defineStore('app', {

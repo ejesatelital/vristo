@@ -2,10 +2,12 @@
     <div>
         <ul class="flex space-x-2 rtl:space-x-reverse">
             <li>
-                <a href="javascript:;" class="text-primary hover:underline">Companies</a>
+                <router-link :to="{name:'dashboard'}" class="text-primary hover:underline">
+                    Escritorio
+                </router-link>
             </li>
             <li class="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">
-                <span>Index</span>
+                <span>Empresas</span>
             </li>
         </ul>
 
@@ -68,20 +70,23 @@
     import { useMeta } from '@/composables/use-meta';
     import { useRouter } from 'vue-router';
     import { API } from '@/services/api';
+    import {useUserStore} from "../../stores/user-store";
+    import {useCompanyStore} from "../../stores/company-store";
     const api = new API();
 
     useMeta({ title: 'Devices' });
-
+    const userStore = useUserStore();
+    const companyStore= useCompanyStore();
     const router = useRouter();
     const selectedRow = ref({});
     const info = ref(null);
 
     const redirectToCreate = () => {
-        router.push({ name: 'companies.create' });
+        router.push({ name: 'companies-create' });
     };
 
     const redirectToEdit = (id: number) => {
-        router.push({ name: 'companies.edit', params: { id } });
+        router.push({ name: 'companies-edit', params: { id } });
     };
 
     // multi language
@@ -102,8 +107,13 @@
 
     async function getData() {
         try {
-            const response = await api.get(`sass/v1/companies`);
-            rows.value = response.data;
+            if(userStore.hasAccess('sass.companies.indexall')){
+                const response = await api.get(`sass/v1/companies`);
+                rows.value = response.data;
+            }else {
+                rows.value = companyStore.companies
+            }
+
         } catch (error) {
             console.error('Error fetching data', error);
         }

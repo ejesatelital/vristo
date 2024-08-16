@@ -91,9 +91,13 @@
                                 <div>
                                     <label for="user_api_devices">Dispositivos</label>
                                     <label class="inline-flex">
-                                        <input type="checkbox" class="form-checkbox text-success" v-model="companyData.settings.user_api_devices"/>
-                                        <span>Mostrar detalles</span>
+                                        <input type="checkbox" class="form-checkbox text-success" v-model="companyData.settings.sync_tracking"/>
+                                        <span>Sincronizar Dispositivos</span>
                                     </label>
+                                    <div>
+                                        <label for="user_tracking">Tiempo De sincronización en Minutos</label>
+                                        <input id="user_tracking" type="text" placeholder="Enter User" class="form-input" v-model="companyData.settings.sync_time" />
+                                    </div>
                                 </div>
                             </div>
                         </div>

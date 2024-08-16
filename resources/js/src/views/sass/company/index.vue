@@ -2,10 +2,12 @@
     <div>
         <ul class="flex space-x-2 rtl:space-x-reverse">
             <li>
-                <a href="javascript:;" class="text-primary hover:underline">Company</a>
+                <router-link :to="{name:'dashboard'}" class="text-primary hover:underline">
+                    Escritorio
+                </router-link>
             </li>
             <li class="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">
-                <span>Index</span>
+                <span>Empresas</span>
             </li>
         </ul>
         <div class="pt-5">
@@ -457,19 +459,20 @@
     </div>
 </template>
 <script lang="ts" setup>
-    import { ref, onMounted, reactive } from 'vue';
+import {ref, onMounted, reactive, computed} from 'vue';
     import { useAppStore } from '@/stores/index';
     import { useMeta } from '@/composables/use-meta';
     import Vue3Datatable from '@bhplugin/vue3-datatable';
     import Swal from 'sweetalert2';
 
     import { API } from '@/services/api';
+    import {useCompanyStore} from "../../../stores/company-store";
     const api = new API();
 
     useMeta({ title: 'Setting company' });
 
     const store = useAppStore();
-
+    const companyStore = useCompanyStore();
     const search = ref('');
     const cols = ref([
         { field: 'id', title: 'Id' },
@@ -487,7 +490,7 @@
     const data = ref();
     const getCompanyData = async () => {
         try {
-            const response = await api.get(`sass/v1/companies/1`);
+            const response = await api.get(`sass/v1/companies/${companyStore.id}`);
             data.value = response.data;
         } catch (error) {
             Swal.fire({
@@ -500,6 +503,7 @@
         }
     };
 
+    computed(getCompanyData)
 
     const rows = ref<Record<string, unknown>[]>([]);
 

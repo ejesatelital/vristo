@@ -1,19 +1,7 @@
 <template>
     <div>
-        <ul class="flex space-x-2 rtl:space-x-reverse">
-            <li>
-                <a href="javascript:;" class="text-primary hover:underline">Dashboard</a>
-            </li>
-            <li class="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">
-                <span>Apps</span>
-            </li>
-        </ul>
-
         <!-- Slider  -->
         <div class="panel lg:col-span-2">
-            <div class="flex items-center justify-between mb-5">
-                <h5 class="font-semibold text-lg dark:text-white-light">Featured Apps</h5>
-            </div>
             <swiper
             :modules="[Navigation, Pagination, Autoplay]"
             :navigation="{ nextEl: '.swiper-button-next-ex5', prevEl: '.swiper-button-prev-ex5' }"
@@ -67,7 +55,7 @@
 
         <!-- Cards -->
         <div class="pt-5">
-            <h5 class="font-semibold text-lg dark:text-white-light">List of Apps</h5>
+            <h5 class="font-semibold text-lg dark:text-white-light">Principales Aplicaciones</h5>
             <div class="mt-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 <div v-for="card in cards" :key="card.id"
                     class="card bg-white shadow-[4px_6px_10px_-3px_#bfc9d4] rounded border border-[#e0e6ed] dark:border-[#1b2e4b] dark:bg-[#191e3a] dark:shadow-none p-4">
@@ -141,7 +129,6 @@
             isActive: true,
         },
     ]);
-
     const cards = ref([
         {
             id: 1,

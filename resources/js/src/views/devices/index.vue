@@ -53,17 +53,19 @@
     import Swal from 'sweetalert2';
 
     import { API } from '@/services/api';
+    import {useCompanyStore} from "../../stores/company-store";
 
     useMeta({ title: 'Setting company' });
 
     const store = useAppStore();
-
+    const companyStore = useCompanyStore();
     const api = new API();
 
     const search = ref('');
     const cols = ref([
         {field: 'id', title: 'Id'},
         {field: 'name', title: 'Nombre'},
+        {field: 'odometer', title: 'Kilometraje'},
     ]);
     const rows: any = ref(null);
     const total_rows = ref(0);
@@ -79,7 +81,7 @@
     const getDevicesData = async () => {
         try {
             loading.value = true;
-            const response = await api.get("devices/v1/devices?company_id=1&page=" + params.current_page + "&take=" + params.pagesize)
+            const response = await api.get(`devices/v1/devices?filter={"company_id":${companyStore.companiesSelect}}&page=${params.current_page}&take=${params.pagesize}`)
             rows.value = response?.data
             total_rows.value = response?.meta?.page?.total;
             loading.value = false;

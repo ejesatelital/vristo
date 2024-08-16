@@ -1,4 +1,5 @@
 import { $themeConfig } from '../theme.config';
+// @ts-ignore
 import { useAppStore } from '@/stores/index';
 
 export default {

@@ -1,26 +1,23 @@
-import axios, { AxiosInstance } from 'axios';
+import axios, {AxiosInstance} from 'axios';
+import {useUserStore} from "../stores/user-store";
 
 const baseURL = 'https://apps.ejesatelital.com/api/'; // Reemplaza con la URL de tu API
 
 export class API {
     private instance: AxiosInstance;
-
     constructor() {
-        const tokenElement = document.querySelector('meta[name="user-api-token"]');
-        if (tokenElement) {
-            const token = tokenElement.getAttribute('content');
-            if (token) {
-                this.instance = axios.create({
-                    baseURL,
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
-            } else {
-                console.error('No se encontró el token de autenticación en la etiqueta meta');
-            }
+        const userStore = useUserStore()
+        //const tokenElement = document.querySelector('meta[name="user-api-token"]');
+        console.log(userStore)
+        if (userStore.api_token) {
+            this.instance = axios.create({
+                baseURL,
+                headers: {
+                    Authorization: `Bearer ${userStore.api_token}`,
+                },
+            });
         } else {
-            console.error('No se encontró la etiqueta meta "user-api-token"');
+            console.error('Usuario no enconrado');
         }
     }
 
@@ -54,6 +51,7 @@ export class API {
     put(url: string, data?: any) {
         return this.instance.put(url, data);
     }
+
     delete(url: string) {
         return this.instance.delete(url);
     }
