@@ -34,6 +34,7 @@
                 :sortColumn="params.sort_column"
                 :sortDirection="params.sort_direction"
                 :pageSize="params.pagesize"
+                :search="search"
                 @change="changeServer"
                 skin="whitespace-nowrap bh-table-hover"
                 firstArrow='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"> <path d="M13 19L7 12L13 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> <path opacity="0.5" d="M16.9998 19L10.9998 12L16.9998 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> </svg>'
@@ -46,7 +47,7 @@
     </div>
 </template>
 <script lang="ts" setup>
-    import { ref, onMounted, reactive } from 'vue';
+    import { ref, onMounted, reactive, watch, watchEffect } from 'vue';
     import { useAppStore } from '@/stores/index';
     import { useMeta } from '@/composables/use-meta';
     import Vue3Datatable from '@bhplugin/vue3-datatable';
@@ -55,11 +56,15 @@
     import { API } from '@/services/api';
     import {useCompanyStore} from "../../stores/company-store";
 
-    useMeta({ title: 'Setting company' });
-
     const store = useAppStore();
     const companyStore = useCompanyStore();
     const api = new API();
+
+    useMeta({ title: 'Setting Device' });
+
+    watch(() => companyStore.companiesSelect, () => {
+        getDevicesData();
+    });
 
     const search = ref('');
     const cols = ref([
@@ -103,7 +108,7 @@
 
     const syncData = async () =>  {
         try {
-            const response = await api.get(`devices`);
+            const response = await api.get(`devices/v1/devices?filter={"company_id":${companyStore.companiesSelect}}&page=${params.current_page}&take=${params.pagesize}`);
             Swal.fire({
                 icon: 'success',
                 title: 'Obteniendo Estado...',

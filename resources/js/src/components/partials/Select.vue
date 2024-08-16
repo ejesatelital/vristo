@@ -62,8 +62,6 @@
 
     const handleSelection = (value) => {
         const companyIds = companiesSelected.value.map(option => option.value).join(',');
-        console.log(companyIds);
-
     };
 
   </script>

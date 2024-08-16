@@ -7,7 +7,7 @@
                 </router-link>
             </li>
             <li class="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">
-                <router-link :to="{name:'companies.index'}" class="text-primary hover:underline">
+                <router-link :to="{name:'companies'}" class="text-primary hover:underline">
                     Empresas
                 </router-link>
             </li>
@@ -564,6 +564,7 @@
                 password_tracking: null,
                 user_api_hash: null,
                 user_api_devices: false,
+                sync_time: null,
                 email_host: null,
                 email_port: null,
                 email_username: null,
@@ -615,7 +616,7 @@
                 padding: '2em',
                 customClass: 'sweet-alerts',
             }).then(() => {
-                router.push('/companies');
+                router.push({name: 'companies'});
             });
         } catch (error) {
             console.error(error.response)

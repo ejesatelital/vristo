@@ -95,8 +95,8 @@
                                         <span>Sincronizar Dispositivos</span>
                                     </label>
                                     <div>
-                                        <label for="user_tracking">Tiempo De sincronización en Minutos</label>
-                                        <input id="user_tracking" type="text" placeholder="Enter User" class="form-input" v-model="companyData.settings.sync_time" />
+                                        <label for="sync_time">Tiempo De sincronización en Minutos</label>
+                                        <input id="sync_time" type="number" min="1" placeholder="Enter time in minutes" class="form-input" v-model="companyData.settings.sync_time" />
                                     </div>
                                 </div>
                             </div>
@@ -168,7 +168,7 @@
                                 <div>
                                     <label for="email_password">Email Password</label>
                                     <div class="flex">
-                                        <input id="password_tracking" :type="showPasswords.email_password ? 'text' : 'password'"
+                                        <input id="email_password" :type="showPasswords.email_password ? 'text' : 'password'"
                                             placeholder="Enter Email Password"
                                             class="form-input ltr:rounded-r-none rtl:rounded-l-none" v-model="companyData.settings.email_password"/>
                                         <div

@@ -7,8 +7,6 @@ export class API {
     private instance: AxiosInstance;
     constructor() {
         const userStore = useUserStore()
-        //const tokenElement = document.querySelector('meta[name="user-api-token"]');
-        console.log(userStore)
         if (userStore.api_token) {
             this.instance = axios.create({
                 baseURL,
@@ -16,8 +14,6 @@ export class API {
                     Authorization: `Bearer ${userStore.api_token}`,
                 },
             });
-        } else {
-            console.error('Usuario no enconrado');
         }
     }
 
@@ -27,7 +23,6 @@ export class API {
             return response.data;
         } catch (error) {
             if (error.response) {
-                console.error('Error:', error.response.data);
                 // Manejar el error según el código de estado
                 if (error.response.status === 401) {
                     // Redirigir a la página de login
