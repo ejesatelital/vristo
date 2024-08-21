@@ -44,7 +44,7 @@
                 >
 
                     <template #actions="data">
-                        <div class="flex justify-center">
+                        <div class="flex justify-center gap-3">
                             <template v-if="userStore.hasAccess('user.users.edit')">
                                 <button type="button" class="btn btn-sm btn-info" v-tippy:edit @click="redirectToEdit(data.value.id)">
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5">
@@ -128,7 +128,7 @@
     const total_rows = ref(0);
     const params = reactive({
         current_page: 1,
-        pagesize: 25,
+        pagesize: 10,
         column_filters: [],
         sort_column: 'id',
         sort_direction: 'desc',
@@ -141,13 +141,13 @@
     const getData = async () => {
         try {
             loading.value = true;
-            let companies = companyStore.companiesSelect;
-            if(userStore.hasAccess('sass.companies.indexall')){
+            let companies: any = companyStore.companiesSelect;
+            if(userStore.hasAccess('sass.companies.indexall') && companies.length > 1){
                 companies = null
             }
-            const response = await api.get(`user/users?companies=${companies}&page=${params.current_page}&per_page=${params.pagesize}`)
-            rows.value = response?.data
-            total_rows.value = response?.meta?.page?.total;
+            const response = await api.get(`user/users?company_id=${companies}&page=${params.current_page}&per_page=${params.pagesize}`)
+            rows.value = response?.data;
+            total_rows.value = response?.meta?.total;
             loading.value = false;
         } catch (error) {
             console.error('Error fetching data', error);

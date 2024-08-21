@@ -71,7 +71,7 @@
                                         />
                                     </svg>
 
-                                    <span class="px-2">{{ $t('Devices') }}</span>
+                                    <span class="px-2">{{ $t('devices') }}</span>
                                 </div>
                             </router-link>
                         </li>
@@ -103,7 +103,7 @@
                                               stroke-linecap="round"/>
                                     </svg>
 
-                                    <span class="px-2">{{ $t('Companies') }}</span>
+                                    <span class="px-2">{{ $t('companies') }}</span>
                                 </div>
                             </router-link>
                         </li>
@@ -168,16 +168,25 @@
 </template>
 
 <script lang="ts" setup>
-import {ref, onMounted} from 'vue';
+import {ref, onMounted, reactive} from 'vue';
 
 import {useAppStore} from '@/stores/index';
 import VueCollapsible from 'vue-height-collapsible/vue3';
 import {useUserStore} from "../../stores/user-store";
-
+import { useI18n } from 'vue-i18n';
+import appSetting from '@/app-setting';
 const store = useAppStore();
 const activeDropdown: any = ref('');
 const subActive: any = ref('');
 const userStore = useUserStore();
+
+// multi language
+const i18n = reactive(useI18n());
+const changeLanguage = (item: any) => {
+    i18n.locale = item.code;
+    appSetting.toggleLanguage(item);
+};
+
 onMounted(() => {
     const selector = document.querySelector('.sidebar ul a[href="' + window.location.pathname + '"]');
     if (selector) {

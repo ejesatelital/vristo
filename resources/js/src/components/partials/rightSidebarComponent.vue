@@ -648,5 +648,12 @@ const logout = async () => {
 </script>
 
 <style>
+    .custom-multiselect {
+        width: 300px; /* Ajusta el ancho fijo que desees */
+        max-width: 100%; /* Asegura que no se expanda más allá del contenedor */
+    }
 
+    .custom-multiselect .multiselect__content-wrapper {
+        max-height: 200px; /* Altura máxima del menú desplegable */
+    }
 </style>

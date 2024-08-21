@@ -2,7 +2,7 @@
     <div>
         <ul class="flex space-x-2 rtl:space-x-reverse">
             <li>
-                <router-link to="/user/users" class="text-primary hover:underline">
+                <router-link :to="{name:'users'}" class="text-primary hover:underline">
                     Users
                 </router-link>
             </li>
@@ -41,10 +41,10 @@
                                 xmlns="http://www.w3.org/2000/svg" class="w-5 h-5">
                                 <path
                                     d="M17.2606 11.4402C19.8781 11.4402 22 9.3269 22 6.72008C22 4.11325 19.8781 2 17.2606 2C14.643 2 12.5211 4.11325 12.5211 6.72008C12.5211 7.92754 13.0722 8.80569 13.0722 8.80569L7.3408 14.5137C7.08363 14.7698 6.72357 15.4358 7.3408 16.0505L8.00212 16.7091C8.25929 16.9286 8.90589 17.236 9.43495 16.7091L10.2065 15.9407C10.978 16.7091 11.8598 16.27 12.1904 15.8309C12.7415 15.0625 12.0802 14.2942 12.0802 14.2942L12.3007 14.0746C13.3588 15.1284 14.2846 14.5137 14.6153 14.0746C15.1664 13.3062 14.6153 12.5378 14.6153 12.5378C14.3948 12.0988 13.954 12.0988 14.505 11.5499L15.1664 10.8913C15.6954 11.3304 16.7829 11.4402 17.2606 11.4402Z"
-                                    stroke="#1C274C" stroke-width="1.5" stroke-linejoin="round" />
+                                    stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
                                 <path
                                     d="M22 14.993C21.9361 17.787 21.6692 19.419 20.5542 20.5341C19.0882 22 16.7288 22 12.0101 22C7.29127 22 4.93188 22 3.46594 20.5341C2 19.0681 2 16.7087 2 11.9899C2 7.27117 2 4.91177 3.46594 3.44584C4.58099 2.33078 6.21298 2.06388 9.00704 2"
-                                    stroke="#1C274C" stroke-width="1.5" stroke-linecap="round" />
+                                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
                             </svg>
                             Permissions
                         </a>
@@ -66,6 +66,17 @@
                                     stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
                             </svg>
                             Reset Password
+                        </a>
+                    </Tab>
+                    <Tab as="template" v-slot="{ selected }">
+                        <a href="javascript:;"
+                            class="flex gap-2 p-4 border-b border-transparent hover:border-primary hover:text-primary !outline-none"
+                            :class="{ '!border-primary text-primary': selected }">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M15.6807 14.5869C19.1708 14.5869 22 11.7692 22 8.29344C22 4.81767 19.1708 2 15.6807 2C12.1907 2 9.3615 4.81767 9.3615 8.29344C9.3615 9.90338 10.0963 11.0743 10.0963 11.0743L2.45441 18.6849C2.1115 19.0264 1.63143 19.9143 2.45441 20.7339L3.33616 21.6121C3.67905 21.9048 4.54119 22.3146 5.2466 21.6121L6.27531 20.5876C7.30403 21.6121 8.4797 21.0267 8.92058 20.4412C9.65538 19.4167 8.77362 18.3922 8.77362 18.3922L9.06754 18.0995C10.4783 19.5045 11.7128 18.6849 12.1537 18.0995C12.8885 17.075 12.1537 16.0505 12.1537 16.0505C11.8598 15.465 11.272 15.465 12.0067 14.7333L12.8885 13.8551C13.5939 14.4405 15.0439 14.5869 15.6807 14.5869Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                                <path d="M17.8853 8.29353C17.8853 9.50601 16.8984 10.4889 15.681 10.4889C14.4635 10.4889 13.4766 9.50601 13.4766 8.29353C13.4766 7.08105 14.4635 6.09814 15.681 6.09814C16.8984 6.09814 17.8853 7.08105 17.8853 8.29353Z" stroke="currentColor" stroke-width="1.5"/>
+                            </svg>
+                            Api Key
                         </a>
                     </Tab>
                 </TabList>
@@ -93,7 +104,7 @@
                                                     <input id="last_name" type="text" placeholder="Last Name"
                                                         class="form-input" v-model="userData.last_name" required />
                                                 </div>
-                                                <div>
+                                                <div class="col-span-2">
                                                     <label for="email">Email *</label>
                                                     <input id="email" type="email" placeholder="info@ejesatelital.com"
                                                         class="form-input" v-model="userData.email" required />
@@ -108,6 +119,33 @@
                                                     <input id="address" type="text" placeholder="Address"
                                                         class="form-input" v-model="userData.address" />
                                                 </div>-->
+                                                <div class="col-span-2">
+                                                    <Select
+                                                    :options="companies"
+                                                    v-model="companiesSelected"
+                                                    :multiple="true"
+                                                    required
+                                                    :closeOnSelect="false"
+                                                    titleSelect="Companies"
+                                                    name="companies"
+                                                    label="name"
+                                                    value="id"
+                                                    />
+                                                </div>
+
+                                                <div class="col-span-2" v-if="userStore.hasAccess('user.roles.index')">
+                                                    <Select
+                                                    :options="roles"
+                                                    v-model="rolesSelected"
+                                                    label="name"
+                                                    value="id"
+                                                    :multiple="true"
+                                                    required
+                                                    :closeOnSelect="false"
+                                                    titleSelect="Roles"
+                                                    name="roles"
+                                                    />
+                                                </div>
                                                 <div>
                                                     <label for="">Estado</label>
                                                     <label class="inline-flex">
@@ -149,7 +187,7 @@
                     <TabPanel>
                         <div>
                             <div class="panel pb-1.5 mt-6">
-                                <Permission :rolData="rolData"/>
+                                <!-- <Permission :rolData="rolData"/> -->
                                 <div class="flex flex-wrap justify-end gap-2 my-5">
                                     <button type="submit" class="btn btn-primary" :disabled="loading">Guardar</button>
                                 </div>
@@ -206,24 +244,126 @@
                         </div>
 
                     </TabPanel>
+
+                    <TabPanel>
+                        <div>
+                            <div class="panel pb-1.5 mt-6">
+                                <label for="user_api_hash">User API Hash</label>
+                                <div class="flex mt-3" v-for="token in tokenData" :key="token.id">
+                                    <input :id="`user_api_hash_${token.id}`"
+                                        :type="showPasswords[token.id] ? 'text' : 'password'"
+                                        class="form-input ltr:rounded-r-none rtl:rounded-l-none"
+                                        v-model="token.access_token"
+                                        readonly />
+                                    <div class="bg-[#eee] flex justify-center items-center ltr:rounded-r-md rtl:rounded-l-md px-3 font-semibold border ltr:border-l-0 rtl:border-r-0 border-[#e0e6ed] dark:border-[#17263c] dark:bg-[#1b2e4b]">
+                                        <label class="w-7 h-4 relative cursor-pointer mb-0">
+                                            <input type="checkbox"
+                                                :id="`user_api_hash_check_${token.id}`"
+                                                v-model="showPasswords[token.id]"
+                                                @click="togglePasswordVisibility(token.id)"
+                                                class="peer absolute w-full h-full opacity-0 z-10 focus:ring-0 focus:outline-none cursor-pointer" />
+                                            <span class="rounded-full border border-[#adb5bd] bg-white peer-checked:bg-primary peer-checked:border-primary dark:bg-dark block h-full before:absolute ltr:before:left-0.5 rtl:before:right-0.5 ltr:peer-checked:before:left-3.5 rtl:peer-checked:before:right-3.5 peer-checked:before:bg-white before:bg-[#adb5bd] dark:before:bg-white-dark before:bottom-[2px] before:w-3 before:h-3 before:rounded-full before:transition-all before:duration-300"></span>
+                                        </label>
+                                    </div>
+                                    <button type="button" class="btn btn-info" @click="copy(token.access_token)">
+                                        <svg
+                                            width="24"
+                                            height="24"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            class="w-5 h-5 ltr:mr-2 rtl:ml-2"
+                                        >
+                                            <path
+                                                d="M6 11C6 8.17157 6 6.75736 6.87868 5.87868C7.75736 5 9.17157 5 12 5H15C17.8284 5 19.2426 5 20.1213 5.87868C21 6.75736 21 8.17157 21 11V16C21 18.8284 21 20.2426 20.1213 21.1213C19.2426 22 17.8284 22 15 22H12C9.17157 22 7.75736 22 6.87868 21.1213C6 20.2426 6 18.8284 6 16V11Z"
+                                                stroke="currentColor"
+                                                stroke-width="1.5"
+                                            />
+                                            <path
+                                                opacity="0.5"
+                                                d="M6 19C4.34315 19 3 17.6569 3 16V10C3 6.22876 3 4.34315 4.17157 3.17157C5.34315 2 7.22876 2 11 2H15C16.6569 2 18 3.34315 18 5"
+                                                stroke="currentColor"
+                                                stroke-width="1.5"
+                                            />
+                                        </svg>
+                                        Copiar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </TabPanel>
+
                 </TabPanels>
             </TabGroup>
         </div>
     </div>
 </template>
 <script lang="ts" setup>
-    import { ref, reactive, onMounted, computed } from 'vue';
+    import { ref, reactive, onMounted, computed, watch } from 'vue';
     import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/vue';
     import { useAppStore } from '@/stores/index';
     import { useMeta } from '@/composables/use-meta';
     import Swal from 'sweetalert2';
     import { useRoute } from 'vue-router';
     import { API } from '@/services/api';
+    import { useCompanyStore } from '@/stores/company-store';
+    import { useUserStore } from '@/stores/user-store';
+    import Select from '@/components/partials/Select.vue';
+    import useClipboard from 'vue-clipboard3';
     useMeta({ title: 'User Edit' });
     const route = useRoute();
     const store = useAppStore();
     const api = new API();
     const loading = ref(false);
+    const companyStore = useCompanyStore();
+    const userStore = useUserStore();
+    const { toClipboard } = useClipboard();
+
+    const copy = async (msg) => {
+        if (msg) {
+            await toClipboard(msg);
+            showMessage('Copiado exitosamente.');
+        }
+    };
+
+    const showMessage = (msg = '', type = 'success') => {
+        const toast: any = Swal.mixin({
+            toast: true,
+            position: 'top',
+            showConfirmButton: false,
+            timer: 3000,
+            customClass: { container: 'toast' },
+        });
+        toast.fire({
+            icon: type,
+            title: msg,
+            padding: '10px 20px',
+        });
+    };
+
+    const companies: any = ref(companyStore.companies);
+    const companiesSelected = ref([]);
+
+    const roles = ref();
+    const rolesSelected = ref([]);
+
+    let companyIds: any = ref([]);
+    let rolesIds: any = ref([]);
+
+    const showPasswords = ref({});
+
+    const togglePasswordVisibility = (tokenId) => {
+        showPasswords.value[tokenId] = !showPasswords.value[tokenId];
+    };
+
+    watch(companiesSelected, (newSelection) => {
+        companyIds.value = newSelection.map(option => option.id);
+    });
+
+    watch(rolesSelected, (newSelection) => {
+        rolesIds.value = newSelection.map(option => option.id);
+    });
+
 
     const isDisabled = computed(() => {
         return loading.value || !!passwordError.value || !!confirmPasswordError.value;
@@ -238,9 +378,13 @@
             address: null,
             phone: null,
             avatar: null,
-            is_activated: true
+            is_activated: true,
+            companies: [],
+            roles: []
         }
     );
+
+    const tokenData = reactive({});
 
     const getData = async () => {
         try {
@@ -259,9 +403,14 @@
                         // phone: data.phone,
                         avatar: data.avatar,
                         is_activated: data.is_activated,
-                        last_login: data.last_login,
+                        last_login: data.last_login
                     });
-
+                if (data.companies_name){
+                    companiesSelected.value = data.companies_name
+                }
+                if (data.roles_name){
+                    rolesSelected.value = data.roles_name
+                }
             } else {
                 throw new Error('Hubo un problema al obtener la lista de vehículos desde el API.');
             }
@@ -272,8 +421,10 @@
 
     const editData = async () => {
         loading.value = true;
+        Object.assign(userData.companies, companyIds.value);
+        Object.assign(userData.roles, rolesIds.value);
         try {
-            const response = await api.post(`user/users/${route.params.id}/edit`,userData);
+            const response = await api.post(`user/users/${route.params.id}/edit`, userData);
             loading.value = false;
             Swal.fire({
                 icon: 'success',
@@ -329,7 +480,7 @@
 
     const sendResetPassword = async () => {
         try {
-            const response = await api.get('user/user/sendResetPassword/{userId}');
+            const response = await api.post('auth/reset', userData.email);
             console.log(response.data);
             // Handle success
         } catch (error) {
@@ -338,8 +489,45 @@
         }
     };
 
-    onMounted(() => {
+    const getRoles = async () =>
+    {
+        try {
+
+            const response = await api.get(`user/roles`);
+            if (response) {
+                roles.value = response.data
+            }
+            else {
+                throw new Error('Hubo un problema al obtener la lista de roles desde el API.');
+            }
+        } catch (error) {
+            console.error(error.response);
+        }
+    }
+
+    const getToken = async () =>
+    {
+        try {
+            const response = await api.get(`user/account/api-keys`);
+            if (response) {
+                Object.assign(tokenData, response.data);
+            }
+            else {
+                throw new Error('Hubo un problema al obtener la lista de tokens desde el API.');
+            }
+        } catch (error) {
+            console.error(error.response);
+        }
+    }
+
+    onMounted(async () => {
         getData();
+        if(userStore.hasAccess('sass.companies.indexall')){
+            await getRoles();
+        }
+
+        await getToken();
+
         // single image upload
         // new FileUploadWithPreview('myFirstImage', {
         //     images: {

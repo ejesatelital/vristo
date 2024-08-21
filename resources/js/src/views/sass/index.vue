@@ -145,17 +145,19 @@
     const getData = async () => {
         try {
             loading.value = true;
-            let companies = companyStore.companiesSelect;
+            let companies: any = null;
             if(userStore.hasAccess('sass.companies.indexall')){
-                companies = null
+                const response = await api.get(`sass/v1/companies?page=${params.current_page}&take=${params.pagesize}`)
+                companies = response?.data;
+                total_rows.value = response?.meta?.page?.total;
+            }else
+            {
+                companies = companyStore.companies;
+                total_rows.value = companies.length;
             }
-            const response = await api.get(`sass/v1/companies?companies=${companies}&page=${params.current_page}&take=${params.pagesize}`)
-            rows.value = response?.data
-            total_rows.value = response?.meta?.page?.total;
-            loading.value = false;
+            rows.value = companies;
         } catch (error) {
             console.error('Error fetching data', error);
-            loading.value = false;
         } finally {
             loading.value = false;
         }

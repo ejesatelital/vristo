@@ -1,18 +1,18 @@
 <template>
     <div>
-      <label class="typo__label">Companies</label>
+      <label class="typo__label">{{ isTitleSelect }}</label>
       <multiselect
-        v-model="companiesSelected"
-        tag-placeholder="Asignar empresa"
-        placeholder="Buscar empresa"
-        label="label"
-        track-by="value"
+        v-model="optionsSelected"
+        tag-placeholder="Select option"
+        placeholder="Search option"
+        :label="isLabel"
+        :track-by="isValue"
         :options="options"
         :searchable="isSearchable"
         :multiple="isMultiple"
         :taggable="true"
         :preserve-search="true"
-        @select="handleSelection"
+        :close-on-select="isCloseOnSelect"
       ></multiselect>
     </div>
   </template>
@@ -38,31 +38,47 @@
         searchable: {
             type: Boolean,
             default: true
+        },
+        closeOnSelect: {
+            type: Boolean,
+            default: true
+        },
+        titleSelect:{
+            type: String,
+            default: "Options"
+        },
+        label:{
+            type: String,
+            default: "label"
+        },
+        value:{
+            type: String,
+            default: "value"
         }
-
     });
 
     // Define emits
     const emit = defineEmits(['update:modelValue']);
 
     // Local state
-    const companiesSelected = ref(props.modelValue);
+    const optionsSelected = ref(props.modelValue);
     const isMultiple = ref(props.multiple);
     const isSearchable = ref(props.searchable);
+    const isCloseOnSelect = ref(props.closeOnSelect);
+    const isTitleSelect = ref(props.titleSelect);
+    const isLabel = ref(props.label);
+    const isValue = ref(props.value);
+
 
     // Watch for changes in modelValue prop
     watch(() => props.modelValue, (newValue) => {
-      companiesSelected.value = newValue;
+      optionsSelected.value = newValue;
     });
 
     // Watch for changes in local value to update modelValue
-    watch(companiesSelected, (newValue) => {
+    watch(optionsSelected, (newValue) => {
         emit('update:modelValue', newValue);
     });
-
-    const handleSelection = (value) => {
-        const companyIds = companiesSelected.value.map(option => option.value).join(',');
-    };
 
   </script>
 

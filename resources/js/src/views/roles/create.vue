@@ -2,7 +2,7 @@
     <div>
         <ul class="flex space-x-2 rtl:space-x-reverse">
             <li>
-                <router-link to="/user/roles" class="text-primary hover:underline">
+                <router-link :to="{name:'roles'}" class="text-primary hover:underline">
                     Roles
                 </router-link>
             </li>

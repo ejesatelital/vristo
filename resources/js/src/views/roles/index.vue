@@ -75,11 +75,11 @@
     const router = useRouter();
 
     const redirectToCreate = () => {
-        router.push({ name: 'roles.create' });
+        router.push({ name: 'roles-create' });
     };
 
     const redirectToEdit = (id: number) => {
-        router.push({ name: 'roles.edit', params: { id } });
+        router.push({ name: 'roles-edit', params: { id } });
     };
 
     const search = ref('');

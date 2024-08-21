@@ -2,7 +2,7 @@
     <div>
         <ul class="flex space-x-2 rtl:space-x-reverse">
             <li>
-                <router-link to="/user/users" class="text-primary hover:underline">
+                <router-link :to="{name:'users'}" class="text-primary hover:underline">
                     Users
                 </router-link>
             </li>
@@ -64,9 +64,23 @@
                                     :options="companies"
                                     v-model="companiesSelected"
                                     :multiple="true"
+                                    required
+                                    :closeOnSelect="false"
+                                    titleSelect="Companies"
+                                    name="companies"
                                     />
-                                    <pre class="language-json"><code>{{ companiesSelected }}</code></pre>
+                                </div>
 
+                                <div class="col-span-2" v-if="userStore.hasAccess('user.roles.index')">
+                                    <Select
+                                    :options="roles"
+                                    v-model="rolesSelected"
+                                    :multiple="true"
+                                    required
+                                    :closeOnSelect="false"
+                                    titleSelect="Roles"
+                                    name="roles"
+                                    />
                                 </div>
 
                             </div>
@@ -101,7 +115,7 @@
     </div>
 </template>
 <script lang="ts" setup>
-    import { ref, reactive, onMounted, computed } from 'vue';
+    import { ref, reactive, computed, watch, onMounted } from 'vue';
     import { useAppStore } from '@/stores/index';
     import { useMeta } from '@/composables/use-meta';
     import Swal from 'sweetalert2';
@@ -109,19 +123,36 @@
     import Select from '@/components/partials/Select.vue';
     import { useCompanyStore } from '@/stores/company-store';
     useMeta({ title: 'Create User' });
+    import { useRouter } from 'vue-router';
+    import { useUserStore } from '@/stores/user-store';
     const api = new API();
     const store = useAppStore();
-
+    const router = useRouter();
     const companyStore = useCompanyStore();
+    const userStore = useUserStore();
 
-    const companies = ref(companyStore.companyOptions);
+    const companies: any = ref(companyStore.companyOptions);
+    const companiesSelected = ref();
 
-    const companiesSelected = ref([]);
+    const roles = ref();
+    const rolesSelected = ref();
+
+    let companyIds: any = ref([]);
+    let rolesIds: any = ref([]);
+
+
+    watch(companiesSelected, (newSelection) => {
+        companyIds.value = newSelection.map(option => option.value);
+    });
+
+    watch(rolesSelected, (newSelection) => {
+        rolesIds.value = newSelection.map(option => option.value);
+    });
 
     const loading = ref(false);
 
     const isDisabled = computed(() => {
-    return loading.value || !!passwordError.value || !!confirmPasswordError.value;
+        return loading.value || !!passwordError.value || !!confirmPasswordError.value;
     });
 
     const userData = reactive(
@@ -136,22 +167,25 @@
             is_activated: true,
             last_login: "2024-07-15 12:21:09",
             password: '',
-            password_confirmation: ''
+            password_confirmation: '',
+            companies: [],
+            roles: []
         }
     );
 
     const createUser = async () => {
         loading.value = true;
+        Object.assign(userData.companies, companyIds.value);
+        Object.assign(userData.roles, rolesIds.value);
         try {
             const response = await api.post(`user/users`, userData);
-            loading.value = false;
             Swal.fire({
                 icon: 'success',
                 title: 'Success',
                 text: 'Updating...',
                 padding: '2em',
                 customClass: 'sweet-alerts',
-            });
+            }).then(router.push({name: 'users'}));
         } catch (error) {
             console.error(error.response)
             Swal.fire({
@@ -161,6 +195,7 @@
                 padding: '2em',
                 customClass: 'sweet-alerts',
             });
+        } finally {
             loading.value = false;
         }
     }
@@ -190,4 +225,29 @@
         }
     };
 
+    const getRoles = async () =>
+    {
+        const response = await api.get(`user/roles`);
+        if (response) {
+            roles.value = response.data.map(function (x: any) {
+                    return {
+                        label: x.name,
+                        value: x.id
+                    }
+                })
+            }
+    }
+
+    onMounted(async () => {
+        if(userStore.hasAccess('sass.companies.indexall')){
+         await getRoles();
+        }
+        // single image upload
+        // new FileUploadWithPreview('myFirstImage', {
+        //     images: {
+        //         baseImage: '/assets/images/file-preview.svg',
+        //         backgroundImage: '',
+        //     },
+        // });
+    });
 </script>
