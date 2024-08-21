@@ -12,6 +12,9 @@
             <div class="flex justify-between mb-5">
                 <h6 class="text-xl font-bold">Dispositivos</h6>
 
+                <div class="mb-5">
+                    <input v-model="params.search" type="text" class="form-input max-w-xs" placeholder="Buscar..."  debounce="3000" />
+                </div>
                 <button type="button" class="btn btn-outline-info btn-sm d-flex align-items-center" @click="syncData()">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="mr-1">
                         <path d="M12.0789 3V2.25V3ZM3.67981 11.3333H2.92981H3.67981ZM3.67981 13L3.15157 13.5324C3.44398 13.8225 3.91565 13.8225 4.20805 13.5324L3.67981 13ZM5.88787 11.8657C6.18191 11.574 6.18377 11.0991 5.89203 10.8051C5.60029 10.511 5.12542 10.5092 4.83138 10.8009L5.88787 11.8657ZM2.52824 10.8009C2.2342 10.5092 1.75933 10.511 1.46759 10.8051C1.17585 11.0991 1.17772 11.574 1.47176 11.8657L2.52824 10.8009ZM18.6156 7.39279C18.8325 7.74565 19.2944 7.85585 19.6473 7.63892C20.0001 7.42199 20.1103 6.96007 19.8934 6.60721L18.6156 7.39279ZM12.0789 2.25C7.03155 2.25 2.92981 6.3112 2.92981 11.3333H4.42981C4.42981 7.15072 7.84884 3.75 12.0789 3.75V2.25ZM2.92981 11.3333L2.92981 13H4.42981L4.42981 11.3333H2.92981ZM4.20805 13.5324L5.88787 11.8657L4.83138 10.8009L3.15157 12.4676L4.20805 13.5324ZM4.20805 12.4676L2.52824 10.8009L1.47176 11.8657L3.15157 13.5324L4.20805 12.4676ZM19.8934 6.60721C18.287 3.99427 15.3873 2.25 12.0789 2.25V3.75C14.8484 3.75 17.2727 5.20845 18.6156 7.39279L19.8934 6.60721Z" fill="currentColor"></path>
@@ -21,9 +24,7 @@
                 </button>
             </div>
 
-            <!-- <div class="flex justify-end ltr:ml-auto rtl:mr-auto">
-                <input v-model="search" type="text" class="form-input" placeholder="Buscar..."  debounce="300" />
-            </div> -->
+
             <vue3-datatable
                 :rows="rows"
                 :columns="cols"
@@ -34,7 +35,7 @@
                 :sortColumn="params.sort_column"
                 :sortDirection="params.sort_direction"
                 :pageSize="params.pagesize"
-                :search="search"
+                :search="params.search"
                 @change="changeServer"
                 skin="whitespace-nowrap bh-table-hover"
                 firstArrow='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"> <path d="M13 19L7 12L13 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> <path opacity="0.5" d="M16.9998 19L10.9998 12L16.9998 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> </svg>'
@@ -66,7 +67,6 @@
         getDevicesData();
     });
 
-    const search = ref('');
     const cols = ref([
         {field: 'id', title: 'Id'},
         {field: 'name', title: 'Nombre'},
@@ -80,19 +80,28 @@
         column_filters: [],
         sort_column: 'id',
         sort_direction: 'desc',
+        search: null
     });
+
+    let timer: any;
+
+    const filterDevices = () => {
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+            getDevicesData();
+        }, 500);
+    };
+
     const loading = ref(true);
 
     const getDevicesData = async () => {
         try {
             loading.value = true;
-            const response = await api.get(`devices/v1/devices?filter={"company_id":${companyStore.companiesSelect}}&page=${params.current_page}&take=${params.pagesize}`)
+            const response = await api.get(`devices/v1/devices?filter={"company_id":[${companyStore.companiesSelect}],"search":"${params.search}"}&page=${params.current_page}&take=${params.pagesize}`)
             rows.value = response?.data
             total_rows.value = response?.meta?.page?.total;
-            loading.value = false;
         } catch (error) {
             console.error('Error fetching data', error);
-            loading.value = false;
         } finally {
             loading.value = false;
         }
@@ -103,7 +112,13 @@
         params.pagesize = data.pagesize;
         params.sort_column = data.sort_column;
         params.sort_direction = data.sort_direction;
-        getDevicesData();
+
+        if (data.change_type === 'search') {
+            filterDevices();
+        } else {
+            getDevicesData();
+        }
+
     };
 
     const syncData = async () =>  {
