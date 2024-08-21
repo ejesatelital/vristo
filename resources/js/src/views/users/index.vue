@@ -2,18 +2,26 @@
     <div>
         <ul class="flex space-x-2 rtl:space-x-reverse">
             <li>
-                <a href="javascript:;" class="text-primary hover:underline">Users</a>
+                <router-link :to="{name:'dashboard'}" class="text-primary hover:underline">
+                    Escritorio
+                </router-link>
             </li>
             <li class="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">
-                <span>Index</span>
+                <span>Usuarios</span>
             </li>
         </ul>
 
         <div class="panel pb-1.5 mt-6">
 
-            <div class="flex flex-wrap justify-end gap-2 mb-5">
+            <div class="flex justify-end mb-5 gap-3">
+                <div class="relative max-w-xs">
+                    <input v-model="params.search" type="text" class="form-input w-full pr-10" placeholder="Buscar..." @input="handleInput"/>
+                    <button v-if="params.search" @click="clearSearch" class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500" >
+                        ✕
+                    </button>
+                </div>
                 <template v-if="userStore.hasAccess('user.users.create')">
-                    <button type="button" class="btn btn-primary" @click="redirectToCreate()">
+                    <button type="button" class="btn btn-sm btn-primary gap-2" @click="redirectToCreate()">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C22 4.92893 22 7.28595 22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12Z" stroke="currentColor" stroke-width="1.5"/>
                             <path d="M15 12L12 12M12 12L9 12M12 12L12 9M12 12L12 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
@@ -34,7 +42,7 @@
                     :sortColumn="params.sort_column"
                     :sortDirection="params.sort_direction"
                     :pageSize="params.pagesize"
-                    :search="search"
+                    :search="params.search"
                     @change="changeServer"
                     skin="whitespace-nowrap bh-table-hover"
                     firstArrow='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"> <path d="M13 19L7 12L13 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> <path opacity="0.5" d="M16.9998 19L10.9998 12L16.9998 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> </svg>'
@@ -103,6 +111,7 @@
     const store = useAppStore();
     const api = new API();
     const router = useRouter();
+    let timer: any;
 
     const redirectToCreate = () => {
         router.push({ name: 'users.create' });
@@ -114,7 +123,6 @@
 
     // multi language
     const i18n = reactive(useI18n());
-    const search = ref('');
     const cols = ref([
         { field: 'id', title: 'Id' },
         { field: 'fullname', title: 'Nombre' },
@@ -132,6 +140,7 @@
         column_filters: [],
         sort_column: 'id',
         sort_direction: 'desc',
+        search: ''
     });
 
     watch(() => companyStore.companiesSelect, () => {
@@ -145,13 +154,11 @@
             if(userStore.hasAccess('sass.companies.indexall') && companies.length > 1){
                 companies = null
             }
-            const response = await api.get(`user/users?company_id=${companies}&page=${params.current_page}&per_page=${params.pagesize}`)
+            const response = await api.get(`user/users?search=${params.search}&company_id=${companies}&page=${params.current_page}&per_page=${params.pagesize}`)
             rows.value = response?.data;
             total_rows.value = response?.meta?.total;
-            loading.value = false;
         } catch (error) {
             console.error('Error fetching data', error);
-            loading.value = false;
         } finally {
             loading.value = false;
         }
@@ -162,7 +169,18 @@
         params.pagesize = data.pagesize;
         params.sort_column = data.sort_column;
         params.sort_direction = data.sort_direction;
-        getData();
+        if (data.change_type === 'search') {
+            clearTimeout(timer);
+            timer = setTimeout(() => {
+                getData();
+            }, 500);
+        } else {
+            getData();
+        }
+    };
+    const clearSearch = () => {
+        params.search = '';
+        clearTimeout(timer);
     };
 
     const deleteUser = (id: number) => {

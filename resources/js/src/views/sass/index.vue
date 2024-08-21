@@ -12,18 +12,25 @@
         </ul>
 
         <div class="panel pb-1.5 mt-6">
-            <template v-if="userStore.hasAccess('sass.companies.create')">
-                <div class="flex flex-wrap justify-end gap-2 mb-5">
-                    <button type="button" class="btn btn-sm btn-primary" v-tippy:edit @click="redirectToCreate()">
-                        <svg width="24" height="24" viewBox="0 0 24 24" class="mr-3" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C22 4.92893 22 7.28595 22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12Z" stroke="currentColor" stroke-width="1.5"/>
-                            <path d="M15 12L12 12M12 12L9 12M12 12L12 9M12 12L12 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                        </svg>
-                        Nueva Empresa
+            <div class="flex justify-end mb-5 gap-3">
+                <div class="relative max-w-xs">
+                    <input v-model="params.search" type="text" class="form-input w-full pr-10" placeholder="Buscar..." @input="handleInput"/>
+                    <button v-if="params.search" @click="clearSearch" class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500" >
+                        ✕
                     </button>
                 </div>
-            </template>
-
+                <template v-if="userStore.hasAccess('sass.companies.create')">
+                    <div class="flex flex-wrap justify-end gap-2">
+                        <button type="button" class="btn btn-sm btn-primary" v-tippy:edit @click="redirectToCreate()">
+                            <svg width="24" height="24" viewBox="0 0 24 24" class="mr-3" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C22 4.92893 22 7.28595 22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12Z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M15 12L12 12M12 12L9 12M12 12L12 9M12 12L12 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                            Nueva Empresa
+                        </button>
+                    </div>
+                </template>
+            </div>
 
             <div class="datatable">
                 <vue3-datatable
@@ -36,7 +43,7 @@
                     :sortColumn="params.sort_column"
                     :sortDirection="params.sort_direction"
                     :pageSize="params.pagesize"
-                    :search="search"
+                    :search="params.search"
                     @change="changeServer"
                     skin="whitespace-nowrap bh-table-hover"
                     firstArrow='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"> <path d="M13 19L7 12L13 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> <path opacity="0.5" d="M16.9998 19L10.9998 12L16.9998 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> </svg>'
@@ -64,7 +71,6 @@
                                 </button>
                                 <tippy target="edit">edit</tippy>
                             </template>
-
 
                             <template v-if="userStore.hasAccess('sass.companies.destroy')">
                                 <button type="button" class="btn btn-sm btn-danger" v-tippy:delete @click="deleteCompany(data.value.id)">
@@ -115,7 +121,6 @@
 
     // multi language
     const i18n = reactive(useI18n());
-    const search = ref('');
 
     const cols = ref([
         { field: 'id', title: 'Id' },
@@ -126,7 +131,7 @@
         { field: 'updated_at', title: 'Creado el' },
         { field: 'actions', title: 'Actions', sort: false, headerClass: 'justify-center' },
     ]);
-
+    let timer: any;
     const loading = ref(true);
     const rows: any = ref(null);
     const total_rows = ref(0);
@@ -136,6 +141,7 @@
         column_filters: [],
         sort_column: 'id',
         sort_direction: 'desc',
+        search: null
     });
 
     watch(() => companyStore.companiesSelect, () => {
@@ -147,7 +153,7 @@
             loading.value = true;
             let companies: any = null;
             if(userStore.hasAccess('sass.companies.indexall')){
-                const response = await api.get(`sass/v1/companies?page=${params.current_page}&take=${params.pagesize}`)
+                const response = await api.get(`sass/v1/companies?filter={"search":"${params.search}"}&page=${params.current_page}&take=${params.pagesize}`)
                 companies = response?.data;
                 total_rows.value = response?.meta?.page?.total;
             }else
@@ -168,7 +174,19 @@
         params.pagesize = data.pagesize;
         params.sort_column = data.sort_column;
         params.sort_direction = data.sort_direction;
-        getData();
+        if (data.change_type === 'search') {
+            clearTimeout(timer);
+            timer = setTimeout(() => {
+                getData();
+            }, 500);
+        } else {
+            getData();
+        }
+    };
+
+    const clearSearch = () => {
+        params.search = null;
+        clearTimeout(timer);
     };
 
     const deleteCompany = (id: number) => {

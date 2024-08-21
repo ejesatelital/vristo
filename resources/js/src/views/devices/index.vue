@@ -2,18 +2,22 @@
     <div>
         <ul class="flex space-x-2 rtl:space-x-reverse">
             <li>
-                <a href="javascript:;" class="text-primary hover:underline">Dispositivos</a>
+                <router-link :to="{name:'dashboard'}" class="text-primary hover:underline">
+                    Escritorio
+                </router-link>
             </li>
             <li class="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">
-                <span>Index</span>
+                <span>Dispositivos</span>
             </li>
         </ul>
-        <div class="panel p-5">
-            <div class="flex justify-between mb-5">
-                <h6 class="text-xl font-bold">Dispositivos</h6>
-
-                <div class="mb-5">
-                    <input v-model="params.search" type="text" class="form-input max-w-xs" placeholder="Buscar..."  debounce="3000" />
+        <div class="panel pt-5 ">
+            <h6 class="text-xl font-bold">Dispositivos</h6>
+            <div class="flex justify-end mb-5 gap-3">
+                <div class="relative max-w-xs">
+                    <input v-model="params.search" type="text" class="form-input w-full pr-10" placeholder="Buscar..." @input="handleInput"/>
+                    <button v-if="params.search" @click="clearSearch" class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500" >
+                        ✕
+                    </button>
                 </div>
                 <button type="button" class="btn btn-outline-info btn-sm d-flex align-items-center" @click="syncData()">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="mr-1">
@@ -23,8 +27,6 @@
                     {{ $t('sync') }}
                 </button>
             </div>
-
-
             <vue3-datatable
                 :rows="rows"
                 :columns="cols"
@@ -48,7 +50,7 @@
     </div>
 </template>
 <script lang="ts" setup>
-    import { ref, onMounted, reactive, watch, watchEffect } from 'vue';
+    import { ref, onMounted, reactive, watch } from 'vue';
     import { useAppStore } from '@/stores/index';
     import { useMeta } from '@/composables/use-meta';
     import Vue3Datatable from '@bhplugin/vue3-datatable';
@@ -76,7 +78,7 @@
     const total_rows = ref(0);
     const params = reactive({
         current_page: 1,
-        pagesize: 25,
+        pagesize: 10,
         column_filters: [],
         sort_column: 'id',
         sort_direction: 'desc',
@@ -84,13 +86,6 @@
     });
 
     let timer: any;
-
-    const filterDevices = () => {
-        clearTimeout(timer);
-        timer = setTimeout(() => {
-            getDevicesData();
-        }, 500);
-    };
 
     const loading = ref(true);
 
@@ -112,15 +107,19 @@
         params.pagesize = data.pagesize;
         params.sort_column = data.sort_column;
         params.sort_direction = data.sort_direction;
-
         if (data.change_type === 'search') {
-            filterDevices();
+            clearTimeout(timer);
+            timer = setTimeout(() => {
+                getDevicesData();
+            }, 500);
         } else {
             getDevicesData();
         }
-
     };
-
+    const clearSearch = () => {
+        params.search = null;
+        clearTimeout(timer);
+    };
     const syncData = async () =>  {
         try {
             const response = await api.get(`devices/v1/devices?filter={"company_id":${companyStore.companiesSelect}}&page=${params.current_page}&take=${params.pagesize}`);
