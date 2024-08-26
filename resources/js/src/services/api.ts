@@ -18,6 +18,7 @@ export class API {
     }
 
     async get(url: string): Promise<any> {
+        const userStore = useUserStore();
         try {
             const response = await this.instance.get(url);
             return response.data;
@@ -25,7 +26,7 @@ export class API {
             if (error.response) {
                 // Manejar el error según el código de estado
                 if (error.response.status === 401) {
-                    // Redirigir a la página de login
+                    userStore.logout();
                 } else if (error.response.status === 500) {
                     // Mostrar un mensaje de error genérico
                 }

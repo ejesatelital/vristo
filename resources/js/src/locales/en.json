@@ -151,6 +151,8 @@
     "send":"Send",
     "export_excel":"Export to excel",
     "companies": "Companies",
-    "roles": "Roles"
+    "roles": "Roles",
+    "applications":"Applications",
+    "subscriptions":"Subscriptions"
 
 }

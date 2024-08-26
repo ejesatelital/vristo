@@ -31,6 +31,11 @@ import DashBoard from '../views/dashboard.vue';
 import storeLayout from '../layouts/store-layout.vue';
 import appLayout from '../layouts/app-layout.vue';
 import authLayout from '../layouts/auth-layout.vue';
+// Subcriptions
+import IndexSubcriptions from '../views/subcriptions/index.vue';
+// Applications
+import IndexApplications from '../views/applications/index.vue';
+
 
 const routes: RouteRecordRaw[] = [
     // dashboard
@@ -125,6 +130,30 @@ const routes: RouteRecordRaw[] = [
                 path: 'profile',
                 name: 'profile',
                 component: ProfileUsers
+            }
+        ],
+        meta: {requiresAuth: true}
+    },
+    {
+        path: '/subscriptions',
+        component: appLayout,
+        children: [
+            {
+                path: '',
+                name: 'subscriptions',
+                component: IndexSubcriptions
+            }
+        ],
+        meta: {requiresAuth: true}
+    },
+    {
+        path: '/applications',
+        component: appLayout,
+        children: [
+            {
+                path: '',
+                name: 'applications',
+                component: IndexApplications
             }
         ],
         meta: {requiresAuth: true}

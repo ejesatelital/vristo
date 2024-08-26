@@ -38,7 +38,7 @@
                 >
                     <ul class="relative font-semibold space-y-0.5 p-4 py-0">
                         <li class="menu nav-item">
-                            <router-link :to="{name:'dashboard'}" class="nav-link">
+                            <router-link :to="{name:'dashboard'}"  class="group" @click="toggleMobileMenu">
                                 <div class="flex items-center">
                                     <svg class="group-hover:!text-primary shrink-0" width="20" height="20"
                                          viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -54,9 +54,9 @@
                             </router-link>
                         </li>
                         <li class="menu nav-item relative" v-if="userStore.hasAccess('devices.devices.index')">
-                            <router-link class="nav-link" :to="{name:'devices'}">
+                            <router-link  class="group" :to="{name:'devices'}" @click="toggleMobileMenu">
                                 <div class="flex items-center">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" class="group-hover:!text-primary shrink-0"
                                          xmlns="http://www.w3.org/2000/svg">
                                         <path
                                             opacity="0.5"
@@ -75,10 +75,11 @@
                                 </div>
                             </router-link>
                         </li>
+
                         <li class="menu nav-item relative" v-if="userStore.hasAccess('sass.companies.index')">
-                            <router-link class="nav-link" :to="{name:'companies'}">
+                            <router-link class="group" :to="{name:'companies'}" @click="toggleMobileMenu">
                                 <div class="flex items-center">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" class="group-hover:!text-primary shrink-0"
                                          xmlns="http://www.w3.org/2000/svg">
                                         <path d="M22 22L2 22" stroke="currentColor" stroke-width="1.5"
                                               stroke-linecap="round"/>
@@ -108,17 +109,80 @@
                             </router-link>
                         </li>
 
-                        <li class="menu nav-item"
-                            v-if="userStore.hasAccess('user.users.index')||userStore.hasAccess('user.roles.index')">
+                        <li class="menu nav-item" v-if="userStore.hasAccess('user.users.index')||userStore.hasAccess('user.roles.index')">
                             <button
                                 type="button"
                                 class="nav-link group w-full"
-                                :class="{ active: activeDropdown === 'dashboard' }"
-                                @click="activeDropdown === 'dashboard' ? (activeDropdown = null) : (activeDropdown = 'dashboard')"
+                                :class="{ active: activeDropdown === 'users' }"
+                                @click="activeDropdown === 'users' ? (activeDropdown = null) : (activeDropdown = 'users')"
                             >
                                 <div class="flex items-center">
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-                                         xmlns="http://www.w3.org/2000/svg" class="shrink-0">
+                                    <svg
+                                        class="group-hover:!text-primary shrink-0"
+                                        width="20"
+                                        height="20"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                    >
+                                        <circle opacity="0.5" cx="15" cy="6" r="3" fill="currentColor" />
+                                        <ellipse opacity="0.5" cx="16" cy="17" rx="5" ry="3" fill="currentColor" />
+                                        <circle cx="9.00098" cy="6" r="4" fill="currentColor" />
+                                        <ellipse cx="9.00098" cy="17.001" rx="7" ry="4" fill="currentColor" />
+                                    </svg>
+
+                                    <span class="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">{{ $t('users') }}</span>
+                                </div>
+                                <div class="rtl:rotate-180" :class="{ '!rotate-90': activeDropdown === 'users' }">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M9 5L15 12L9 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                </div>
+                            </button>
+                            <vue-collapsible :isOpen="activeDropdown === 'users'">
+                                <ul class="sub-menu text-gray-500">
+                                    <li v-if="userStore.hasAccess('user.users.index')">
+                                        <router-link :to="{name:'users'}" @click="toggleMobileMenu">{{ $t('users') }}</router-link>
+                                    </li>
+                                    <li v-if="userStore.hasAccess('user.roles.index')">
+                                        <router-link :to="{name:'roles'}" @click="toggleMobileMenu">{{ $t('roles') }}</router-link>
+                                    </li>
+                                </ul>
+                            </vue-collapsible>
+                        </li>
+
+
+                        <h2 class="py-3 px-7 flex items-center uppercase font-extrabold bg-white-light/30 dark:bg-dark dark:bg-opacity-[0.08] -mx-4 mb-1" v-if="userStore.hasAccess('user.users.index')">
+                            <svg
+                                class="w-4 h-5 flex-none hidden"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                                stroke-width="1.5"
+                                fill="none"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            >
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                            </svg>
+                            <span>{{ $t('admin') }}</span>
+                        </h2>
+
+                        <li class="menu nav-item" v-if="userStore.hasAccess('user.users.index')">
+                            <button
+                                type="button"
+                                class="nav-link group w-full"
+                                :class="{ active: activeDropdown === 'components' }"
+                                @click="activeDropdown === 'components' ? (activeDropdown = null) : (activeDropdown = 'components')"
+                            >
+                                <div class="flex items-center">
+                                    <svg
+                                        class="group-hover:!text-primary shrink-0"
+                                        width="20"
+                                        height="20"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                    >
                                         <path
                                             d="M8.42229 20.6181C10.1779 21.5395 11.0557 22.0001 12 22.0001V12.0001L2.63802 7.07275C2.62423 7.09491 2.6107 7.11727 2.5974 7.13986C2 8.15436 2 9.41678 2 11.9416V12.0586C2 14.5834 2 15.8459 2.5974 16.8604C3.19479 17.8749 4.27063 18.4395 6.42229 19.5686L8.42229 20.6181Z"
                                             fill="currentColor"
@@ -135,26 +199,23 @@
                                         />
                                     </svg>
 
-                                    <span
-                                        class="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">
-                                        {{ $t('users') }}
-                                    </span>
+                                    <span class="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">{{
+                                        $t('components')
+                                    }}</span>
                                 </div>
-                                <div class="rtl:rotate-180" :class="{ '!rotate-90': activeDropdown === 'dashboard' }">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
-                                         xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M9 5L15 12L9 19" stroke="currentColor" stroke-width="1.5"
-                                              stroke-linecap="round" stroke-linejoin="round"/>
+                                <div class="rtl:rotate-180" :class="{ '!rotate-90': activeDropdown === 'components' }">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M9 5L15 12L9 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                                     </svg>
                                 </div>
                             </button>
-                            <vue-collapsible :isOpen="activeDropdown === 'dashboard'">
+                            <vue-collapsible :isOpen="activeDropdown === 'components'">
                                 <ul class="sub-menu text-gray-500">
-                                    <li v-if="userStore.hasAccess('user.users.index')">
-                                        <router-link :to="{name:'users'}">{{ $t('users') }}</router-link>
+                                    <li>
+                                        <router-link :to="{name:'applications'}" @click="toggleMobileMenu">{{ $t('applications') }}</router-link>
                                     </li>
-                                    <li v-if="userStore.hasAccess('user.roles.index')">
-                                        <router-link :to="{name:'roles'}">{{ $t('roles') }}</router-link>
+                                    <li>
+                                        <router-link :to="{name:'subscriptions'}" @click="toggleMobileMenu">{{ $t('subscriptions') }}</router-link>
                                     </li>
                                 </ul>
                             </vue-collapsible>
