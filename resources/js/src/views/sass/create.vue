@@ -172,6 +172,8 @@
                 user_api_hash: null,
                 user_api_devices: false,
                 sync_time: null,
+                last_devices: null,
+                sync_driver: null,
                 email_host: null,
                 email_port: null,
                 email_username: null,
