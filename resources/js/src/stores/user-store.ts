@@ -82,8 +82,6 @@ export const useUserStore = defineStore('user', {
                         }
                     }
                 ).then(response => {
-                    console.log(response);
-
                     const user = response.data.data;
                     this.setUser(user);
                     if (user.companies.length === 1) {

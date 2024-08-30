@@ -18,7 +18,6 @@ import IndexSass from '../views/sass/index.vue';
 import EditSass from '../views/sass/edit.vue';
 import CreateSass from '../views/sass/create.vue';
 import IndexCompany from '../views/sass/company/index.vue';
-import ShowCompany from '../views/sass/company/show.vue';
 // Roles
 import IndexRoles from '../views/roles/index.vue';
 import CreateRoles from '../views/roles/create.vue';
@@ -168,6 +167,11 @@ const routes: RouteRecordRaw[] = [
                 component: IndexSass
             },
             {
+                path: ':id',
+                name: 'companies-show',
+                component: IndexCompany
+            },
+            {
                 path: ':id/edit',
                 name: 'companies-edit',
                 component: EditSass
@@ -190,9 +194,9 @@ const routes: RouteRecordRaw[] = [
                 component: IndexCompany
             },
             {
-                path: 'edit',
+                path: ':id',
                 name: 'company-edit',
-                component: ShowCompany
+                component: EditSass
             },
         ],
         meta: {requiresAuth: true}
@@ -206,12 +210,7 @@ const routes: RouteRecordRaw[] = [
                 path: '',
                 name: 'devices',
                 component: Device
-            },
-            {
-                path: ':id/edit',
-                name: 'company-edit',
-                component: ShowCompany
-            },
+            }
         ],
         meta: {requiresAuth: true}
     },

@@ -7,8 +7,8 @@
                 </router-link>
             </li>
             <li class="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">
-                <router-link :to="{name:'companies'}" class="text-primary hover:underline">
-                    Empresas
+                <router-link :to="{name:'companies-show', params: {id: route.params.id}}" class="text-primary hover:underline">
+                   Empresa
                 </router-link>
             </li>
             <li class="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">
@@ -631,8 +631,8 @@
         }
     }
 
-    onMounted(() => {
-        getData();
+    onMounted(async () => {
+        await getData();
         // single image upload
         // new FileUploadWithPreview('myFirstImage', {
         //     images: {

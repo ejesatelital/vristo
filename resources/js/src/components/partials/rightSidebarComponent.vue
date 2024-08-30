@@ -416,7 +416,7 @@
                             Perfil
                         </router-link>
                     </li>
-                    <li v-if="companyStore.companiesSelect.length===1">
+                    <li v-if="companyStore.companiesSelect.length===1" >
                         <router-link :to="{name:'company'}" class="dark:hover:text-white"
                                      @click="close()">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
@@ -491,11 +491,9 @@ import {useAppStore} from '@/stores/index';
 import {API} from '@/services/api';
 import Multiselect from '@suadelabs/vue3-multiselect';
 import '@suadelabs/vue3-multiselect/dist/vue3-multiselect.css';
-import RightSidebarComponent from "../partials/rightSidebarComponent.vue";
 
 const store = useAppStore();
 const route = useRoute();
-const search = ref(false);
 const api = new API();
 const companyStore = useCompanyStore();
 const userStore = useUserStore();
@@ -511,7 +509,7 @@ const displayOptions = computed(() => [
     {label: 'Ver Todas', value: 0},
     ...options.value
 ]);
-const selectedOption = ref();
+const selectedOption = ref({label: 'Ver Todas', value: 0});
 
 const handleSelection = (option) => {
     if (option.value === 0) {
@@ -530,6 +528,16 @@ const changeLanguage = (item: any) => {
     i18n.locale = item.code;
     appSetting.toggleLanguage(item);
 };
+
+watch(() => companyStore.id, () => {
+    if (!companyStore.id )
+    {
+        selectedOption.value = {label: 'Ver Todas', value: 0}
+    }
+    else{
+        selectedOption.value = { label:companyStore.name,value:companyStore.id }
+    }
+});
 
 const currentFlag = computed(() => {
     return `/assets/images/flags/${i18n.locale.toUpperCase()}.svg`;
@@ -617,7 +625,6 @@ const removeMessage = (value: number) => {
 };
 
 onMounted(() => {
-    console.log(userStore.id, companyStore.id)
     if (userStore.id && companyStore.id) {
         selectedOption.value = { label:companyStore.name,value:companyStore.id }
     }

@@ -6,8 +6,13 @@
                     Escritorio
                 </router-link>
             </li>
+            <li class="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2" v-if="companyStore.companies.length > 1">
+                <router-link :to="{name:'companies'}" class="text-primary hover:underline">
+                    Empresas
+                </router-link>
+            </li>
             <li class="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">
-                <span>Empresas</span>
+                <span>Empresa</span>
             </li>
         </ul>
         <div class="pt-5">
@@ -16,7 +21,7 @@
                     <div class="flex items-center justify-between mb-5">
                         <h5 class="font-semibold text-lg dark:text-white-light">Company</h5>
                         <router-link
-                            :to="`/company/${data.id}/edit`"
+                            :to="{ name:'companies-edit', params: { id: data.id }}"
                             class="ltr:ml-auto rtl:mr-auto btn btn-primary p-2 rounded-full"
                             :class="{ 'disabled-link': !data.id }"
                             :style="{ pointerEvents: !data.id ? 'none' : 'auto', opacity: !data.id ? 0.5 : 1 }"
@@ -459,17 +464,20 @@
     </div>
 </template>
 <script lang="ts" setup>
-import {ref, onMounted, reactive, computed} from 'vue';
+import {ref, onMounted } from 'vue';
     import { useAppStore } from '@/stores/index';
     import { useMeta } from '@/composables/use-meta';
     import Vue3Datatable from '@bhplugin/vue3-datatable';
     import Swal from 'sweetalert2';
-
+    import { useRoute, useRouter } from 'vue-router';
     import { API } from '@/services/api';
+    import { NOTIFY } from '@/services/notify';
     import {useCompanyStore} from "../../../stores/company-store";
     const api = new API();
-
-    useMeta({ title: 'Setting company' });
+    const notify = new NOTIFY();
+    const route = useRoute();
+    const router = useRouter();
+    useMeta({ title: 'Company' });
 
     const store = useAppStore();
     const companyStore = useCompanyStore();
@@ -488,9 +496,10 @@ import {ref, onMounted, reactive, computed} from 'vue';
     ]);
 
     const data = ref();
-    const getCompanyData = async () => {
+
+    const getCompanyData = async (companyId) => {
         try {
-            const response = await api.get(`sass/v1/companies/${companyStore.id}`);
+            const response = await api.get(`sass/v1/companies/${companyId}`);
             data.value = response.data;
         } catch (error) {
             Swal.fire({
@@ -503,7 +512,6 @@ import {ref, onMounted, reactive, computed} from 'vue';
         }
     };
 
-    computed(getCompanyData)
 
     const rows = ref<Record<string, unknown>[]>([]);
 
@@ -565,7 +573,14 @@ import {ref, onMounted, reactive, computed} from 'vue';
     };
 
     onMounted(async () => {
-       await getCompanyData();
+        const companyId = route.params.id ?? companyStore.id;
+        if ( companyId ){
+            await getCompanyData(companyId);
+        }else
+        {
+            notify.showToast('Debes seleccionar empresa.', 'warning');
+            router.push({name:'dashboard'});
+        }
     });
 </script>
 
