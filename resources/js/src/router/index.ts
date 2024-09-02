@@ -32,6 +32,8 @@ import appLayout from '../layouts/app-layout.vue';
 import authLayout from '../layouts/auth-layout.vue';
 // Subcriptions
 import IndexSubcriptions from '../views/subcriptions/index.vue';
+import CreateSubcriptions from '../views/subcriptions/create.vue';
+import EditSubcriptions from '../views/subcriptions/edit.vue';
 // Applications
 import IndexApplications from '../views/applications/index.vue';
 
@@ -141,6 +143,16 @@ const routes: RouteRecordRaw[] = [
                 path: '',
                 name: 'subscriptions',
                 component: IndexSubcriptions
+            },
+            {
+                path: 'create',
+                name: 'subscriptions-create',
+                component: CreateSubcriptions
+            },
+            {
+                path: ':id/edit',
+                name: 'subscriptions-edit',
+                component: EditSubcriptions
             }
         ],
         meta: {requiresAuth: true}

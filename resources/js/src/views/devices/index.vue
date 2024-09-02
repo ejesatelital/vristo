@@ -106,11 +106,11 @@
     });
 
     const cols = ref([
-        {field: 'id', title: 'Id', hide: false},
-        {field: 'name', title: 'Nombre', hide: false},
+        {field: 'name', title: 'Placa', hide: false},
         {field: 'odometer', title: 'Kilometraje', hide: true},
         {field: 'options.last_driver', title: 'Ultímo conductor', hide: false},
         {field: 'options.current_driver', title: 'Conductor actual', hide: false},
+        {field: 'device_data.time', title: 'Última actualización', type:'date', hide: true},
     ]);
     const rows: any = ref(null);
     const total_rows = ref(0);

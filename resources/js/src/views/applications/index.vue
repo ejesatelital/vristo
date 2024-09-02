@@ -366,7 +366,7 @@
                                             />
                                         </svg>
                                     </button>
-                                    <tippy target="edit">edit</tippy>
+                                    <tippy target="edit">Editar</tippy>
                                 <!-- </template> -->
 
                                 <!-- <template v-if="userStore.hasAccess('sass.companies.destroy')"> -->
@@ -379,7 +379,7 @@
                                             <path opacity="0.5" d="M6.5 6C6.55588 6 6.58382 6 6.60915 5.99936C7.43259 5.97849 8.15902 5.45491 8.43922 4.68032C8.44784 4.65649 8.45667 4.62999 8.47434 4.57697L8.57143 4.28571C8.65431 4.03708 8.69575 3.91276 8.75071 3.8072C8.97001 3.38607 9.37574 3.09364 9.84461 3.01877C9.96213 3 10.0932 3 10.3553 3H13.6447C13.9068 3 14.0379 3 14.1554 3.01877C14.6243 3.09364 15.03 3.38607 15.2493 3.8072C15.3043 3.91276 15.3457 4.03708 15.4286 4.28571L15.5257 4.57697C15.5433 4.62992 15.5522 4.65651 15.5608 4.68032C15.841 5.45491 16.5674 5.97849 17.3909 5.99936C17.4162 6 17.4441 6 17.5 6" stroke="currentColor" stroke-width="1.5"></path>
                                         </svg>
                                     </button>
-                                    <tippy target="delete">borrar</tippy>
+                                    <tippy target="delete">Borrar</tippy>
                                 <!-- </template> -->
                         </div>
                     </div>
@@ -466,6 +466,83 @@
                                             <label for="color">Color</label>
                                             <input id="color" type="color" v-model="app.color"/>
                                         </div>
+
+                                        <!-- Trigger -->
+                                        <div class="flex items-center justify-center">
+                                            <button type="button" class="btn btn-info" @click="uploadImage(app.media_single)">Cargar logo</button>
+                                                    <!-- Modal -->
+                                                    <TransitionRoot appear :show="modal2" as="template">
+                                                        <Dialog as="div" @close="modal2 = false" class="relative z-[51]">
+                                                            <TransitionChild
+                                                                as="template"
+                                                                enter="duration-300 ease-out"
+                                                                enter-from="opacity-0"
+                                                                enter-to="opacity-100"
+                                                                leave="duration-200 ease-in"
+                                                                leave-from="opacity-100"
+                                                                leave-to="opacity-0"
+                                                            >
+                                                                <DialogOverlay class="fixed inset-0 bg-[black]/60" />
+                                                            </TransitionChild>
+
+                                                            <div class="fixed inset-0 overflow-y-auto">
+                                                                <div class="flex min-h-full items-center justify-center px-4 py-8">
+                                                                    <TransitionChild
+                                                                        as="template"
+                                                                        enter="duration-300 ease-out"
+                                                                        enter-from="opacity-0 scale-95"
+                                                                        enter-to="opacity-100 scale-100"
+                                                                        leave="duration-200 ease-in"
+                                                                        leave-from="opacity-100 scale-100"
+                                                                        leave-to="opacity-0 scale-95"
+                                                                    >
+                                                                        <DialogPanel class="panel border-0 p-0 rounded-lg overflow-hidden w-full max-w-lg text-black dark:text-white-dark">
+                                                                            <button
+                                                                                type="button"
+                                                                                class="absolute top-4 ltr:right-4 rtl:left-4 text-gray-400 hover:text-gray-800 dark:hover:text-gray-600 outline-none"
+                                                                                @click="modal2 = false"
+                                                                            >
+                                                                                <svg
+                                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                                    width="24px"
+                                                                                    height="24px"
+                                                                                    viewBox="0 0 24 24"
+                                                                                    fill="none"
+                                                                                    stroke="currentColor"
+                                                                                    stroke-width="1.5"
+                                                                                    stroke-linecap="round"
+                                                                                    stroke-linejoin="round"
+                                                                                    class="w-6 h-6"
+                                                                                >
+                                                                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                                                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                                                                </svg>
+                                                                            </button>
+                                                                            <div
+                                                                                class="text-lg font-bold bg-[#fbfbfb] dark:bg-[#121c2c] ltr:pl-5 rtl:pr-5 py-3 ltr:pr-[50px] rtl:pl-[50px]"
+                                                                            >
+                                                                                Modal Title
+                                                                            </div>
+                                                                            <div class="p-5">
+                                                                                <p>
+                                                                                    Mauris mi tellus, pharetra vel mattis sed, tempus ultrices eros. Phasellus egestas sit amet velit sed
+                                                                                    luctus. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
+                                                                                    Suspendisse potenti. Vivamus ultrices sed urna ac pulvinar. Ut sit amet ullamcorper mi.
+                                                                                </p>
+
+                                                                                <div class="flex justify-end items-center mt-8">
+                                                                                    <button type="button" @click="modal2 = false" class="btn btn-outline-danger">Discard</button>
+                                                                                    <button type="button" @click="modal2 = false" class="btn btn-primary ltr:ml-4 rtl:mr-4">Save</button>
+                                                                                </div>
+                                                                            </div>
+                                                                        </DialogPanel>
+                                                                    </TransitionChild>
+                                                                </div>
+                                                            </div>
+                                                        </Dialog>
+                                                    </TransitionRoot>
+                                        </div>
+
                                         <div class="flex justify-end items-center mt-8">
                                             <button type="button" class="btn btn-outline-danger" @click="addApplicationModal = false">Cancelar</button>
                                             <button type="submit" class="btn btn-primary ltr:ml-4 rtl:mr-4">
@@ -492,6 +569,9 @@
     import { useI18n } from 'vue-i18n';
     import { API } from '@/services/api';
     import {useCompanyStore} from "../../stores/company-store";
+
+    const modal2 = ref(false);
+
     useMeta({ title: 'Applications' });
     const companyStore = useCompanyStore();
     const loading = ref(true);
@@ -529,6 +609,7 @@
         name: '',
         description: '',
         permissions: {},
+        media_single: {zone:{}, image:{}},
         version: '',
         color: '#0B39EF',
         status: 1,

@@ -502,13 +502,7 @@ import {ref, onMounted } from 'vue';
             const response = await api.get(`sass/v1/companies/${companyId}`);
             data.value = response.data;
         } catch (error) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Error opteniendo datos: ' + error.response,
-                padding: '2em',
-                customClass: 'sweet-alerts',
-            });
+            notify.showAlert('Error opteniendo datos:'+ error.response, 'error');
         }
     };
 
