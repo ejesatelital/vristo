@@ -651,4 +651,11 @@ const logout = async () => {
     .custom-multiselect .multiselect__content-wrapper {
         max-height: 200px; /* Altura máxima del menú desplegable */
     }
+
+    @media (max-width: 600px) {
+        .custom-multiselect {
+            width: auto; /* Ancho automático en pantallas pequeñas */
+            max-width: 100%; /* Asegura que no se expanda más allá del contenedor */
+        }
+    }
 </style>

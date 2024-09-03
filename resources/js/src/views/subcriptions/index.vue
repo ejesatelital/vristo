@@ -148,7 +148,7 @@
     import Vue3Datatable from '@bhplugin/vue3-datatable';
     import { useMeta } from '@/composables/use-meta';
     import { useRouter } from 'vue-router';
-    import { API } from '@/services/api';
+    import { API } from '@/services/local';
 
     // const expandedIndex = ref<number | null>(null);
     // const toggleExpand = (index: number) => {
