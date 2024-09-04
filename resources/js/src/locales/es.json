@@ -153,6 +153,7 @@
     "companies": "Empresas",
     "roles": "Roles",
     "applications":"Aplicaciones",
-    "subscriptions":"Suscripciones"
-
+    "subscriptions":"Suscripciones",
+    "orders":"Pedidos",
+    "payments":"Pagos"
 }

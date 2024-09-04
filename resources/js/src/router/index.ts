@@ -36,6 +36,11 @@ import CreateSubcriptions from '../views/subcriptions/create.vue';
 import EditSubcriptions from '../views/subcriptions/edit.vue';
 // Applications
 import IndexApplications from '../views/applications/index.vue';
+// Orders
+import IndexOrders from '../views/orders/index.vue';
+// Payments
+import IndexPayments from '../views/payments/index.vue';
+
 
 
 const routes: RouteRecordRaw[] = [
@@ -170,6 +175,30 @@ const routes: RouteRecordRaw[] = [
         meta: {requiresAuth: true}
     },
     {
+        path: '/orders',
+        component: appLayout,
+        children: [
+            {
+                path: '',
+                name: 'orders',
+                component: IndexOrders
+            }
+        ],
+        meta: {requiresAuth: true}
+    },
+    {
+        path: '/payments',
+        component: appLayout,
+        children: [
+            {
+                path: '',
+                name: 'payments',
+                component: IndexPayments
+            }
+        ],
+        meta: {requiresAuth: true}
+    },
+    {
         path: '/sass/companies',
         component: appLayout,
         children: [
@@ -213,7 +242,6 @@ const routes: RouteRecordRaw[] = [
         ],
         meta: {requiresAuth: true}
     },
-
     {
         path: '/devices',
         component: appLayout,

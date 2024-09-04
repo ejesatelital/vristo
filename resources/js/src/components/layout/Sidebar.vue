@@ -217,6 +217,12 @@
                                     <li>
                                         <router-link :to="{name:'subscriptions'}" @click="toggleMobileMenu">{{ $t('subscriptions') }}</router-link>
                                     </li>
+                                    <li>
+                                        <router-link :to="{name:'orders'}" @click="toggleMobileMenu">{{ $t('orders') }}</router-link>
+                                    </li>
+                                    <li>
+                                        <router-link :to="{name:'payments'}" @click="toggleMobileMenu">{{ $t('payments') }}</router-link>
+                                    </li>
                                 </ul>
                             </vue-collapsible>
                         </li>

@@ -162,7 +162,7 @@
     import Vue3Datatable from '@bhplugin/vue3-datatable';
     import { useMeta } from '@/composables/use-meta';
     import { useRouter } from 'vue-router';
-    import { API } from '@/services/local';
+    import { API } from '@/services/api';
     import { NOTIFY } from '@/services/notify';
     const notify = new NOTIFY();
 
