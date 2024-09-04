@@ -12,7 +12,7 @@
         </ul>
 
         <div class="panel pb-1.5 mt-6">
-            <div class="flex justify-between mb-5 ltr:ml-auto rtl:mr-auto">
+            <div class="flex flex-col sm:flex-row sm:justify-between  mb-5 ltr:ml-auto rtl:mr-auto">
                 <h6 class="text-xl font-bold">Suscripciones</h6>
                 <div class="flex gap-3 items-center">
                     <div class="relative max-w-xs">
@@ -118,7 +118,7 @@
                     </template>-->
 
                     <template #actions="data">
-                        <div class="flex items-center justify-center">
+                        <div class="flex items-center justify-center gap-3">
                             <button type="button" class="btn btn-sm btn-info" v-tippy:edit @click="redirectToEdit(data.value.id)">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5">
                                     <path
@@ -134,9 +134,23 @@
                                     />
                                 </svg>
                             </button>
-                            <tippy target="edit">edit</tippy>
+                            <tippy target="edit">Editar</tippy>
+                            <!-- <template  v-if="userStore.hasAccess('user.users.destroy')"> -->
+                                <button type="button" class="btn btn-sm btn-danger" v-tippy:delete @click="deleteRow(data.value.id)">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5">
+                                        <path d="M20.5001 6H3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+                                        <path d="M18.8334 8.5L18.3735 15.3991C18.1965 18.054 18.108 19.3815 17.243 20.1907C16.378 21 15.0476 21 12.3868 21H11.6134C8.9526 21 7.6222 21 6.75719 20.1907C5.89218 19.3815 5.80368 18.054 5.62669 15.3991L5.16675 8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+                                        <path opacity="0.5" d="M9.5 11L10 16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+                                        <path opacity="0.5" d="M14.5 11L14 16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+                                        <path opacity="0.5" d="M6.5 6C6.55588 6 6.58382 6 6.60915 5.99936C7.43259 5.97849 8.15902 5.45491 8.43922 4.68032C8.44784 4.65649 8.45667 4.62999 8.47434 4.57697L8.57143 4.28571C8.65431 4.03708 8.69575 3.91276 8.75071 3.8072C8.97001 3.38607 9.37574 3.09364 9.84461 3.01877C9.96213 3 10.0932 3 10.3553 3H13.6447C13.9068 3 14.0379 3 14.1554 3.01877C14.6243 3.09364 15.03 3.38607 15.2493 3.8072C15.3043 3.91276 15.3457 4.03708 15.4286 4.28571L15.5257 4.57697C15.5433 4.62992 15.5522 4.65651 15.5608 4.68032C15.841 5.45491 16.5674 5.97849 17.3909 5.99936C17.4162 6 17.4441 6 17.5 6" stroke="currentColor" stroke-width="1.5"></path>
+                                    </svg>
+                                </button>
+                                <tippy target="delete">Borrar</tippy>
+                            <!-- </template> -->
                         </div>
                     </template>
+
+
                 </vue3-datatable>
             </div>
         </div>
@@ -149,15 +163,18 @@
     import { useMeta } from '@/composables/use-meta';
     import { useRouter } from 'vue-router';
     import { API } from '@/services/local';
+    import { NOTIFY } from '@/services/notify';
+    const notify = new NOTIFY();
 
     // const expandedIndex = ref<number | null>(null);
     // const toggleExpand = (index: number) => {
     //     console.log(index);
-
     //     expandedIndex.value = expandedIndex.value == index ? null : index;
     // };
 
     const api = new API();
+    const loading = ref(false);
+    let timer: any;
 
     useMeta({ title: 'Suscripciones' });
 
@@ -179,7 +196,7 @@
     { field: 'start_date', title: 'Fecha de inicio', type:'date', headerClass: 'justify-center', width:'150px' },
     { field: 'end_date', title: 'Fecha de finalización', type:'date', headerClass: 'justify-center', width:'150px' },
     { field: 'status', title: 'Estado' },
-    { field: 'actions', title: 'Actions', sort: false, headerClass: 'justify-center', width:'150px' },
+    { field: 'actions', title: 'Actions', sort: false, headerClass: 'justify-center' },
   ]);
 
     const rows = ref<Record<string, unknown>[]>([]);
@@ -203,6 +220,47 @@
         }
     }
 
+    const changeServer = (data: any) => {
+        params.current_page = data.current_page;
+        params.pagesize = data.pagesize;
+        params.sort_column = data.sort_column;
+        params.sort_direction = data.sort_direction;
+        if (data.change_type === 'search') {
+            clearTimeout(timer);
+            timer = setTimeout(() => {
+                getData();
+            }, 500);
+        } else {
+            getData();
+        }
+    };
+
+    const clearSearch = () => {
+        params.search = null;
+        clearTimeout(timer);
+    };
+
+
+    const deleteRow = (id: number) => {
+        notify.showConfirm(
+            '¿Estás seguro?',
+            'Esta acción no se puede deshacer',
+            'warning',
+            'Sí, eliminar',
+            'Cancelar'
+            ).then(isConfirmed => {
+            if (isConfirmed) {
+                api.delete(`subscriptions/v1/subscriptions/${id}`)
+                .then(async response => {
+                    await getData();
+                    notify.showToast('Registro eliminado exitosamente!', 'success');
+                })
+                .catch(error => {
+                    notify.showToast('Hubo un problema al eliminar el registro.', 'error');
+                });
+            }
+        });
+    };
     onMounted(async () => {
         await getData();
     });

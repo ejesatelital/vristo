@@ -25,4 +25,20 @@ export class NOTIFY {
     });
   }
 
+  // método para mostrar una confirmación
+  async showConfirm(title: string, text: string, icon: 'success' | 'error' | 'warning' | 'info' | 'question', confirmButtonText: string, cancelButtonText: string, config = {}) {
+    const result = await Swal.fire({
+      title: title,
+      text: text,
+      icon: icon,
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      confirmButtonText: confirmButtonText,
+      cancelButtonText: cancelButtonText,
+      ...config,
+    });
+    return result.isConfirmed;
+  }
+
+
 }

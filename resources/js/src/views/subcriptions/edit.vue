@@ -22,7 +22,7 @@
                     <h6 class="text-lg font-bold mb-5">Ingresar nueva suscripción</h6>
 
                     <div class="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-5">
-                        <div class="col-span-2">
+                        <!-- <div class="col-span-2">
                             <Select
                             :options="applications"
                             v-model="applicationsSelected"
@@ -33,7 +33,7 @@
                             value="id"
                             label="name"
                             />
-                        </div>
+                        </div> -->
                         <div>
                             <label for="phone">Fecha de inicio *</label>
                             <input id="phone" type="date" v-model="subscriptionData.start_date"
@@ -88,9 +88,9 @@
     import { ref, reactive, watch, onMounted } from 'vue';
     import { useI18n } from 'vue-i18n';
     import { useMeta } from '@/composables/use-meta';
-    import { API } from '@/services/api';
+    import { API } from '@/services/local';
     import {useCompanyStore} from "../../stores/company-store";
-    import Select from '@/components/partials/Select.vue';
+    // import Select from '@/components/partials/Select.vue';
     import { NOTIFY } from '@/services/notify';
     import { useRouter, useRoute } from 'vue-router';
     useMeta({ title: 'Subscription create' });
@@ -108,73 +108,70 @@
             description:null,
             start_date:null,
             end_date:null,
-            status:null,
-            renewal:0,
+            renewal:false,
             value:null,
-            applications:[]
+            // applications:[]
         }
     );
 
     const editSubscription = async () => {
         loading.value = true;
-        Object.assign(subscriptionData.applications, applicationsIds.value);
+        // Object.assign(subscriptionData.applications, applicationsIds.value);
         try {
-            const response = await api.post(`subscriptions/v1/subscriptions`, subscriptionData);
+            const response = await api.put(`subscriptions/v1/subscriptions/${route.params.id}`, subscriptionData);
             loading.value = false;
-            notify.showToast('Registro editado exitosamente', 'Success').then(
+            notify.showToast('Registro editado exitosamente', 'success').then(
                 router.push({ name: 'subscriptions' })
             );
         } catch (error) {
-            notify.showAlert('Error editando los datos: '+ error.response, 'error');
+            notify.showAlert('Error!',  'No se pudo actualizar: '+ error.response, 'error');
             loading.value = false;
         }
     };
 
-    const applications = ref();
-    let applicationsIds: any = ref([]);
-    interface Application {
-        id: number;
-        name: string;
-    }
+    // const applications = ref();
+    // let applicationsIds: any = ref([]);
+    // interface Application {
+    //     id: number;
+    //     name: string;
+    // }
 
-    const applicationsSelected = ref<Application[]>([]);
-    watch(applicationsSelected, (newSelection: Application[]) => {
-        applicationsIds.value = newSelection.map((option: Application) => option.id);
-    });
+    // const applicationsSelected = ref<Application[]>([]);
+    // watch(applicationsSelected, (newSelection: Application[]) => {
+    //     applicationsIds.value = newSelection.map((option: Application) => option.id);
+    // });
 
-    const getApplications = async () =>
-    {
-        try {
-            const response = await api.get(`subscriptions/v1/applications`);
-            if (response) {
-                applications.value = response.data
-            }
-            else {
-                throw new Error('Hubo un problema al obtener la lista de applications desde el API.');
-            }
-        } catch (error) {
-            console.error(error.response);
-        }
-    }
+    // const getApplications = async () =>
+    // {
+    //     try {
+    //         const response = await api.get(`subscriptions/v1/applications`);
+    //         if (response) {
+    //             applications.value = response.data
+    //         }
+    //         else {
+    //             throw new Error('Hubo un problema al obtener la lista de applications desde el API.');
+    //         }
+    //     } catch (error) {
+    //         console.error(error.response);
+    //     }
+    // }
 
 
     const getSubscription = async () =>
     {
-        console.log(route.params.id);
-
         try {
             const response = await api.get(`subscriptions/v1/subscriptions/${route.params.id}`);
             const data = response.data;
-                Object.assign(subscriptionData, {
-                    description:data.description,
-                    start_date:data.start_date,
-                    end_date:data.end_date,
-                    status:data.status,
-                    renewal:data.renewal,
-                    value:data.value
-                });
-                Object.assign(applicationsSelected, data.application);
-
+            Object.assign(subscriptionData, {
+                description:data.description,
+                start_date:data.start_date,
+                end_date:data.end_date,
+                status:data.status,
+                renewal:data.renewal,
+                value:data.value
+            });
+                // applicationsSelected.value = data.application;
+                // console.log(applicationsSelected);
         } catch (error) {
             loading.value = true;
             console.error(error.response);
@@ -183,7 +180,7 @@
 
 
     onMounted(async () => {
-       await getApplications();
+    //    await getApplications();
        await getSubscription();
 
     });
