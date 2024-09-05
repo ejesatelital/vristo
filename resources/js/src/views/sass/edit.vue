@@ -113,8 +113,31 @@
                                         <h6 class="text-lg font-bold mb-5">General Information</h6>
                                         <div class="flex flex-col sm:flex-row">
                                             <div class="ltr:sm:mr-4 rtl:sm:ml-4 w-full sm:w-2/12 mb-5">
-                                                <img src="/assets//images/profile-34.jpeg" alt=""
-                                                    class="w-20 h-20 md:w-32 md:h-32 rounded-full object-cover mx-auto" />
+                                                <div class="custom-file-container">
+                                                    <div class="mb-5">
+                                                        <label for="file">Imagen</label>
+                                                        <div>
+                                                            <input
+                                                                id="file"
+                                                                type="file"
+                                                                class="form-input file:py-2 file:px-4 file:border-0 file:font-semibold p-0 file:bg-primary/90 ltr:file:mr-5 rtl:file:ml-5 file:text-white file:hover:bg-primary"
+                                                                multiple
+                                                                accept="image/*"
+                                                                @change="handleFileUpload($event)"
+                                                            />
+                                                        </div>
+                                                        <div class="text-center mt-6" v-if="loading">
+                                                            <!-- custom loader -->
+                                                            <span
+                                                                class="animate-[spin_2s_linear_infinite] border-8 border-[#f1f2f3] border-l-primary border-r-primary rounded-full w-14 h-14 inline-block align-middle m-auto mb-10"></span>
+                                                        </div>
+                                                        <div class="text-danger mt-2" id="file"></div>
+                                                    </div>
+                                                    <div class="flex flex-col justify-center items-center">
+                                                        <img :src="companyData.logo" :alt="companyData.name"
+                                                             class="w-100 h-100 object-cover mb-5 p-6"/>
+                                                    </div>
+                                                </div>
                                             </div>
                                             <div class="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-5">
                                                 <div>
@@ -534,10 +557,8 @@
 
     import { ref, reactive, onMounted } from 'vue';
     import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/vue';
-
     import { useI18n } from 'vue-i18n';
     import { useMeta } from '@/composables/use-meta';
-    import FileUploadWithPreview from 'file-upload-with-preview';
     import { useRoute, useRouter } from 'vue-router';
     import apiConfigurations from './partials/apisComponent.vue';
     import Swal from 'sweetalert2';
@@ -545,6 +566,8 @@
     const api = new API();
     const route = useRoute();
     const router = useRouter();
+    const file = ref();
+    const image = ref();
 
     useMeta({ title: 'Company' });
 
@@ -557,7 +580,7 @@
             email: null,
             address: null,
             phone: null,
-            logo: null,
+            logo: '/assets/images/file-preview.svg',
             web: null,
             settings: {
                 user_tracking: null,
@@ -633,14 +656,31 @@
         }
     }
 
+    const uploadedFile = ref({
+        file: '',
+        company_id: route.params.id,
+        pathOld: ""
+    });
+
+    const handleFileUpload = async (event) => {
+        try {
+            loading.value = true
+            uploadedFile.value.file = event.target.files[0];
+            let formData = new FormData();
+            formData.append('file', uploadedFile.value.file);
+            formData.append('company_id', uploadedFile.value.company_id);
+            formData.append('pathOld', uploadedFile.value.pathOld);
+            const response = await api.post(`maintenance/v1/images`, formData)
+            companyData.value.logo = response.data.data.link
+            image.value = response.data.data.url
+            loading.value = false
+        } catch (e) {
+            console.log(e)
+            loading.value = false
+        }
+    };
+
     onMounted(async () => {
         await getData();
-        // single image upload
-        // new FileUploadWithPreview('myFirstImage', {
-        //     images: {
-        //         baseImage: '/assets/images/file-preview.svg',
-        //         backgroundImage: '',
-        //     },
-        // });
     });
 </script>

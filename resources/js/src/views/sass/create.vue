@@ -64,8 +64,31 @@
                                         <h6 class="text-lg font-bold mb-5">General Information</h6>
                                         <div class="flex flex-col sm:flex-row">
                                             <div class="ltr:sm:mr-4 rtl:sm:ml-4 w-full sm:w-2/12 mb-5">
-                                                <img src="/assets//images/profile-34.jpeg" alt=""
-                                                    class="w-20 h-20 md:w-32 md:h-32 rounded-full object-cover mx-auto" />
+                                                <div class="custom-file-container">
+                                                    <div class="mb-5">
+                                                        <label for="file">Imagen</label>
+                                                        <div>
+                                                            <input
+                                                                id="file"
+                                                                type="file"
+                                                                class="form-input file:py-2 file:px-4 file:border-0 file:font-semibold p-0 file:bg-primary/90 ltr:file:mr-5 rtl:file:ml-5 file:text-white file:hover:bg-primary"
+                                                                multiple
+                                                                accept="image/*"
+                                                                @change="handleFileUpload($event)"
+                                                            />
+                                                        </div>
+                                                        <div class="text-center mt-6" v-if="loading">
+                                                            <!-- custom loader -->
+                                                            <span
+                                                                class="animate-[spin_2s_linear_infinite] border-8 border-[#f1f2f3] border-l-primary border-r-primary rounded-full w-14 h-14 inline-block align-middle m-auto mb-10"></span>
+                                                        </div>
+                                                        <div class="text-danger mt-2" id="file"></div>
+                                                    </div>
+                                                    <div class="flex flex-col justify-center items-center">
+                                                        <img :src="companyData.logo" :alt="companyData.name"
+                                                             class="w-100 h-100 object-cover mb-5 p-6"/>
+                                                    </div>
+                                                </div>
                                             </div>
                                             <div class="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-5">
                                                 <div>
@@ -101,19 +124,6 @@
                                             </div>
                                         </div>
 
-                                    <!-- <div class="mb-5">
-                                        <div class="custom-file-container" data-upload-id="myFirstImage">
-                                            <div class="label-container">
-                                                <label>Logo </label> <a href="javascript:;" class="custom-file-container__image-clear" title="Clear Image">×</a>
-                                            </div>
-                                            <label class="custom-file-container__custom-file">
-                                                <input type="file" class="custom-file-container__custom-file__custom-file-input" accept="image/*" />
-                                                <input type="hidden" name="MAX_FILE_SIZE" value="10485760" />
-                                                <span class="custom-file-container__custom-file__custom-file-control ltr:pr-20 rtl:pl-20"></span>
-                                            </label>
-                                            <div class="custom-file-container__image-preview"></div>
-                                        </div>
-                                    </div> -->
                                     </div>
                                 </div>
                             </div>
@@ -164,7 +174,7 @@
             email: null,
             address: null,
             phone: null,
-            logo: null,
+            logo: '/assets/images/file-preview.svg',
             web: null,
             settings: {
                 user_tracking: null,
