@@ -133,9 +133,9 @@
                                                         </div>
                                                         <div class="text-danger mt-2" id="file"></div>
                                                     </div>
-                                                    <div class="flex flex-col justify-center items-center">
+                                                    <div class="flex flex-col justify-center items-center" >
                                                         <img :src="companyData.logo" :alt="companyData.name"
-                                                             class="w-100 h-100 object-cover mb-5 p-6"/>
+                                                             class="w-20 h-20 md:w-32 md:h-32 rounded-full object-cover mx-auto"/>
                                                     </div>
                                                 </div>
                                             </div>

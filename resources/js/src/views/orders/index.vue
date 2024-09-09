@@ -13,7 +13,7 @@
 
         <div class="mt-5 panel pb-1.5">
             <div class="flex items-center justify-between gap-4 p-5">
-                <h2 class="text-xl text-bold"> {{ $t('payments') }}</h2>
+                <h2 class="text-xl text-bold"> {{ $t('orders') }}</h2>
                 <div class="flex sm:flex-row flex-col sm:items-center sm:gap-3 gap-4 w-full sm:w-auto">
                     <div class="dropdown">
                         <Popper :placement="store.rtlClass === 'rtl' ? 'bottom-end' : 'bottom-start'" offsetDistance="0" class="align-middle">
