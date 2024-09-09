@@ -134,7 +134,7 @@
                                                         <div class="text-danger mt-2" id="file"></div>
                                                     </div>
                                                     <div class="flex flex-col justify-center items-center" >
-                                                        <img :src="companyData.logo" :alt="companyData.name"
+                                                        <img :src="image" :alt="companyData.name"
                                                              class="w-20 h-20 md:w-32 md:h-32 rounded-full object-cover mx-auto"/>
                                                     </div>
                                                 </div>
@@ -573,7 +573,7 @@
 
     const loading = ref(false);
 
-    const companyData = reactive(
+    const companyData = ref(
         {
             name: null,
             identification: null,
@@ -611,17 +611,8 @@
         try {
             const response = await api.get(`sass/v1/companies/${route.params.id}`);
                 const data = response.data;
-                Object.assign(companyData, {
-                    name: data.name,
-                    identification: data.identification,
-                    email: data.email,
-                    address: data.address,
-                    phone: data.phone,
-                    logo: data.logo,
-                    web: data.web
-                });
-
-                Object.assign(companyData.settings, data.settings);
+                Object.assign(companyData.value, data);
+                image.value = data.avatar;
         } catch (error) {
             loading.value = true;
             console.error(error.response);
@@ -630,8 +621,10 @@
 
     const editCompany = async () => {
         loading.value = true;
+        console.log(companyData.value);
+
         try {
-            const response = await api.put(`sass/v1/companies/${route.params.id}`, companyData);
+            const response = await api.put(`sass/v1/companies/${route.params.id}`, companyData.value);
 
             loading.value = false;
             Swal.fire({
@@ -659,7 +652,7 @@
     const uploadedFile = ref({
         file: '',
         company_id: route.params.id,
-        pathOld: ""
+        pathOld: companyData.value.logo
     });
 
     const handleFileUpload = async (event) => {
@@ -670,9 +663,9 @@
             formData.append('file', uploadedFile.value.file);
             formData.append('company_id', uploadedFile.value.company_id);
             formData.append('pathOld', uploadedFile.value.pathOld);
-            const response = await api.post(`maintenance/v1/images`, formData)
-            companyData.value.logo = response.data.data.link
-            image.value = response.data.data.url
+            const response = await api.post(`sass/v1/companies/images`, formData);
+            companyData.value.logo = response.data.data.link;
+            image.value = response.data.data.url;
             loading.value = false
         } catch (e) {
             console.log(e)

@@ -103,7 +103,8 @@
     import { API } from '@/services/api';
     import {useUserStore} from "../../stores/user-store";
     import {useCompanyStore} from "../../stores/company-store";
-    import Swal from 'sweetalert2';
+    import { NOTIFY } from '@/services/notify';
+    const notify = new NOTIFY();
 
     useMeta({ title: 'Companies' });
     const api = new API();
@@ -190,33 +191,22 @@
     };
 
     const deleteCompany = (id: number) => {
-        Swal.fire({
-            title: '¿Estás seguro?',
-            text: "Esta acción no se puede deshacer",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Sí, eliminar',
-            cancelButtonText: 'Cancelar'
-        }).then((result) => {
-            if (result.isConfirmed) {
+        notify.showConfirm(
+            '¿Estás seguro?',
+            'Esta acción no se puede deshacer',
+            'warning',
+            'Sí, eliminar',
+            'Cancelar'
+            ).then(isConfirmed => {
+            if (isConfirmed) {
                 api.delete(`sass/v1/companies/${id}`)
-                    .then(async response => {
-                        await getData();
-                        Swal.fire(
-                            'Eliminado!',
-                            'La empresa ha sido eliminada.',
-                            'success'
-                        );
-                    })
-                    .catch(error => {
-                        Swal.fire(
-                            'Error',
-                            'Hubo un problema al eliminar la empresa.',
-                            'error'
-                        );
-                    });
+                .then(async response => {
+                    await getData();
+                    notify.showToast('Registro eliminado exitosamente!', 'success');
+                })
+                .catch(error => {
+                    notify.showToast('Hubo un problema al eliminar el registro.', 'error');
+                });
             }
         });
     };

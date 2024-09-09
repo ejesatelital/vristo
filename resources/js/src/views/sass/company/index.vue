@@ -51,7 +51,9 @@
                     </div>
                     <div class="mb-5">
                         <div class="flex flex-col justify-center items-center">
-                            <img src="/assets/images/profile-34.jpeg" alt="" class="w-24 h-24 rounded-full object-cover mb-5" />
+                            <!-- <img src="/assets/images/profile-34.jpeg" alt="" class="w-24 h-24 rounded-full object-cover mb-5" /> -->
+                            <img :src="image" :alt="data?.name || ''" class="w-20 h-20 md:w-32 md:h-32 rounded-full object-cover mx-auto"/>
+
                             <p class="font-semibold text-primary text-xl">{{ data?.name || '' }}</p>
                         </div>
                         <ul class="mt-5 flex flex-col max-w-[160px] m-auto space-y-4 font-semibold text-white-dark">
@@ -496,11 +498,13 @@ import {ref, onMounted } from 'vue';
     ]);
 
     const data = ref();
+    const image = ref();
 
     const getCompanyData = async (companyId) => {
         try {
             const response = await api.get(`sass/v1/companies/${companyId}`);
             data.value = response.data;
+            image.value = response.data.avatar;
         } catch (error) {
             notify.showAlert('Error opteniendo datos:'+ error.response, 'error');
         }
