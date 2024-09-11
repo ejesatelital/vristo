@@ -82,6 +82,9 @@
                 previousArrow='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"> <path d="M15 5L9 12L15 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> </svg>'
                 nextArrow='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"> <path d="M9 5L15 12L9 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> </svg>'
             >
+            <template #engine_status="data">
+                <span class="badge" :class="data.device_data.engine_status ? 'badge-outline-success':'badge-outline-danger'">{{data.device_data.engine_status ? 'Encendido':'Apagado' }}</span>
+            </template>
         </vue3-datatable>
         </div>
     </div>
@@ -111,7 +114,8 @@
         {field: 'odometer', title: 'Kilometraje', hide: true},
         {field: 'options.last_driver', title: 'Ultímo conductor', hide: false},
         {field: 'options.current_driver', title: 'Conductor actual', hide: false},
-        {field: 'device_data.time', title: 'Última actualización', type:'date', hide: true},
+        {field: 'engine_status', title: 'Estado del vehículo', hide: false},
+        {field: 'device_data.time', title: 'Última actualización', type:'date', hide: false},
     ]);
     const rows: any = ref(null);
     const total_rows = ref(0);
