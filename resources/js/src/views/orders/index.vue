@@ -166,7 +166,7 @@
     import { useMeta } from '@/composables/use-meta';
     import { useAppStore } from '@/stores/index';
     import { useI18n } from 'vue-i18n';
-    import { API } from '@/services/local';
+    import { API } from '@/services/api';
     import {useCompanyStore} from "../../stores/company-store";
     import { NOTIFY } from '@/services/notify';
     const notify = new NOTIFY();
