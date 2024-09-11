@@ -184,6 +184,16 @@
             });
         }
     }
+
+    // var pusher = new Pusher("510b20d8f066bb70b3a3", {
+    //     cluster: "us2",
+    // });
+
+    // var channel = pusher.subscribe(`ejetrack.webhook.${route.params.id}`);
+    // channel.bind('ejetrack.webhook.device', function() {
+    //     console.log('Evento device recibido');
+    // });
+    
     onMounted(async () => {
        await getDevicesData();
     });
