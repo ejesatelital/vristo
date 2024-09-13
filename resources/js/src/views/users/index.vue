@@ -154,7 +154,7 @@
             if(userStore.hasAccess('sass.companies.indexall') && companies.length > 1){
                 companies = null
             }
-            const response = await api.get(`user/users?search=${params.search}&company_id=${companies}&page=${params.current_page}&per_page=${params.pagesize}`)
+            const response = await api.get(`user/users?search=${params.search}&company_id=[${companies}]&page=${params.current_page}&per_page=${params.pagesize}`)
             rows.value = response?.data;
             total_rows.value = response?.meta?.total;
         } catch (error) {
