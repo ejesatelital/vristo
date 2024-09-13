@@ -169,7 +169,7 @@
             password: '',
             password_confirmation: '',
             companies: [],
-            roles: []
+            roles: [3]
         }
     );
 
