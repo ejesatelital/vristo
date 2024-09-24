@@ -18,15 +18,16 @@ export const useCompanyStore = defineStore('company', {
         getCompaniesSelect: state => state.companiesSelect
     },
     actions: {
-        async setAllCompanies(limit = 50, page = 1) {
-            const api = new API()
-            let companies = []
-            await api.get("/sass/v1/companies?page=1&take=20").then(async function (response) {
-                    companies = response
-            }).catch(e => {
-                console.log(e)
-            });
-            return companies
+        async setAllCompanies(limit = 20, page = 1) {
+            const api = new API();
+            try {
+              const response = await api.get(`/sass/v1/companies?page=${page}&take=${limit}`);
+              return response;  // Retorna la respuesta completa para que podamos usarla
+            } catch (error) {
+              console.error('Error fetching companies on page ' + page + ':', error);
+              return [];  // Devuelve un array vacío o maneja el error según tu lógica
+            }
+          },
 
         },
         setCompaniesSelect(payload: any) {
