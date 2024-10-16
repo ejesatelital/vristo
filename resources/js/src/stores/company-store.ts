@@ -58,7 +58,6 @@ export const useCompanyStore = defineStore('company', {
             this.companies = []
             this.companyOptions = []
             this.companiesSelect = []
-        }
-    },
-    persist: true
+        },
+        persist: true
 })
