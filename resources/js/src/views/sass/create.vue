@@ -150,8 +150,6 @@
 
     import { useI18n } from 'vue-i18n';
     import { useMeta } from '@/composables/use-meta';
-    import VueCollapsible from 'vue-height-collapsible/vue3';
-    import FileUploadWithPreview from 'file-upload-with-preview';
     import { useRouter } from 'vue-router';
     import Swal from 'sweetalert2';
     import apiConfigurations from './partials/apisComponent.vue';
@@ -160,8 +158,6 @@
     const api = new API();
 
     const router = useRouter();
-
-    const accordians: any = ref();
 
     useMeta({ title: 'Company create' });
 

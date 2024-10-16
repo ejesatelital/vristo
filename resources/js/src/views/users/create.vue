@@ -64,7 +64,6 @@
                                     :options="companies"
                                     v-model="companiesSelected"
                                     :multiple="true"
-                                    required
                                     :closeOnSelect="false"
                                     titleSelect="Companies"
                                     name="companies"
@@ -76,7 +75,6 @@
                                     :options="roles"
                                     v-model="rolesSelected"
                                     :multiple="true"
-                                    required
                                     :closeOnSelect="false"
                                     titleSelect="Roles"
                                     name="roles"

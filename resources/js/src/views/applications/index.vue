@@ -533,6 +533,7 @@
     import { useMeta } from '@/composables/use-meta';
     import { useAppStore } from '@/stores/index';
     import { useI18n } from 'vue-i18n';
+    import { API } from '@/services/local';
     import {useCompanyStore} from "../../stores/company-store";
 
     const modal2 = ref(false);

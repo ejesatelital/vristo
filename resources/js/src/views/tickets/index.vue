@@ -1356,6 +1356,19 @@
 
         console.log( quillEditorObj.value);
 
+        // const filesForUpload = ticketData.value.message.attachments;
+
+        // console.log(filesForUpload);
+
+        // const formData = new FormData;
+        // if (filesForUpload.length) {
+        //     filesForUpload.map(file => {
+        //         formData.append('files[]', file.file);
+        //     });
+        // }
+
+        // console.log(formData);
+
 
         const { browser, os } = getBrowserInfo();
 

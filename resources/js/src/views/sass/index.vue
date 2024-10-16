@@ -159,6 +159,7 @@
                 total_rows.value = response?.meta?.page?.total;
             }else
             {
+                const response = await api.get(`sass/v1/companies?filter={"search":"${params.search}"}&page=${params.current_page}&take=${params.pagesize}&company_id=[${companyStore.companies}]`)
                 companies = companyStore.companies;
                 total_rows.value = companies.length;
             }
