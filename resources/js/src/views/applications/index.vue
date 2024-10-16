@@ -480,80 +480,33 @@
                                             <input id="color" type="color" v-model="app.color"/>
                                         </div>
 
-                                        <!-- Trigger -->
-                                        <div class="flex items-center justify-center">
-                                            <button type="button" class="btn btn-info" @click="uploadImage(app.media_single)">Cargar logo</button>
-                                                    <!-- Modal -->
-                                                    <TransitionRoot appear :show="modal2" as="template">
-                                                        <Dialog as="div" @close="modal2 = false" class="relative z-[51]">
-                                                            <TransitionChild
-                                                                as="template"
-                                                                enter="duration-300 ease-out"
-                                                                enter-from="opacity-0"
-                                                                enter-to="opacity-100"
-                                                                leave="duration-200 ease-in"
-                                                                leave-from="opacity-100"
-                                                                leave-to="opacity-0"
-                                                            >
-                                                                <DialogOverlay class="fixed inset-0 bg-[black]/60" />
-                                                            </TransitionChild>
-
-                                                            <div class="fixed inset-0 overflow-y-auto">
-                                                                <div class="flex min-h-full items-center justify-center px-4 py-8">
-                                                                    <TransitionChild
-                                                                        as="template"
-                                                                        enter="duration-300 ease-out"
-                                                                        enter-from="opacity-0 scale-95"
-                                                                        enter-to="opacity-100 scale-100"
-                                                                        leave="duration-200 ease-in"
-                                                                        leave-from="opacity-100 scale-100"
-                                                                        leave-to="opacity-0 scale-95"
-                                                                    >
-                                                                        <DialogPanel class="panel border-0 p-0 rounded-lg overflow-hidden w-full max-w-lg text-black dark:text-white-dark">
-                                                                            <button
-                                                                                type="button"
-                                                                                class="absolute top-4 ltr:right-4 rtl:left-4 text-gray-400 hover:text-gray-800 dark:hover:text-gray-600 outline-none"
-                                                                                @click="modal2 = false"
-                                                                            >
-                                                                                <svg
-                                                                                    xmlns="http://www.w3.org/2000/svg"
-                                                                                    width="24px"
-                                                                                    height="24px"
-                                                                                    viewBox="0 0 24 24"
-                                                                                    fill="none"
-                                                                                    stroke="currentColor"
-                                                                                    stroke-width="1.5"
-                                                                                    stroke-linecap="round"
-                                                                                    stroke-linejoin="round"
-                                                                                    class="w-6 h-6"
-                                                                                >
-                                                                                    <line x1="18" y1="6" x2="6" y2="18"></line>
-                                                                                    <line x1="6" y1="6" x2="18" y2="18"></line>
-                                                                                </svg>
-                                                                            </button>
-                                                                            <div
-                                                                                class="text-lg font-bold bg-[#fbfbfb] dark:bg-[#121c2c] ltr:pl-5 rtl:pr-5 py-3 ltr:pr-[50px] rtl:pl-[50px]"
-                                                                            >
-                                                                                Modal Title
-                                                                            </div>
-                                                                            <div class="p-5">
-                                                                                <p>
-                                                                                    Mauris mi tellus, pharetra vel mattis sed, tempus ultrices eros. Phasellus egestas sit amet velit sed
-                                                                                    luctus. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
-                                                                                    Suspendisse potenti. Vivamus ultrices sed urna ac pulvinar. Ut sit amet ullamcorper mi.
-                                                                                </p>
-
-                                                                                <div class="flex justify-end items-center mt-8">
-                                                                                    <button type="button" @click="modal2 = false" class="btn btn-outline-danger">Discard</button>
-                                                                                    <button type="button" @click="modal2 = false" class="btn btn-primary ltr:ml-4 rtl:mr-4">Save</button>
-                                                                                </div>
-                                                                            </div>
-                                                                        </DialogPanel>
-                                                                    </TransitionChild>
-                                                                </div>
-                                                            </div>
-                                                        </Dialog>
-                                                    </TransitionRoot>
+                                        <div class="flex items-center justify-center" v-if="app.id">
+                                            <div class="ltr:sm:mr-4 rtl:sm:ml-4 w-full sm:w-2/12 mb-5">
+                                                <div class="custom-file-container">
+                                                    <div class="mb-5">
+                                                        <label for="file">Imagen</label>
+                                                        <div>
+                                                            <input
+                                                                id="file"
+                                                                type="file"
+                                                                class="form-input file:py-2 file:px-4 file:border-0 file:font-semibold p-0 file:bg-primary/90 ltr:file:mr-5 rtl:file:ml-5 file:text-white file:hover:bg-primary"
+                                                                multiple
+                                                                accept="image/*"
+                                                                @change="handleFileUpload($event)"
+                                                            />
+                                                        </div>
+                                                        <div class="text-center mt-6" v-if="loading">
+                                                            <!-- custom loader -->
+                                                            <span class="animate-[spin_2s_linear_infinite] border-8 border-[#f1f2f3] border-l-primary border-r-primary rounded-full w-14 h-14 inline-block align-middle m-auto mb-10"></span>
+                                                        </div>
+                                                        <div class="text-danger mt-2" id="file"></div>
+                                                    </div>
+                                                    <div class="flex flex-col justify-center items-center">
+                                                        <img :src="app.logo" :alt="app.name"
+                                                             class="w-100 h-100 object-cover mb-5 p-6"/>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
 
                                         <div class="flex justify-end items-center mt-8">
@@ -580,7 +533,6 @@
     import { useMeta } from '@/composables/use-meta';
     import { useAppStore } from '@/stores/index';
     import { useI18n } from 'vue-i18n';
-    import { API } from '@/services/api';
     import {useCompanyStore} from "../../stores/company-store";
 
     const modal2 = ref(false);
@@ -595,7 +547,7 @@
     const api = new API();
 
     const cols = ref([
-        { field: 'id', title: 'Id'},
+        { field: 'id', title: 'Id', width: '50px'},
         { field: 'name', title: 'Nombre'},
         { field: 'description', title: 'Descripción'},
         { field: 'url', title: 'Url'},
@@ -627,6 +579,7 @@
         color: '#0B39EF',
         status: 1,
         url: '',
+        logo: '/assets/images/file-preview.svg',
     });
 
     const displayType = ref('list');
@@ -751,6 +704,33 @@
         clearTimeout(timer);
         getData();
     };
+
+    const image = ref();
+
+    const uploadedFile = ref({
+        file: '',
+        app_id: app.value.id,
+        pathOld: app.value.logo
+    });
+
+    const handleFileUpload = async (event) => {
+        try {
+            loading.value = true
+            uploadedFile.value.file = event.target.files[0];
+            let formData = new FormData();
+            formData.append('file', uploadedFile.value.file);
+            formData.append('app_id', uploadedFile.value.app_id);
+            formData.append('pathOld', uploadedFile.value.pathOld);
+            const response = await api.post(`sass/v1/companies/images`, formData);
+            app.value.logo = response.data.data.link;
+            image.value = response.data.data.url;
+            loading.value = false
+        } catch (e) {
+            console.log(e)
+            loading.value = false
+        }
+    };
+
 
     onMounted(async () => {
        await getData();
