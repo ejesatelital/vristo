@@ -47,28 +47,11 @@ export const useUserStore = defineStore('user', {
                     const user = response.data;
                     await this.setUser(user);
                     if (this.hasAccess('sass.companies.indexall')) {
-                        let limit = 20
-                        let page = 1;
-                        let lastPage = 1;
-                        try {
-                          do {
-                            // Llamar a setAllCompanies para obtener los datos de la página actual
-                            const response = await companyStore.setAllCompanies(limit, page);
-                            // Añadir los nuevos datos al array de companies
-                            response.data.forEach((company: any) => {
-                              companyStore.companies.push(company);
-                            });
-                            // Actualizar el número de la página actual y de la última página
-                            page = response.meta.page.currentPage + 1;
-                            lastPage = response.meta.page.lastPage;
-                          } while (page <= lastPage); // Continuar mientras no se haya alcanzado la última página
-
-                        } catch (error) {
-                          console.error('Error fetching companies:', error);
-                        }
+                        await companyStore.setAllCompanies();
                         companyStore.setCompany(companyStore.companies[0]);
                         companyStore.setCompaniesSelect([companyStore.companies[0].id]);
                         companyStore.setCompanyOptions(companyStore.companies);
+
                     } else {
                         if (user.companies.length === 1) {
                             companyStore.setCompany(user.companies[0]);

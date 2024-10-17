@@ -15,7 +15,7 @@
 
             <div class="flex justify-end mb-5 gap-3">
                 <div class="relative max-w-xs">
-                    <input v-model="params.search" type="text" class="form-input w-full pr-10" placeholder="Buscar..." @input="handleInput"/>
+                    <input v-model="params.search" type="text" class="form-input w-full pr-10" placeholder="Buscar..." />
                     <button v-if="params.search" @click="clearSearch" class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500" >
                         ✕
                     </button>

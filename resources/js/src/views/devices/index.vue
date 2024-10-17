@@ -100,9 +100,12 @@
 
     import { API } from '@/services/api';
     import {useCompanyStore} from "../../stores/company-store";
+    import Pusher from "pusher-js";
+    import {useUserStore} from "@/stores/user-store";
 
     const store = useAppStore();
     const companyStore = useCompanyStore();
+    const userStore= useUserStore();
     const api = new API();
 
     useMeta({ title: 'Devices' });
@@ -187,14 +190,16 @@
         }
     }
 
-    // var pusher = new Pusher("510b20d8f066bb70b3a3", {
-    //     cluster: "us2",
-    // });
+    Pusher.logToConsole = true;
 
-    // var channel = pusher.subscribe(`ejetrack.webhook.${route.params.id}`);
-    // channel.bind('ejetrack.webhook.device', function() {
-    //     console.log('Evento device recibido');
-    // });
+    var pusher = new Pusher('1a3ed9fce586aff12654', {
+        cluster: 'us2'
+    });
+
+    var channel = pusher.subscribe('device-user-'+userStore.id);
+    channel.bind('update-devices', function(data) {
+        getDevicesData()
+    });
 
     onMounted(async () => {
        await getDevicesData();

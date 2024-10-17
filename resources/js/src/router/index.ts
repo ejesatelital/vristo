@@ -31,15 +31,15 @@ import storeLayout from '../layouts/store-layout.vue';
 import appLayout from '../layouts/app-layout.vue';
 import authLayout from '../layouts/auth-layout.vue';
 // Subcriptions
-import IndexSubcriptions from '../views/subcriptions/index.vue';
-import CreateSubcriptions from '../views/subcriptions/create.vue';
-import EditSubcriptions from '../views/subcriptions/edit.vue';
+import IndexSubcriptions from '../views/subcriptions/subcription/index.vue';
+import CreateSubcriptions from '../views/subcriptions/subcription/create.vue';
+import EditSubcriptions from '../views/subcriptions/subcription/edit.vue';
 // Applications
-import IndexApplications from '../views/applications/index.vue';
+import IndexApplications from '../views/subcriptions/applications/index.vue';
 // Orders
-import IndexOrders from '../views/orders/index.vue';
+import IndexOrders from '../views/subcriptions/orders/index.vue';
 // Payments
-import IndexPayments from '../views/payments/index.vue';
+import IndexPayments from '../views/subcriptions/payments/index.vue';
 
 
 

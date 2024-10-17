@@ -11,9 +11,9 @@
             </li>
         </ul>
 
-        <div class="mt-5 panel pb-1.5">
+        <div class="mt-5 panel p-0 border-0 overflow-hidden">
             <div class="flex items-center justify-between gap-4 p-5">
-                <h2 class="text-xl text-bold"> {{ $t('orders') }}</h2>
+                <h2 class="text-xl text-bold"> {{ $t('payments') }}</h2>
                 <div class="flex sm:flex-row flex-col sm:items-center sm:gap-3 gap-4 w-full sm:w-auto">
                     <div class="dropdown">
                         <Popper :placement="store.rtlClass === 'rtl' ? 'bottom-end' : 'bottom-start'" offsetDistance="0" class="align-middle">
@@ -167,17 +167,18 @@
     import { useAppStore } from '@/stores/index';
     import { useI18n } from 'vue-i18n';
     import { API } from '@/services/api';
-    import {useCompanyStore} from "../../stores/company-store";
     import { NOTIFY } from '@/services/notify';
+    import {useCompanyStore} from "@/stores/company-store";
     const notify = new NOTIFY();
-    const api = new API();
 
-    useMeta({ title: 'Orders' });
+    useMeta({ title: 'Payments' });
     const companyStore = useCompanyStore();
     const loading = ref(true);
     const store = useAppStore();
     // multi language
     const i18n = reactive(useI18n());
+
+    const api = new API();
 
     const cols = ref([
         { field:'id', title: 'Id', hide: true},

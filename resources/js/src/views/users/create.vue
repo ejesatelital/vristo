@@ -15,7 +15,7 @@
                 <div class="panel pb-1.5 mt-6">
                     <div
                         class="border border-[#ebedf2] dark:border-[#191e3a] rounded-md p-4 mb-2 bg-white dark:bg-[#0e1726]">
-                        <h6 class="text-lg font-bold mb-5">General Information</h6>
+                        <h6 class="text-lg font-bold mb-5">Información General</h6>
                         <div class="flex flex-col sm:flex-row">
                             <div class="ltr:sm:mr-4 rtl:sm:ml-4 w-full sm:w-2/12 mb-5">
                                 <img src="/assets//images/profile-34.jpeg" alt=""

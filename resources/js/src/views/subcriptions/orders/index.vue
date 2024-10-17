@@ -11,9 +11,9 @@
             </li>
         </ul>
 
-        <div class="mt-5 panel p-0 border-0 overflow-hidden">
+        <div class="mt-5 panel pb-1.5">
             <div class="flex items-center justify-between gap-4 p-5">
-                <h2 class="text-xl text-bold"> {{ $t('payments') }}</h2>
+                <h2 class="text-xl text-bold"> {{ $t('orders') }}</h2>
                 <div class="flex sm:flex-row flex-col sm:items-center sm:gap-3 gap-4 w-full sm:w-auto">
                     <div class="dropdown">
                         <Popper :placement="store.rtlClass === 'rtl' ? 'bottom-end' : 'bottom-start'" offsetDistance="0" class="align-middle">
@@ -149,7 +149,7 @@
                                         <path opacity="0.5" d="M6.5 6C6.55588 6 6.58382 6 6.60915 5.99936C7.43259 5.97849 8.15902 5.45491 8.43922 4.68032C8.44784 4.65649 8.45667 4.62999 8.47434 4.57697L8.57143 4.28571C8.65431 4.03708 8.69575 3.91276 8.75071 3.8072C8.97001 3.38607 9.37574 3.09364 9.84461 3.01877C9.96213 3 10.0932 3 10.3553 3H13.6447C13.9068 3 14.0379 3 14.1554 3.01877C14.6243 3.09364 15.03 3.38607 15.2493 3.8072C15.3043 3.91276 15.3457 4.03708 15.4286 4.28571L15.5257 4.57697C15.5433 4.62992 15.5522 4.65651 15.5608 4.68032C15.841 5.45491 16.5674 5.97849 17.3909 5.99936C17.4162 6 17.4441 6 17.5 6" stroke="currentColor" stroke-width="1.5"></path>
                                     </svg>
                                 </button>
-                                <tippy target="delete">borrar</tippy>
+                                <tippy target="delete">Borrar</tippy>
                             <!-- </template> -->
 
                         </div>
@@ -167,18 +167,17 @@
     import { useAppStore } from '@/stores/index';
     import { useI18n } from 'vue-i18n';
     import { API } from '@/services/api';
-    import {useCompanyStore} from "../../stores/company-store";
+    import {useCompanyStore} from "@/stores/company-store";
     import { NOTIFY } from '@/services/notify';
     const notify = new NOTIFY();
+    const api = new API();
 
-    useMeta({ title: 'Payments' });
+    useMeta({ title: 'Orders' });
     const companyStore = useCompanyStore();
     const loading = ref(true);
     const store = useAppStore();
     // multi language
     const i18n = reactive(useI18n());
-
-    const api = new API();
 
     const cols = ref([
         { field:'id', title: 'Id', hide: true},

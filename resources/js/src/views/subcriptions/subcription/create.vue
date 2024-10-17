@@ -12,17 +12,27 @@
                 </router-link>
             </li>
             <li class="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">
-                <span>Actualizar suscripción</span>
+                <span>Nueva suscripción</span>
             </li>
         </ul>
 
         <div class="panel pb-1.5 mt-6">
-            <form @submit.prevent="editSubscription">
+            <form @submit.prevent="createSubscription">
                 <div class="border border-[#ebedf2] dark:border-[#191e3a] rounded-md p-4 mb-2 bg-white dark:bg-[#0e1726]">
                     <h6 class="text-lg font-bold mb-5">Ingresar nueva suscripción</h6>
 
                     <div class="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-5">
-                        <!-- <div class="col-span-2">
+                        <div class="col-span-2">
+                            <Select
+                            :options="companies"
+                            v-model="companiesSelected"
+                            required
+                            :closeOnSelect="true"
+                            titleSelect="Companies"
+                            name="companies"
+                            />
+                        </div>
+                        <div class="col-span-2">
                             <Select
                             :options="applications"
                             v-model="applicationsSelected"
@@ -33,7 +43,7 @@
                             value="id"
                             label="name"
                             />
-                        </div> -->
+                        </div>
                         <div>
                             <label for="phone">Fecha de inicio *</label>
                             <input id="phone" type="date" v-model="subscriptionData.start_date"
@@ -63,7 +73,7 @@
                         <div>
                             <label for="">Renovación automatica?</label>
                             <label class="inline-flex">
-                                <input type="checkbox" v-model="subscriptionData.renewal" :checked="subscriptionData.renewal"
+                                <input type="checkbox" v-model="subscriptionData.renewal"
                                     class="form-checkbox rounded-full peer" />
                                 <span
                                     :class="subscriptionData.renewal ? 'text-success' : 'text-danger'"
@@ -89,99 +99,78 @@
     import { useI18n } from 'vue-i18n';
     import { useMeta } from '@/composables/use-meta';
     import { API } from '@/services/api';
-    import {useCompanyStore} from "../../stores/company-store";
-    // import Select from '@/components/partials/Select.vue';
+    import {useCompanyStore} from "@/stores/company-store";
+    import Select from '@/components/partials/Select.vue';
     import { NOTIFY } from '@/services/notify';
-    import { useRouter, useRoute } from 'vue-router';
+    import { useRouter } from 'vue-router';
+
     useMeta({ title: 'Subscription create' });
     const router = useRouter();
-    const route = useRoute();
-
     const notify = new NOTIFY();
-
     const companyStore = useCompanyStore();
     const api = new API();
     const loading = ref(false);
 
     const subscriptionData = reactive(
         {
+            company_id:null,
             description:null,
             start_date:null,
             end_date:null,
-            renewal:false,
+            status:null,
+            renewal:0,
             value:null,
-            // applications:[]
+            applications:[]
         }
     );
+    const companies: any = ref(companyStore.companyOptions);
+    const companiesSelected = ref();
 
-    const editSubscription = async () => {
+    const createSubscription = async () => {
         loading.value = true;
-        // Object.assign(subscriptionData.applications, applicationsIds.value);
+        subscriptionData.company_id = companiesSelected.value.value;
+        Object.assign(subscriptionData.applications, applicationsIds.value);
         try {
-            const response = await api.put(`subscriptions/v1/subscriptions/${route.params.id}`, subscriptionData);
+            const response = await api.post(`subscriptions/v1/subscriptions`, subscriptionData);
+
             loading.value = false;
-            notify.showToast('Registro editado exitosamente', 'success').then(
+            notify.showToast('Registro editado exitosamente', 'Success').then(
                 router.push({ name: 'subscriptions' })
             );
         } catch (error) {
-            notify.showAlert('Error!',  'No se pudo actualizar: '+ error.response, 'error');
+            notify.showAlert('Error obteniendo los datos:'+ error.response, 'error');
             loading.value = false;
         }
     };
 
-    // const applications = ref();
-    // let applicationsIds: any = ref([]);
-    // interface Application {
-    //     id: number;
-    //     name: string;
-    // }
+    const applications = ref();
+    let applicationsIds: any = ref([]);
+    interface Application {
+        id: number;
+        name: string;
+    }
 
-    // const applicationsSelected = ref<Application[]>([]);
-    // watch(applicationsSelected, (newSelection: Application[]) => {
-    //     applicationsIds.value = newSelection.map((option: Application) => option.id);
-    // });
+    const applicationsSelected = ref<Application[]>([]);
+    watch(applicationsSelected, (newSelection: Application[]) => {
+        applicationsIds.value = newSelection.map((option: Application) => option.id);
+    });
 
-    // const getApplications = async () =>
-    // {
-    //     try {
-    //         const response = await api.get(`subscriptions/v1/applications`);
-    //         if (response) {
-    //             applications.value = response.data
-    //         }
-    //         else {
-    //             throw new Error('Hubo un problema al obtener la lista de applications desde el API.');
-    //         }
-    //     } catch (error) {
-    //         console.error(error.response);
-    //     }
-    // }
-
-
-    const getSubscription = async () =>
+    const getApplications = async () =>
     {
         try {
-            const response = await api.get(`subscriptions/v1/subscriptions/${route.params.id}`);
-            const data = response.data;
-            Object.assign(subscriptionData, {
-                description:data.description,
-                start_date:data.start_date,
-                end_date:data.end_date,
-                status:data.status,
-                renewal:data.renewal,
-                value:data.value
-            });
-                // applicationsSelected.value = data.application;
-                // console.log(applicationsSelected);
+            const response = await api.get(`subscriptions/v1/applications`);
+            if (response) {
+                applications.value = response.data
+            }
+            else {
+                throw new Error('Hubo un problema al obtener la lista de applications desde el API.');
+            }
         } catch (error) {
-            loading.value = true;
-            console.error(error.response);
+            notify.showAlert('Error obteniendo las aplicaciones:'+ error.response, 'error');
         }
     }
 
-
     onMounted(async () => {
-    //    await getApplications();
-       await getSubscription();
-
+       await getApplications();
     });
 </script>

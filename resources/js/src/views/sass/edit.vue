@@ -32,7 +32,7 @@
                                 <path d="M12 15L12 18" stroke="currentColor" stroke-width="1.5"
                                     stroke-linecap="round" />
                             </svg>
-                            Home
+                            Información
                         </a>
                     </Tab>
 
@@ -48,11 +48,23 @@
                                     d="M15 9.5C15 8.11929 13.6569 7 12 7C10.3431 7 9 8.11929 9 9.5C9 10.8807 10.3431 12 12 12C13.6569 12 15 13.1193 15 14.5C15 15.8807 13.6569 17 12 17C10.3431 17 9 15.8807 9 14.5"
                                     stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
                             </svg>
-                            API Configurations
+                           Conexiones Externas
                         </a>
                     </Tab>
 
-
+                    <Tab as="template" v-slot="{ selected }">
+                        <a href="javascript:;"
+                           class="flex gap-2 p-4 border-b border-transparent hover:border-primary hover:text-primary !outline-none"
+                           :class="{ '!border-primary text-primary': selected }">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                 xmlns="http://www.w3.org/2000/svg" class="w-5 h-5">
+                                <circle cx="12" cy="6" r="4" stroke="currentColor" stroke-width="1.5" />
+                                <ellipse opacity="0.5" cx="12" cy="17" rx="7" ry="4" stroke="currentColor"
+                                         stroke-width="1.5" />
+                            </svg>
+                            Usuarios
+                        </a>
+                    </Tab>
                     <Tab as="template" v-slot="{ selected }" disabled>
                         <a href="javascript:;"
                             class="flex gap-2 p-4 border-b border-transparent hover:border-primary hover:text-primary !outline-none"
@@ -73,11 +85,14 @@
                         <a href="javascript:;"
                             class="flex gap-2 p-4 border-b border-transparent hover:border-primary hover:text-primary !outline-none"
                             :class="{ '!border-primary text-primary': selected }">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                xmlns="http://www.w3.org/2000/svg" class="w-5 h-5">
-                                <circle cx="12" cy="6" r="4" stroke="currentColor" stroke-width="1.5" />
-                                <ellipse opacity="0.5" cx="12" cy="17" rx="7" ry="4" stroke="currentColor"
-                                    stroke-width="1.5" />
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path opacity="0.5" d="M2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C22 4.92893 22 7.28595 22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12Z" stroke="#1C274C" stroke-width="1.5"/>
+                                <circle cx="8" cy="10" r="2" stroke="#1C274C" stroke-width="1.5"/>
+                                <circle cx="2" cy="2" r="2" transform="matrix(1 0 0 -1 14 16)" stroke="#1C274C" stroke-width="1.5"/>
+                                <path d="M8 14V19" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round"/>
+                                <path d="M16 10V5" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round"/>
+                                <path d="M8 5V6" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round"/>
+                                <path d="M16 19V18" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round"/>
                             </svg>
                             Preferences
                         </a>
@@ -174,19 +189,6 @@
                                             </div>
                                         </div>
 
-                                    <!-- <div class="mb-5">
-                                        <div class="custom-file-container" data-upload-id="myFirstImage">
-                                            <div class="label-container">
-                                                <label>Logo </label> <a href="javascript:;" class="custom-file-container__image-clear" title="Clear Image">×</a>
-                                            </div>
-                                            <label class="custom-file-container__custom-file">
-                                                <input type="file" class="custom-file-container__custom-file__custom-file-input" accept="image/*" />
-                                                <input type="hidden" name="MAX_FILE_SIZE" value="10485760" />
-                                                <span class="custom-file-container__custom-file__custom-file-control ltr:pr-20 rtl:pl-20"></span>
-                                            </label>
-                                            <div class="custom-file-container__image-preview"></div>
-                                        </div>
-                                    </div> -->
                                     </div>
                                 </div>
                             </div>
@@ -197,17 +199,18 @@
                                 <apiConfigurations :companyData="companyData" />
                             </div>
                         </TabPanel>
-
+                        <TabPanel>
+                           <users-component :company-data="companyData"/>
+                        </TabPanel>
                         <TabPanel>
                             <div>
                                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-5">
                                     <div class="panel">
                                         <div class="mb-5">
-                                            <h5 class="font-semibold text-lg mb-4">Billing Address</h5>
+                                            <h5 class="font-semibold text-lg mb-4">Dirección de Facturación</h5>
                                             <p>
-                                                Changes to your <span class="text-primary">Billing</span> information will
-                                                take effect starting with scheduled
-                                                payment and will be refelected on your next invoice.
+                                                Los cambios en su información de <span class="text-primary">facturación</span>
+                                                entrarán en vigencia a partir del pago programado y se reflejarán en su próxima factura.
                                             </p>
                                         </div>
                                         <div class="mb-5">
@@ -363,9 +366,8 @@
                                     </div>
                                     <div class="panel">
                                         <div class="mb-5">
-                                            <h5 class="font-semibold text-lg mb-4">Add Payment Method</h5>
-                                            <p>Changes your New <span class="text-primary">Payment Method</span>
-                                                Information.</p>
+                                            <h5 class="font-semibold text-lg mb-4">Agregar método de pago</h5>
+                                            <p>Cambia la información de tu <span class="text-primary">método de pago</span></p>
                                         </div>
                                         <div class="mb-5">
                                             <form>
@@ -560,9 +562,10 @@
     import { useI18n } from 'vue-i18n';
     import { useMeta } from '@/composables/use-meta';
     import { useRoute, useRouter } from 'vue-router';
-    import apiConfigurations from './partials/apisComponent.vue';
     import Swal from 'sweetalert2';
+    import apiConfigurations from './partials/apisComponent.vue';
     import { API } from '@/services/api';
+    import UsersComponent from "@/views/sass/partials/usersComponent.vue";
     const api = new API();
     const route = useRoute();
     const router = useRouter();
@@ -604,14 +607,17 @@
                 whatsapp_message: null,
                 whatsapp_template: null,
                 whatsapp_version: "v16.0"
-            }
-        });
+            },
+            users:[],
+            user_data:[]
+        }
+    );
 
     const getData = async () => {
         try {
             const response = await api.get(`sass/v1/companies/${route.params.id}`);
                 const data = response.data;
-                Object.assign(companyData.value, data);
+                companyData.value=data
                 image.value = data.avatar;
         } catch (error) {
             loading.value = true;

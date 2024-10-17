@@ -18,17 +18,20 @@ export const useCompanyStore = defineStore('company', {
         getCompaniesSelect: state => state.companiesSelect
     },
     actions: {
-        async setAllCompanies(limit = 20, page = 1) {
+        async setAllCompanies(page = 1) {
             const api = new API();
             try {
-              const response = await api.get(`/sass/v1/companies?page=${page}&take=${limit}`);
-              return response;  // Retorna la respuesta completa para que podamos usarla
+                const response = await api.get(`/sass/v1/companies?page=${page}&take=20`);
+                response.data?.map((company: any) => {
+                    this.setCompanies(company)
+                })
+                if (response.meta.page.currentPage < response.meta.page.lastPage) {
+                    this.setAllCompanies(response.meta.page.currentPage + 1);
+                }
             } catch (error) {
-              console.error('Error fetching companies on page ' + page + ':', error);
-              return [];  // Devuelve un array vacío o maneja el error según tu lógica
+                console.error('Error fetching companies on page ' + page + ':', error);
+                return [];  // Devuelve un array vacío o maneja el error según tu lógica
             }
-          },
-
         },
         setCompaniesSelect(payload: any) {
             if (payload) this.companiesSelect = payload
@@ -47,8 +50,8 @@ export const useCompanyStore = defineStore('company', {
                 })
             }
         },
-        setCompanies(payload: []) {
-            if (payload.length) this.companies = payload
+        setCompanies(payload) {
+            if (payload) this.companies.push(payload)
         },
         clearCompany() {
             this.id = null
@@ -60,5 +63,5 @@ export const useCompanyStore = defineStore('company', {
             this.companiesSelect = []
         }
     },
-    persist: true
+    persist: true,
 })
