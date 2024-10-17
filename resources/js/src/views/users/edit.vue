@@ -124,7 +124,6 @@
                                                     :options="companies"
                                                     v-model="companiesSelected"
                                                     :multiple="true"
-                                                    required
                                                     :closeOnSelect="false"
                                                     titleSelect="Companies"
                                                     name="companies"
@@ -140,7 +139,6 @@
                                                     label="name"
                                                     value="id"
                                                     :multiple="true"
-                                                    required
                                                     :closeOnSelect="false"
                                                     titleSelect="Roles"
                                                     name="roles"
@@ -161,20 +159,6 @@
 
                                             </div>
                                         </div>
-
-                                        <!-- <div class="mb-5">
-                                        <div class="custom-file-container" data-upload-id="myFirstImage">
-                                            <div class="label-container">
-                                                <label>avatar </label> <a href="javascript:;" class="custom-file-container__image-clear" title="Clear Image">×</a>
-                                            </div>
-                                            <label class="custom-file-container__custom-file">
-                                                <input type="file" class="custom-file-container__custom-file__custom-file-input" accept="image/*" />
-                                                <input type="hidden" name="MAX_FILE_SIZE" value="10485760" />
-                                                <span class="custom-file-container__custom-file__custom-file-control ltr:pr-20 rtl:pl-20"></span>
-                                            </label>
-                                            <div class="custom-file-container__image-preview"></div>
-                                        </div>
-                                    </div> -->
                                     <div class="flex flex-wrap justify-end gap-2 mt-4">
                                         <button type="submit" class="btn btn-primary" :disabled="loading">Save</button>
                                     </div>
@@ -525,15 +509,6 @@
         if(userStore.hasAccess('sass.companies.indexall')){
             await getRoles();
         }
-
         await getToken();
-
-        // single image upload
-        // new FileUploadWithPreview('myFirstImage', {
-        //     images: {
-        //         baseImage: '/assets/images/file-preview.svg',
-        //         backgroundImage: '',
-        //     },
-        // });
     });
 </script>

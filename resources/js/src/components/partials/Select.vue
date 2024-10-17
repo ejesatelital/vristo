@@ -13,6 +13,7 @@
         :taggable="true"
         :preserve-search="true"
         :close-on-select="isCloseOnSelect"
+        allow-empty="false"
       ></multiselect>
     </div>
   </template>

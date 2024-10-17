@@ -1,6 +1,8 @@
 import {defineStore} from 'pinia';
 import axios from 'axios';
 import {useCompanyStore} from './company-store';
+import {useSubscriptionsStore} from './subscriptions-store';
+
 import {API} from "../services/api";
 
 // @ts-ignore
@@ -35,6 +37,7 @@ export const useUserStore = defineStore('user', {
         async login(email: any, password: any) {
             try {
                 const companyStore = useCompanyStore();
+                const subscriptionsStore = useSubscriptionsStore();
                 await axios.post('https://apps.ejesatelital.com/api/auth/login', {
                         email: email.value,
                         password: password.value

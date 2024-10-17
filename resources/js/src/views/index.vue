@@ -20,15 +20,15 @@
                 <swiper-slide>
                     <img :src="`${item.image}`" class="w-full max-h-80 object-cover" alt="" />
                     <div class="absolute z-[999] text-white top-1/4 ltr:left-12 rtl:right-12">
-                        <div class="sm:text-3xl text-base font-bold">{{ item.title }}</div>
+                        <div class="sm:text-3xl text-base font-bold">{{ item.name }}</div>
                         <div class="sm:mt-5 mt-1 w-4/5 text-base sm:block hidden font-medium">
                             {{ item.description }}
                         </div>
                         <button type="button" class="mt-4 btn btn-primary">
                             <a
-                                :href="item.isActive ? `/signin` : `/detail`"
+                                :href="item.status ? `/signin` : `/detail`"
                                 >
-                                {{ item.isActive ? 'Abrir' : 'Obtener' }}
+                                {{ item.status ? 'Abrir' : 'Obtener' }}
                             </a>
                         </button>
                     </div>
@@ -55,22 +55,33 @@
 
         <!-- Cards -->
         <div class="pt-5">
-            <h5 class="font-semibold text-lg dark:text-white-light">Principales Aplicaciones</h5>
-            <div class="mt-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                <div v-for="card in cards" :key="card.id"
-                    class="card bg-white shadow-[4px_6px_10px_-3px_#bfc9d4] rounded border border-[#e0e6ed] dark:border-[#1b2e4b] dark:bg-[#191e3a] dark:shadow-none p-4">
-                    <a :href="card.isActive ? `/signin` : `/detail`" class="mt-6">
+            <h5 class="font-semibold text-lg dark:text-white-light">Aplicaciones principales</h5>
+            <div class="mt-3 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div v-for="card in rows" :key="card.id"
+                class="card bg-white shadow-[4px_6px_10px_-3px_#bfc9d4] rounded border border-[#e0e6ed] dark:border-[#1b2e4b] dark:bg-[#191e3a] dark:shadow-none p-4">
+                    <a :href="card.url??'/detail'" class="mt-6">
                         <div class="flex">
-                            <div class="ltr:mr-4 rtl:ml-4">
-                                <img :src="card.image" alt="" class="w-24 h-24 rounded" />
+                            <div v-show="card.image" class="ltr:mr-4 rtl:ml-4">
+                                <img
+                                    :src="`${card.image}`"
+                                    class="w-24 h-24 object-cover mb-5"
+                                    alt="avatar"
+                                />
+                            </div>
+                            <div
+                                v-show="!card.image && card.name"
+                                class="grid place-content-center h-24 w-24 text-white ltr:mr-2 rtl:ml-2 text-5xl rounded font-semibold"
+                                :style="{ backgroundColor: card.color }"
+                            >
+                                {{ card.name ? card.name.charAt(0) : ''}}
                             </div>
                             <div class="flex-1">
-                                <h4 class="font-semibold text-lg mb-2 text-primary">
-                                {{ card.title }}
-                                <span class="ltr:float-right rtl:float-left" :class="card.isActive ? `badge bg-success`:`badge bg-info`"> {{ card.isActive ?  'Abrir' : 'Obtener' }}</span>
+                                <h4 class="font-semibold text-lg mb-2 text-primary"  :style="{ color: card.color }">
+                                    {{ card.name }}
+                                <span class="ltr:float-right rtl:float-left" :class="getStatusClass(card.status) ? `badge bg-success`:`badge bg-info`"> {{ getStatusText(card.status) }}</span>
                                 </h4>
                                 <p class="media-text">
-                                {{ card.description }}
+                                    {{ card.description }}
                                 </p>
                             </div>
                         </div>
@@ -82,7 +93,7 @@
     </div>
 </template>
 <script lang="ts" setup>
-    import { ref } from 'vue';
+    import { ref, onMounted, reactive } from 'vue';
     import { Swiper, SwiperSlide } from 'swiper/vue';
     import { Navigation, Pagination, Autoplay } from 'swiper';
     import 'swiper/css';
@@ -90,15 +101,21 @@
     import 'swiper/css/pagination';
     import { useMeta } from '@/composables/use-meta';
     import { useAppStore } from '@/stores/index';
+    import { API } from '@/services/local';
+    import axios from 'axios';
+    import { useCompanyStore } from '../stores/company-store';
+    const api = new API();
+    const companyStore = useSubscriptionsStore();
+
     useMeta({ title: 'Marketplace' });
     const store = useAppStore();
     const items = ref([
         {
             id: 1,
             image: '/assets/images/carousel1.jpeg',
-            title: 'CLI Based',
+            name: 'CLI Based',
             description: 'Etiam sed augue ac justo tincidunt posuere. Vivamus euismod eros, nec risus malesuada.',
-            isActive: true,
+            status: true,
         },
         {
             id: 2,
@@ -129,52 +146,110 @@
             isActive: true,
         },
     ]);
-    const cards = ref([
-        {
-            id: 1,
-            image: '/assets/images/profile-28.jpeg',
-            title: 'Forms',
-            description: 'Etiam sed augue ac justo tincidunt posuere. Vivamus euismod eros, nec risus malesuada.',
-            isActive: true,
-        },
-        {
-            id: 2,
-            image: '/assets/images/profile-29.jpeg',
-            title: 'Maintenance',
-            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor.',
-            isActive: false,
-        },
-        {
-            id: 3,
-            image: '/assets/images/profile-30.jpeg',
-            title: 'Certificates',
-            description: 'Integer nec odio. Praesent libero. Sed cursus ante dapibus diam.',
-            isActive: true,
-        },
-        {
-            id: 4,
-            image: '/assets/images/profile-31.jpeg',
-            title: 'TTM',
-            description: 'Suspendisse potenti. Nunc feugiat mi a tellus consequat imperdiet.',
-            isActive: false,
-        },
-        {
-            id: 5,
-            image: '/assets/images/profile-5.jpeg',
-            title: 'Certificates',
-            description: 'Integer nec odio. Praesent libero. Sed cursus ante dapibus diam.',
-            buttonText: 'Obtener',
-            isActive: true,
-        },
-        {
-            id: 6,
-            image: '/assets/images/profile-6.jpeg',
-            title: 'TTM',
-            description: 'Suspendisse potenti. Nunc feugiat mi a tellus consequat imperdiet.',
-            buttonText: 'Get Started',
-            isActive: false,
-        },
-    ]);
+    const loading = ref(true);
+    let timer: any;
+
+    const rows: any = ref({
+        id: null,
+        name: '',
+        description: '',
+        media_single: {zone:{}, image:{}},
+        version: '',
+        color: '#0B39EF',
+        status: 'Obtener',
+    });
+
+    const params = reactive({
+        current_page: 1,
+        pagesize: 10,
+        column_filters: [],
+        sort_column: 'id',
+        sort_direction: 'desc',
+        search: null
+    });
+
+    const changeServer = (data: any) => {
+        params.current_page = data.current_page;
+        params.pagesize = data.pagesize;
+        params.sort_column = data.sort_column;
+        params.sort_direction = data.sort_direction;
+        if (data.change_type === 'search') {
+            clearTimeout(timer);
+            timer = setTimeout(() => {
+                getApplications();
+            }, 500);
+        } else {
+            getApplications();
+        }
+    };
+
+    const clearSearch = () => {
+        params.search = null;
+        clearTimeout(timer);
+    };
+
+    const getApplications = async () => {
+        try {
+            loading.value = true;
+            const response = await axios.get(`http://127.0.0.1:8000/api/subscriptions/v1/applications?filter={"search":"${params.search}"}&page=${params.current_page}&take=${params.pagesize}`);
+            rows.value = response?.data.data.map(function (x: any) {
+                return {
+                        id: x.id,
+                        name: x.name,
+                        description: x.description,
+                        version: x.version,
+                        color: x.color,
+                        status: x.status,
+                        url: x.url
+                    }
+            });
+
+        } catch (error) {
+            console.error('Error fetching data', error);
+        } finally {
+            loading.value = false;
+        }
+    }
+
+    const getSubscriptions = async () => {
+        try {
+            loading.value = true;
+            const subscriptions = companyStore?.companySubscriptions;
+            console.log(subscriptions);
+
+        } catch (error) {
+            console.error('Error fetching subscriptions', error);
+        } finally {
+            loading.value = false;
+        }
+    };
+
+    const getStatusClass = (status) => {
+      switch (status) {
+        case 'true' || true || 1 || 'active' || 'online':
+          return 'badge badge-outline-success';
+        case 'false' || false || 0 || 'deactive' || 'offline':
+          return 'badge badge-outline-danger';
+        default:
+          return 'badge badge-outline-secondary';
+      }
+    };
+
+    const getStatusText = (status) => {
+      switch (status) {
+        case 'true' || true || 1 || 'active' || 'online':
+          return 'Activo';
+        case 'false' || false || 0 || 'deactive' || 'offline':
+          return 'Inactivo';
+        default:
+          return status;
+      }
+    };
+
+    onMounted(async () => {
+       await getApplications();
+    });
+
 </script>
 <style>
     .card {

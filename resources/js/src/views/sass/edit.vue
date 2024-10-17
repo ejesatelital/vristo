@@ -627,11 +627,8 @@
 
     const editCompany = async () => {
         loading.value = true;
-        console.log(companyData.value);
-
         try {
             const response = await api.put(`sass/v1/companies/${route.params.id}`, companyData.value);
-
             loading.value = false;
             Swal.fire({
                 icon: 'success',

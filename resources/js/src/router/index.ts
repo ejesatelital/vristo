@@ -42,6 +42,12 @@ import IndexOrders from '../views/subcriptions/orders/index.vue';
 import IndexPayments from '../views/subcriptions/payments/index.vue';
 
 
+import IndexPayments from '../views/payments/index.vue';
+// Tickets
+import IndexTickets from '../views/tickets/index.vue';
+// Media
+import IndexMedia from '../views/media/index.vue';
+// import EditMedia from '../views/media/edit.vue';
 
 const routes: RouteRecordRaw[] = [
     // dashboard
@@ -251,6 +257,35 @@ const routes: RouteRecordRaw[] = [
                 name: 'devices',
                 component: Device
             }
+        ],
+        meta: {requiresAuth: true}
+    },
+    {
+        path: '/tickets',
+        component: appLayout,
+        children: [
+            {
+                path: '',
+                name: 'tickets',
+                component: IndexTickets
+            }
+        ],
+        meta: {requiresAuth: true}
+    },
+    {
+        path: '/media',
+        component: appLayout,
+        children: [
+            {
+                path: '',
+                name: 'media',
+                component: IndexMedia
+            },
+            // {
+            //     path: ':id/edit',
+            //     name: 'media-edit',
+            //     component: EditMedia
+            // }
         ],
         meta: {requiresAuth: true}
     },
