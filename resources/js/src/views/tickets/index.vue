@@ -1384,6 +1384,9 @@
                     },
                 });
                 getData();
+                selectedTicket.value = null;
+                isEdit.value = false;
+                notify.showToast('Ticket creado exitosamente', 'success');
             } else {
                 notify.showToast('Operación cancelada', 'info');
             }
