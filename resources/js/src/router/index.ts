@@ -40,9 +40,6 @@ import IndexApplications from '../views/subcriptions/applications/index.vue';
 import IndexOrders from '../views/subcriptions/orders/index.vue';
 // Payments
 import IndexPayments from '../views/subcriptions/payments/index.vue';
-
-
-import IndexPayments from '../views/payments/index.vue';
 // Tickets
 import IndexTickets from '../views/tickets/index.vue';
 // Media
