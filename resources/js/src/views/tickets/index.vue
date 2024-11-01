@@ -1248,7 +1248,7 @@
 
     const saveResponsible = async () => {
 
-        if (!rolSelected.value.value) {
+        if (!rolSelected.value) {
             notify.showToast('Debes asignar un área al caso.', 'warning');
             return false;
         }
@@ -1335,7 +1335,7 @@
             return false;
         }
 
-        if (!rolSelected.value.value) {
+        if (!rolSelected.value) {
             notify.showToast('Debes asignar un área al caso.', 'warning');
             return false;
         }
@@ -1384,9 +1384,6 @@
                     },
                 });
                 getData();
-                selectedTicket.value = null;
-                isEdit.value = false;
-                notify.showToast('Ticket creado exitosamente', 'success');
             } else {
                 notify.showToast('Operación cancelada', 'info');
             }
