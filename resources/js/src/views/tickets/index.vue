@@ -8,12 +8,12 @@
             ></div>
 
             <div
-                class="panel xl:block p-4 dark:gray-50 w-[250px] max-w-full flex-none space-y-3 xl:relative absolute z-10 xl:h-auto h-full hidden ltr:xl:rounded-r-md ltr:rounded-r-none rtl:xl:rounded-l-md rtl:rounded-l-none overflow-hidden"
+                class="panel xl:block p-4 dark:gray-50 w-[225px] max-w-full flex-none space-y-3 xl:relative absolute z-10 xl:h-auto h-full hidden ltr:xl:rounded-r-md ltr:rounded-r-none rtl:xl:rounded-l-md rtl:rounded-l-none overflow-hidden"
                 :class="{ '!block': isShowMailMenu }"
             >
                 <div class="flex flex-col h-full pb-16">
                     <div class="pb-5">
-                        <button class="btn btn-primary w-full" type="button" @click="newTicket('add', null)">Nuevo ticket</button>
+                        <button class="btn btn-primary w-full" type="button" @click="newTicket('add', null)">Crear ticket</button>
                     </div>
                     <perfect-scrollbar
                         :options="{
@@ -46,7 +46,7 @@
                                     />
                                 </svg>
 
-                                <div class="ltr:ml-3 rtl:mr-3">Inbox</div>
+                                <div class="ltr:ml-3 rtl:mr-3">Solicitudes</div>
                             </button>
 
                             <button
@@ -103,7 +103,7 @@
                         <template #content="{ close }">
                                 <ul @click="close()">
                                     <li>
-                                        <a href="javascript:;" @click="filterByStatus(null)">
+                                        <a href="javascript:;" @click="filterByStatus([1,2,3])">
                                             <div class="w-2 h-2 rounded-full bg-dark ltr:mr-3 rtl:ml-3 shrink-0"></div>
                                             No filtrar
                                         </a>
@@ -123,7 +123,7 @@
                                     <li>
                                         <a href="javascript:;" @click="filterByStatus(3)">
                                             <div class="w-2 h-2 rounded-full bg-warning ltr:mr-3 rtl:ml-3 shrink-0"></div>
-                                            En espera
+                                            Respondido
                                         </a>
                                     </li>
                                     <li>
@@ -148,6 +148,41 @@
                         <!-- Campo de búsqueda por fecha -->
                         <div class="w-full md:w-auto md:flex-1">
                             <flat-pickr v-model="date" :config="rangeCalendar" @on-close="setRangeDate" class="form-input lg:w-[266px] text-center" placeholder="Buscar por fecha..."></flat-pickr>
+                        </div>
+                        <!-- Select columns -->
+                        <div class="dropdown">
+                            <Popper :placement="store.rtlClass === 'rtl' ? 'bottom-end' : 'bottom-start'" offsetDistance="0" class="align-middle">
+                                <button
+                                    type="button"
+                                    class="flex items-center border font-semibold border-[#e0e6ed] dark:border-[#253b5c] rounded-md px-4 py-2 text-sm dark:bg-[#1b2e4b] dark:text-white-dark"
+                                >
+                                    <span class="ltr:mr-1 rtl:ml-1">Columnas</span>
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5">
+                                        <path d="M19 9L12 15L5 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                </button>
+                                <template #content>
+                                    <ul class="whitespace-nowrap">
+                                        <template v-for="(col, i) in cols" :key="i">
+                                            <li>
+                                                <div class="flex items-center px-4 py-1">
+                                                    <label class="cursor-pointer mb-0">
+                                                        <input
+                                                            type="checkbox"
+                                                            class="form-checkbox"
+                                                            :id="`chk-${i}`"
+                                                            :value="col.field"
+                                                            @change="col.hide = !$event.target.checked"
+                                                            :checked="!col.hide"
+                                                        />
+                                                        <span :for="`chk-${i}`" class="ltr:ml-2 rtl:mr-2">{{ col.title }}</span>
+                                                    </label>
+                                                </div>
+                                            </li>
+                                        </template>
+                                    </ul>
+                                </template>
+                            </Popper>
                         </div>
                     </div>
                 </div>
@@ -178,18 +213,11 @@
                             <div @click="selectTicket(data)" class="flex flex-col gap-2">
                                 <div class="flex items-center gap-2">
                                     <div
-                                        v-tippy:priority
-                                        class="w-3 h-3 rounded-full"
-                                        :class="`bg-${data.value.priority_class}`"
-                                    ></div>
-                                    <tippy target="priority" class="capitalize">{{ data.value.priority }}</tippy>
-                                    <div
                                         class="group-hover:text-primary font-semibold text-base flex items-center gap-1"
-                                        :class="`${data.value.status_id == 4 ? 'line-through text-' + data.value.status_class : ''}`"
+                                        :class="`${data.value.status_id == 4 ? 'text-white-dark':''}`"
                                     >
                                         {{ data.value.requester.first_name ?? '' }} {{ data.value.requester.last_name ?? '' }}
-                                        <span class="text-white-dark overflow-hidden max-w-[500px] whitespace-nowrap text-ellipsis"
-                                            :class="`${data.value.status_id == 4 ? 'text-' + data.value.status_class : ''}`">
+                                        <span class="text-white-dark overflow-hidden max-w-[500px] whitespace-nowrap text-ellipsis">
                                             - {{ data.value.subject }}
                                         </span>
                                     </div>
@@ -198,15 +226,10 @@
                         </template>
 
                         <template #status="data">
-                            <div class="flex items-center ltr:justify-end rtl:justify-start space-x-2 rtl:space-x-reverse">
-                                <template v-if="data.value.status">
-                                        <span
-                                            class="badge rounded-full capitalize hover:top-0"
-                                            :class="`badge-outline-${data.value.status_class}`"
-                                        >
-                                            {{data.value.status }}
-                                        </span>
-                                </template>
+                            <div v-if="data.value.status">
+                                <span class="badge" :class="`badge-outline-${data.value.status_class}`">
+                                    {{ data.value.status }}
+                                </span>
                             </div>
                         </template>
 
@@ -257,7 +280,7 @@
                                                             <path opacity="0.5" d="M2 17L6 17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
                                                             <path opacity="0.5" d="M22 7L18 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
                                                         </svg>
-                                                        Asignar ticket
+                                                       {{ data.value.assigned_id ? 'Reasignar ticket':'Asignar ticket' }}
                                                     </a>
                                                 </li>
                                                 <li v-if="data.value.user_id == userStore.id">
@@ -270,7 +293,7 @@
                                                         Cerrar ticket
                                                     </a>
                                                 </li>
-                                                <li v-if="data.value.user_id == userStore.id">
+                                                <li v-if="data.value.user_id == userStore.id && data.value.responses.length == 0">
                                                     <a href="javascript:;" @click="deleteRow(data.value.id)" class="text-danger">
                                                         <svg
                                                             width="24"
@@ -491,7 +514,7 @@
                                                                 <path opacity="0.5" d="M2 17L6 17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
                                                                 <path opacity="0.5" d="M22 7L18 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
                                                             </svg>
-                                                            Asignar ticket
+                                                            {{ selectedTicket.assigned_id ? 'Reasignar ticket':'Asignar ticket' }}
                                                         </a>
                                                     </li>
                                                     <li v-if="selectedTicket.user_id == userStore.id">
@@ -502,45 +525,6 @@
                                                                 <path d="M17 2.12695C18.6251 2.28681 19.7191 2.64808 20.5355 3.46455C22 4.92902 22 7.28604 22 12.0001C22 16.7141 22 19.0712 20.5355 20.5356C19.0711 22.0001 16.714 22.0001 12 22.0001C7.28595 22.0001 4.92893 22.0001 3.46447 20.5356C2 19.0712 2 16.7141 2 12.0001C2 7.28604 2 4.92902 3.46447 3.46455C4.28094 2.64808 5.37486 2.28681 7 2.12695" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
                                                             </svg>
                                                             Cerrar ticket
-                                                        </a>
-                                                    </li>
-                                                    <li v-if="selectedTicket.user_id == userStore.id">
-                                                        <a href="javascript:;" @click="deleteRow(selectedTicket.id)" class="text-danger gap-2">
-                                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" >
-                                                                <path
-                                                                    d="M20.5001 6H3.5"
-                                                                    stroke="currentColor"
-                                                                    stroke-width="1.5"
-                                                                    stroke-linecap="round"
-                                                                ></path>
-                                                                <path
-                                                                    d="M18.8334 8.5L18.3735 15.3991C18.1965 18.054 18.108 19.3815 17.243 20.1907C16.378 21 15.0476 21 12.3868 21H11.6134C8.9526 21 7.6222 21 6.75719 20.1907C5.89218 19.3815 5.80368 18.054 5.62669 15.3991L5.16675 8.5"
-                                                                    stroke="currentColor"
-                                                                    stroke-width="1.5"
-                                                                    stroke-linecap="round"
-                                                                ></path>
-                                                                <path
-                                                                    opacity="0.5"
-                                                                    d="M9.5 11L10 16"
-                                                                    stroke="currentColor"
-                                                                    stroke-width="1.5"
-                                                                    stroke-linecap="round"
-                                                                ></path>
-                                                                <path
-                                                                    opacity="0.5"
-                                                                    d="M14.5 11L14 16"
-                                                                    stroke="currentColor"
-                                                                    stroke-width="1.5"
-                                                                    stroke-linecap="round"
-                                                                ></path>
-                                                                <path
-                                                                    opacity="0.5"
-                                                                    d="M6.5 6C6.55588 6 6.58382 6 6.60915 5.99936C7.43259 5.97849 8.15902 5.45491 8.43922 4.68032C8.44784 4.65649 8.45667 4.62999 8.47434 4.57697L8.57143 4.28571C8.65431 4.03708 8.69575 3.91276 8.75071 3.8072C8.97001 3.38607 9.37574 3.09364 9.84461 3.01877C9.96213 3 10.0932 3 10.3553 3H13.6447C13.9068 3 14.0379 3 14.1554 3.01877C14.6243 3.09364 15.03 3.38607 15.2493 3.8072C15.3043 3.91276 15.3457 4.03708 15.4286 4.28571L15.5257 4.57697C15.5433 4.62992 15.5522 4.65651 15.5608 4.68032C15.841 5.45491 16.5674 5.97849 17.3909 5.99936C17.4162 6 17.4441 6 17.5 6"
-                                                                    stroke="currentColor"
-                                                                    stroke-width="1.5"
-                                                                ></path>
-                                                            </svg>
-                                                            Delete
                                                         </a>
                                                     </li>
                                                 </ul>
@@ -1142,14 +1126,15 @@
     });
     const rows: any = ref(null);
     const cols = ref([
-        { field: 'id', title: '', sort: false, width: '20px'},
-        { field: 'message', title: 'Solicitudes', width: '400px', headerClass: 'justify-center'},
-        { field: 'status', title: 'Estado', headerClass: 'justify-center' },
-        { field: 'area.name', title: 'Area asignada', headerClass: 'justify-center' },
-        { field: 'responsible', title: 'Responsable', headerClass: 'justify-center' },
-        { field: 'updated_at_text', title: 'Ultima actualización', headerClass: 'justify-center' },
-        { field: 'created_at', title: 'Creado el', headerClass: 'justify-center' },
-        { field: 'actions', title: 'Acciones', sort: false, headerClass: 'justify-center' },
+        { field: 'id', title: 'ID', sort: false, width: '20px', hide: false},
+        { field: 'message', title: 'Solicitudes', width: '400px', headerClass: 'justify-center', hide: false},
+        { field: 'status', title: 'Estado', headerClass: 'justify-center', hide: false },
+        { field: 'priority', title: 'Prioridad', headerClass: 'justify-center', hide: false },
+        { field: 'area.name', title: 'Area asignada', headerClass: 'justify-center', hide: true },
+        { field: 'responsible', title: 'Responsable', headerClass: 'justify-center', hide: false },
+        { field: 'updated_at_text', title: 'Ultima actualización', headerClass: 'justify-center', hide: true },
+        { field: 'created_at', title: 'Creado el', headerClass: 'justify-center', hide: true },
+        { field: 'actions', title: 'Acciones', sort: false, headerClass: 'justify-center', hide: false },
     ]);
     let timer: any;
     const total_rows = ref(0);
@@ -1163,7 +1148,7 @@
         sort_direction: 'desc',
         search: null,
         date:{from: moment().startOf('month').format('YYYY-MM-DD'), to: moment().format('YYYY-MM-DD')},
-        status:null,
+        status:[1,2,3],
         user_id: null
     });
     const defaultData = ref({
@@ -1522,7 +1507,8 @@
                     },
                 });
                 notify.showToast('Respuesta guardada exitosamente', 'success');
-                getResponseData(id);
+                await getResponseData(id);
+                await getData();
                 clearForm();
             } else {
                 notify.showToast('Envío cancelado', 'info');
@@ -1581,7 +1567,10 @@
     const getData = async () => {
         try {
             loading.value = true;
-            const response = await api.get(`tickets/v1/tickets?filter={"search":"${params.search}","order":{"field":"${params.sort_column}","way":"${params.sort_direction}"},"date":{"from":"${params.date.from}","to":"${params.date.to}"},"status":"${params.status}","user_id":"${params.user_id}"}&page=${params.current_page}&take=${params.pagesize}`);
+            const response = await api.get(`tickets/v1/tickets?filter={"search":"${params.search}",
+            "order":{"field":"${params.sort_column}","way":"${params.sort_direction}"},
+            "date":{"from":"${params.date.from}","to":"${params.date.to}"},
+            "status":[${params.status}],"user_id":"${params.user_id}"}&page=${params.current_page}&take=${params.pagesize}`);
             rows.value = response?.data;
             total_rows.value = response?.meta?.page?.total;
         } catch (error) {
@@ -1635,7 +1624,6 @@
                     getData();
                     notify.showToast('Registro eliminado exitosamente!', 'success');
                 } catch (error) {
-                    console.log(error);
                     const errorMessage = error.response?.data?.errors ?? 'Ocurrió un error al eliminar el registro.';
                     notify.showToast(errorMessage, 'error');
                 }
