@@ -155,6 +155,26 @@
     "applications":"Applications",
     "subscriptions":"Subscriptions",
     "orders":"Orders",
-    "payments":"Payments"
+    "payments":"Payments",
+    "signit":"Fírmalo",
+    "templates":"Templates",
+    "contracts":"Contracts",
+    "media":"Media",
+    "tickets":"Tickets",
+    "designer":"Designer",
+    "settings":"Settings",
+    "create":"Create",
+    "new_contract":"New Contract",
+    "new_ticket":"New Ticket",
+    "filter_by":"Filter By",
+    "open":"Open",
+    "closed":"Closed",
+    "in_progress":"In Progress",
+    "answered":"Answered",
+    "states":"States",
+    "not_filter":"Not Filter",
+    "create_ticket": "Create Ticket",
+    "my_tickets": "My Tickets",
+    "requests": "Requests"
 
 }

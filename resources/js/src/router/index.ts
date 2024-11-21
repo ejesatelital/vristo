@@ -42,9 +42,19 @@ import IndexOrders from '../views/subcriptions/orders/index.vue';
 import IndexPayments from '../views/subcriptions/payments/index.vue';
 // Tickets
 import IndexTickets from '../views/tickets/index.vue';
+import CreateTickets from '../views/tickets/create.vue';
 // Media
 import IndexMedia from '../views/media/index.vue';
 // import EditMedia from '../views/media/edit.vue';
+//Sigint
+import IndexTemplates from '../views/singit/templates/index.vue';
+import IndexTemplate from '../views/singit/templates/show.vue';
+import EditTemplates from '../views/singit/templates/edit.vue';
+import CreateTemplates from '../views/singit/templates/create.vue';
+import IndexContracts from '../views/singit/contracts/index.vue';
+import IndexContract from '../views/singit/contracts/show.vue';
+import EditContracts from '../views/singit/contracts/edit.vue';
+import CreateContracts from '../views/singit/contracts/create.vue';
 
 const routes: RouteRecordRaw[] = [
     // dashboard
@@ -265,6 +275,11 @@ const routes: RouteRecordRaw[] = [
                 path: '',
                 name: 'tickets',
                 component: IndexTickets
+            },
+            {
+                path: 'create',
+                name: 'tickets-create',
+                component: CreateTickets
             }
         ],
         meta: {requiresAuth: true}
@@ -283,6 +298,60 @@ const routes: RouteRecordRaw[] = [
             //     name: 'media-edit',
             //     component: EditMedia
             // }
+        ],
+        meta: {requiresAuth: true}
+    },
+    {
+        path: '/singit/templates',
+        component: appLayout,
+        children: [
+            {
+                path: '',
+                name: 'templates',
+                component: IndexTemplates
+            },
+            {
+                path: ':id',
+                name: 'templates-show',
+                component: IndexTemplate
+            },
+            {
+                path: ':id/edit',
+                name: 'templates-edit',
+                component: EditTemplates
+            },
+            {
+                path: 'create',
+                name: 'templates-create',
+                component: CreateTemplates
+            }
+        ],
+        meta: {requiresAuth: true}
+    },
+    {
+        path: '/singit/contracts',
+        component: appLayout,
+        children: [
+            {
+                path: '',
+                name: 'contracts',
+                component: IndexContracts
+            },
+            {
+                path: ':id',
+                name: 'contracts-show',
+                component: IndexContract
+            },
+            {
+                path: ':id/edit',
+                name: 'contracts-edit',
+                component: EditContracts
+            },
+            {
+                path: 'create',
+                name: 'contracts-create',
+                component: CreateContracts
+            }
         ],
         meta: {requiresAuth: true}
     },

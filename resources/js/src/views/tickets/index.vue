@@ -13,7 +13,7 @@
             >
                 <div class="flex flex-col h-full pb-16">
                     <div class="pb-5">
-                        <button class="btn btn-primary w-full" type="button" @click="newTicket('add', null)">Crear ticket</button>
+                        <button class="btn btn-primary w-full" type="button" @click="redirectToCreate">{{$t('create_ticket')}}</button>
                     </div>
                     <perfect-scrollbar
                         :options="{
@@ -46,7 +46,7 @@
                                     />
                                 </svg>
 
-                                <div class="ltr:ml-3 rtl:mr-3">Solicitudes</div>
+                                <div class="ltr:ml-3 rtl:mr-3">{{ $t("requests")}}</div>
                             </button>
 
                             <button
@@ -62,7 +62,7 @@
                                     <path opacity="0.5" d="M20 17.5C20 19.9853 20 22 12 22C4 22 4 19.9853 4 17.5C4 15.0147 7.58172 13 12 13C16.4183 13 20 15.0147 20 17.5Z" stroke="currentColor" stroke-width="1.5"></path>
                                 </svg>
 
-                                <div class="ltr:ml-3 rtl:mr-3">Mis tickets</div>
+                                <div class="ltr:ml-3 rtl:mr-3">{{ $t("my_tickets") }}</div>
                             </button>
 
                         </div>
@@ -96,40 +96,40 @@
                                     <path d="M22 5.81445V6.50427C22 7.54211 22 8.06103 21.7404 8.49121C21.4808 8.92139 21.0065 9.18837 20.058 9.72234L17.145 11.3622C16.5085 11.7204 16.1903 11.8996 15.9625 12.0974C15.488 12.5093 15.1959 12.9933 15.0636 13.587C15 13.872 15 14.2056 15 14.8727V17.5422C15 19.4517 15 20.4064 14.3321 20.8242C13.6641 21.242 12.7248 20.8748 10.8462 20.1404C9.95128 19.7905 9.50385 19.6156 9.25192 19.2611C9 18.9065 9 18.4518 9 17.5422L9 14.8727C9 14.2056 9 13.872 8.93644 13.587C8.80408 12.9933 8.51199 12.5093 8.03751 12.0974C7.80967 11.8996 7.49146 11.7204 6.85504 11.3622L3.94202 9.72234C2.99347 9.18837 2.5192 8.92139 2.2596 8.49121C2 8.06103 2 7.54211 2 6.50427V5.81445" stroke="currentColor" stroke-width="1.5"/>
                                     <path opacity="0.5" d="M22 5.81466C22 4.48782 22 3.8244 21.5607 3.4122C21.1213 3 20.4142 3 19 3H5C3.58579 3 2.87868 3 2.43934 3.4122C2 3.8244 2 4.48782 2 5.81466" stroke="currentColor" stroke-width="1.5"/>
                                 </svg>
-                                Filtrar por
+                                {{ $t('filter_by') }}
                             </button>
-                            <tippy target="group">Estados</tippy>
+                            <tippy target="group">{{ $t('states') }}</tippy>
                         </div>
                         <template #content="{ close }">
                                 <ul @click="close()">
                                     <li>
                                         <a href="javascript:;" @click="filterByStatus([1,2,3])">
                                             <div class="w-2 h-2 rounded-full bg-dark ltr:mr-3 rtl:ml-3 shrink-0"></div>
-                                            No filtrar
+                                            {{ $t('not_filter') }}
                                         </a>
                                     </li>
                                     <li>
                                         <a href="javascript:;" @click="filterByStatus(1)">
                                             <div class="w-2 h-2 rounded-full bg-info ltr:mr-3 rtl:ml-3 shrink-0"></div>
-                                            Abiertos
+                                            {{ $t('open') }}
                                         </a>
                                     </li>
                                     <li>
                                         <a href="javascript:;" @click="filterByStatus(2)">
                                             <div class="w-2 h-2 rounded-full bg-primary ltr:mr-3 rtl:ml-3 shrink-0"></div>
-                                            En progreso
+                                            {{ $t('in_progress') }}
                                         </a>
                                     </li>
                                     <li>
                                         <a href="javascript:;" @click="filterByStatus(3)">
                                             <div class="w-2 h-2 rounded-full bg-warning ltr:mr-3 rtl:ml-3 shrink-0"></div>
-                                            Respondido
+                                            {{ $t('answered') }}
                                         </a>
                                     </li>
                                     <li>
                                         <a href="javascript:;" @click="filterByStatus(4)">
                                             <div class="w-2 h-2 rounded-full bg-success ltr:mr-3 rtl:ml-3 shrink-0"></div>
-                                            Cerrados
+                                            {{ $t('closed') }}
                                         </a>
                                     </li>
                                 </ul>
@@ -290,7 +290,7 @@
                                                             <path opacity="0.5" d="M2 13H5.16026C6.06543 13 6.51802 13 6.91584 13.183C7.31367 13.3659 7.60821 13.7096 8.19729 14.3968L8.80271 15.1032C9.39179 15.7904 9.68633 16.1341 10.0842 16.317C10.482 16.5 10.9346 16.5 11.8397 16.5H12.1603C13.0654 16.5 13.518 16.5 13.9158 16.317C14.3137 16.1341 14.6082 15.7904 15.1973 15.1032L15.8027 14.3968C16.3918 13.7096 16.6863 13.3659 17.0842 13.183C17.482 13 17.9346 13 18.8397 13H22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
                                                             <path d="M17 2.12695C18.6251 2.28681 19.7191 2.64808 20.5355 3.46455C22 4.92902 22 7.28604 22 12.0001C22 16.7141 22 19.0712 20.5355 20.5356C19.0711 22.0001 16.714 22.0001 12 22.0001C7.28595 22.0001 4.92893 22.0001 3.46447 20.5356C2 19.0712 2 16.7141 2 12.0001C2 7.28604 2 4.92902 3.46447 3.46455C4.28094 2.64808 5.37486 2.28681 7 2.12695" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
                                                         </svg>
-                                                        Cerrar ticket
+                                                        {{$t('new_ticket')}}
                                                     </a>
                                                 </li>
                                                 <li v-if="data.value.user_id == userStore.id && data.value.responses.length == 0">
@@ -868,7 +868,7 @@
                                 ref="editor"
                                 v-model:value="ticketResponseData.message.description"
                                 :options="editorOptions"
-                                style="min-height: 100px"
+                                style="min-height: 300px"
                                 @ready="quillEditorReady($event)"
                             ></quillEditor>
                         </div>
@@ -906,101 +906,6 @@
                 </div>
 
             </div>
-
-            <div v-if="isEdit" class="panel p-0 flex-1 overflow-x-hidden h-full">
-                <div class="relative">
-                    <div class="py-4 px-6 flex items-center">
-                        <button type="button" class="xl:hidden hover:text-primary block ltr:mr-3 rtl:ml-3" @click="isShowMailMenu = !isShowMailMenu">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6">
-                                <path d="M20 7L4 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
-                                <path opacity="0.5" d="M20 12L4 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
-                                <path d="M20 17L4 17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
-                            </svg>
-                        </button>
-
-                        <h4 class="text-lg text-gray-600 dark:text-gray-400 font-medium">Crear un nuevo ticket</h4>
-
-                        <button type="button" class="ltr:ml-auto rtl:mr-auto hover:text-primary" @click="closeMsgPopUp">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke-width="1.5"
-                                stroke="currentColor"
-                                class="w-5 h-5 rtl:rotate-180"
-                            >
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
-                            </svg>
-                        </button>
-                    </div>
-                    <div class="h-px bg-gradient-to-l from-indigo-900/20 via-black dark:via-white to-indigo-900/20 opacity-[0.1]"></div>
-                    <form class="p-6 grid gap-6">
-                        <div>
-                            <label for="subject">Título</label>
-                            <input id="subject" type="text" placeholder="Ingrese un título" class="form-input" v-model="ticketData.subject" />
-                        </div>
-
-                        <div class="flex-1">
-                            <label for="priority">Prioridad</label>
-                            <select id="priority" class="form-select" v-model="ticketData.priority">
-                                <option value="1">Bajo</option>
-                                <option value="2">Medio</option>
-                                <option value="3">Alto</option>
-                                <option value="4">Urgente</option>
-                            </select>
-                        </div>
-
-                        <div class="flex-1">
-                            <Select
-                                :options="roles"
-                                v-model="rolSelected"
-                                titleSelect="Area"
-                                name="roles"
-                                @update:modelValue="getUsersByRol"
-                            />
-                        </div>
-
-                        <div class="flex-1">
-                            <Select
-                                :options="usersByRol"
-                                v-model="userByRolSelected"
-                                titleSelect="Colaboradores"
-                                name="usersByRol"
-                            />
-                        </div>
-
-                        <div class="h-fit">
-                            <label for="message">Descripción del caso</label>
-                            <quillEditor
-                                id="message"
-                                ref="editor"
-                                v-model:value="ticketData.message.description"
-                                :options="editorOptions"
-                                style="min-height: 200px"
-                                @ready="quillEditorReady($event)"
-                            ></quillEditor>
-                        </div>
-                        <div>
-                            <label for="file">Adjuntar archivos</label>
-                            <input
-                                id="file"
-                                type="file"
-                                class="form-input file:py-2 file:px-4 file:border-0 file:font-semibold p-0 file:bg-primary/90 ltr:file:mr-5 rtl:file:ml-5 file:text-white file:hover:bg-primary"
-                                multiple
-                                accept="image/*,.zip,.pdf,.xls,.xlsx,.txt.doc,.docx"
-                                @change="handleFileChange"
-                            />
-                        </div>
-
-                        <div class="flex items-center ltr:ml-auto rtl:mr-auto mt-8">
-                            <button type="button" class="btn btn-success ltr:mr-3 rtl:ml-3" @click="saveTicket('save', null)" :disabled="loading">Guardar</button>
-                            <button type="button" class="btn btn-outline-danger ltr:mr-3 rtl:ml-3" @click="closeMsgPopUp">Cerrar</button>
-                            <!-- <button type="button" class="btn btn-primary" @click="saveTicket('send', ticketData.id)">Send</button> -->
-                        </div>
-                    </form>
-                </div>
-            </div>
-
         </div>
 
         <!-- add project modal -->
@@ -1107,6 +1012,7 @@
     import { NOTIFY } from '@/services/notify';
     import moment from 'moment';
     import VueEasyLightbox from 'vue-easy-lightbox';
+    import { useRouter } from 'vue-router';
 
     useMeta({ title: 'Tickets' });
     const roles = ref();
@@ -1151,26 +1057,7 @@
         status:[1,2,3],
         user_id: null
     });
-    const defaultData = ref({
-        id: null,
-        subject: null,
-        message: {
-            description: null,
-            attachments: []
-        },
-        code: 1,
-        status: 1,
-        priority: 1,
-        assigned_id: null,
-        user_id: userStore.id,
-        rol_id: null,
-        data: {
-            navigator:null,
-            ip_address:null,
-            operating_system :null
-        },
-    });
-    const ticketData: any = ref(defaultData.value);
+
     const paramsResponses = reactive({
         current_page: 1,
         pagesize: 10,
@@ -1205,6 +1092,7 @@
     const images = ref<string[]>([]); // Almacena las URLs de las imágenes
     const currentImageIndex = ref(0); // Índice de la imagen seleccionada
     const renderedDescription = ref(''); // Donde se mostrará el HTML dinámico
+    const router = useRouter();
 
     const openResponsibleModal = (selectedTicket: any = null) => {
 
@@ -1304,142 +1192,8 @@
         quillEditorObj.value = quill;
     };
 
-    // Función para manejar la selección de archivos
-    const handleFileChange = (event) => {
-        ticketData.value.message.attachments = event.target.files;
-    };
-
-    const saveTicket = async (id: any) => {
-        if (!ticketData.value.subject) {
-            notify.showToast('Debes asignar un título al caso.', 'warning');
-            return false;
-        }
-
-        if (!ticketData.value.priority) {
-            notify.showToast('Debes asignar una prioridad del caso.', 'warning');
-            return false;
-        }
-
-        if (!rolSelected.value) {
-            notify.showToast('Debes asignar un área al caso.', 'warning');
-            return false;
-        }
-
-        if (!ticketData.value.message?.description || ticketData.value.message.description.trim() === '') {
-            notify.showToast('Debes agregar una descripción al caso.', 'warning');
-            return false;
-        }
-
-        loading.value = true;
-
-        const { browser, os } = getBrowserInfo();
-        const ipAddress = await getIpAddress();
-
-        let obj: any = {
-            subject: ticketData.value.subject,
-            message: {
-                description: ticketData.value.message.description
-            },
-            code: 1,
-            status: ticketData.value.status,
-            priority: ticketData.value.priority,
-            rol_id: rolSelected.value.value,
-            assigned_id: userByRolSelected.value?.value || null,
-            user_id: userStore.id,
-            data: {
-                navigator: browser,
-                ip_address: ipAddress,
-                operating_system: os
-            },
-            file: ticketData.value.message.attachments || []
-        };
-
-        try {
-            const isConfirmed = await notify.showConfirm(
-                'Confirmar Envío',
-                '¿Estás seguro de que deseas asignar este caso?',
-                'question',
-                'Sí, enviar',
-                'Cancelar'
-            );
-            if (isConfirmed) {
-                await api.post(`tickets/v1/tickets`, obj, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                    },
-                });
-                getData();
-                selectedTicket.value = null;
-                isEdit.value = false;
-                notify.showToast('Ticket creado exitosamente', 'success');
-            } else {
-                notify.showToast('Operación cancelada', 'info');
-            }
-        } catch (error) {
-            console.error('Error fetching data', error);
-        } finally {
-            loading.value = false;
-        }
-
-    };
-
-    const getIpAddress = async () => {
-        try {
-            const response = await fetch('https://api.ipify.org?format=json');
-            const data = await response.json();
-            return data.ip;
-        } catch (error) {
-            console.error('Error fetching IP address:', error);
-            return null;
-        }
-    };
-
-    const getBrowserInfo = () => {
-        const userAgent = navigator.userAgent;
-        let browser = 'Unknown';
-        let os = 'Unknown';
-
-        // Detectar el navegador
-        if (userAgent.indexOf('Firefox') > -1) {
-            browser = 'Mozilla Firefox';
-        } else if (userAgent.indexOf('Opera') > -1 || userAgent.indexOf('OPR') > -1) {
-            browser = 'Opera';
-        } else if (userAgent.indexOf('Chrome') > -1) {
-            browser = 'Google Chrome';
-        } else if (userAgent.indexOf('Safari') > -1) {
-            browser = 'Safari';
-        } else if (userAgent.indexOf('MSIE') > -1 || !!document.documentMode === true) {
-            browser = 'Internet Explorer';
-        }
-
-        // Detectar el sistema operativo
-        if (userAgent.indexOf('Win') > -1) {
-            os = 'Windows';
-        } else if (userAgent.indexOf('Mac') > -1) {
-            os = 'MacOS';
-        } else if (userAgent.indexOf('Linux') > -1) {
-            os = 'Linux';
-        } else if (userAgent.indexOf('Android') > -1) {
-            os = 'Android';
-        } else if (userAgent.indexOf('like Mac') > -1) {
-            os = 'iOS';
-        }
-
-        return { browser, os };
-    };
-
-    const closeMsgPopUp = () => {
-        isEdit.value = false;
-        selectedTab.value = 'inbox';
-        getTicketsTab();
-    };
-
-    const newTicket = (type: string, item: any) => {
-        if (type === 'add') {
-            isShowMailMenu.value = false;
-            ticketData.value = JSON.parse(JSON.stringify(defaultData.value));
-        }
-        isEdit.value = true;
+    const redirectToCreate = () => {
+        router.push({ name: 'tickets-create' });
     };
 
     // Función para manejar clics en las imágenes
@@ -1525,7 +1279,6 @@
     };
 
     const changeServer = (data: any) => {
-
         params.current_page = data.current_page;
         params.pagesize = data.pagesize;
         params.sort_column = data.sort_column;
