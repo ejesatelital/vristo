@@ -332,3 +332,14 @@
        await getRoles();
     });
 </script>
+
+<style>
+    .quill-editor {
+        max-height: 200px;
+        overflow-y: auto;
+    }
+
+    .quill-editor img {
+        width: 15%;
+    }
+</style>
