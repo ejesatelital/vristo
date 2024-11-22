@@ -230,6 +230,7 @@
                         'Content-Type': 'multipart/form-data',
                     },
                 });
+                router.push({ name: 'tickets' });
                 notify.showToast('Ticket creado exitosamente', 'success');
             } else {
                 notify.showToast('Operación cancelada', 'info');
