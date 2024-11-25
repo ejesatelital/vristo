@@ -123,9 +123,19 @@
     const userStore = useUserStore();
     const editorOptions = ref({
         modules: {
-            toolbar: [[{ header: [1, 2, false] }], ['bold', 'italic', 'underline', 'link', 'image', 'strike'], [{ list: 'ordered' }, { list: 'bullet' }], ['clean']],
+            toolbar: [
+                        ['bold', 'italic', 'underline', 'strike', 'link', 'image'],
+                        [{ indent: '+1' }, { indent: '-1' }],
+                        [{ list: 'ordered' }, { list: 'bullet' }],
+                        [{ header: [1, 2, 3, 4, 5, 6, false] }],
+                        [{ size: ['small', false, 'large', 'huge'] }],
+                        [{ color: [] }, { background: [] }],
+                        [{ font: [] }],
+                        [{ align: [] }],
+                        ['clean'],
+                    ],
         },
-        placeholder: '',
+        placeholder: 'Escribe aquí...',
     });
     const quillEditorObj: any = ref(null);
 

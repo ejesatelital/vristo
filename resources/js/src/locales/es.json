@@ -175,6 +175,7 @@
     "not_filter":"No filtrar",
     "create_ticket": "Crear ticket",
     "my_tickets": "Mis tickets",
-    "requests": "Solicitudes"
+    "requests": "Solicitudes",
+    "close_ticket": "Cerrar Ticket"
 
 }
