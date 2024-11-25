@@ -109,7 +109,7 @@
     import { quillEditor, Quill } from 'vue3-quill';
     import 'vue3-quill/lib/vue3-quill.css';
     import {useUserStore} from "../../stores/user-store";
-    import { API } from '@/services/local';
+    import { API } from '@/services/api';
     import Select from '@/components/partials/Select.vue';
 
     const api = new API();

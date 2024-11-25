@@ -447,7 +447,7 @@
     import { useMeta } from '@/composables/use-meta';
     import flatPickr from 'vue-flatpickr-component';
     import 'flatpickr/dist/flatpickr.css';
-    import { API } from '@/services/local';
+    import { API } from '@/services/api';
     import Select from '@/components/partials/Select.vue';
     import { useUserStore } from "../../stores/user-store";
     import { NOTIFY } from '@/services/notify';

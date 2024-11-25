@@ -572,7 +572,7 @@
     import { ref, onMounted, reactive } from 'vue';
     import { quillEditor, Quill } from 'vue3-quill';
     import 'vue3-quill/lib/vue3-quill.css';
-    import { API } from '@/services/local';
+    import { API } from '@/services/api';
     import { NOTIFY } from '@/services/notify';
     import VueEasyLightbox from 'vue-easy-lightbox';
     import { useRoute, useRouter } from 'vue-router';
