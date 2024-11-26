@@ -43,6 +43,7 @@ import IndexPayments from '../views/subcriptions/payments/index.vue';
 // Tickets
 import IndexTickets from '../views/tickets/index.vue';
 import CreateTickets from '../views/tickets/create.vue';
+import EditTickets from '../views/tickets/edit.vue';
 // Media
 import IndexMedia from '../views/media/index.vue';
 // import EditMedia from '../views/media/edit.vue';
