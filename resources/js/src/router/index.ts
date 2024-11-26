@@ -280,7 +280,12 @@ const routes: RouteRecordRaw[] = [
                 path: 'create',
                 name: 'tickets-create',
                 component: CreateTickets
-            }
+            },
+            {
+                path: ':id/edit',
+                name: 'tickets-edit',
+                component: EditTickets
+            },
         ],
         meta: {requiresAuth: true}
     },
