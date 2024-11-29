@@ -55,7 +55,8 @@ import CreateTemplates from '../views/singit/templates/create.vue';
 import IndexContracts from '../views/singit/contracts/index.vue';
 import IndexContract from '../views/singit/contracts/show.vue';
 import EditContracts from '../views/singit/contracts/edit.vue';
-import CreateContracts from '../views/singit/contracts/create.vue';
+import SignatureContracts from '../views/singit/contracts/signature.vue';
+
 
 const routes: RouteRecordRaw[] = [
     // dashboard
@@ -353,15 +354,34 @@ const routes: RouteRecordRaw[] = [
                 name: 'contracts-edit',
                 component: EditContracts
             },
-            {
-                path: 'create',
-                name: 'contracts-create',
-                component: CreateContracts
-            }
+            // {
+            //     path: 'signature',
+            //     name: 'contracts-signature',
+            //     component: SignatureContracts
+            // },
+
         ],
+
         meta: {requiresAuth: true}
     },
+    {
+        path: '/contratos',
+        component: storeLayout,
+        children: [
+            {
+                path: 'firmar/:hash',
+                name: 'contracts-signature',
+                component: SignatureContracts
+            },
+            {
+                path: 'firmar/:id/edit',
+                name: 'contracts-signature-edit',
+                component: SignatureContracts
+            },
+        ],
 
+        meta: {requiresAuth: false}
+    },
     {path: '/:pathMatch(.*)*', component: Error404},
 
 ];
