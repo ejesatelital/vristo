@@ -3,8 +3,8 @@
       <label class="typo__label">{{ isTitleSelect }}</label>
       <multiselect
         v-model="optionsSelected"
-        tag-placeholder="Select option"
-        placeholder="Search option"
+        :tag-placeholder="isTitleSelect"
+        :placeholder="isTitleSelect"
         :label="isLabel"
         :track-by="isValue"
         :options="options"

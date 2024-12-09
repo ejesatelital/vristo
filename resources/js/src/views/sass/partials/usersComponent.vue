@@ -97,7 +97,7 @@ const showPasswords = ref({
     email_password: false,
     whatsapp_token: false
 });
-
+const emit = defineEmits(['updateUsers'])
 const props = defineProps({
     companyData: {
         type: Object,
@@ -137,9 +137,10 @@ const getData = async () => {
     try {
         loading.value = true;
         let companies: any = companyStore.companiesSelect;
-        console.log(userStore.hasAccess('sass.companies.indexall'))
         if (userStore.hasAccess('sass.companies.indexall') && companies.length > 1) {
             companies = null
+        } else if (!companyStore.companiesSelect) {
+            companies = companyStore.companies.map(x=>x.id);
         } else {
             companies = `[${companyStore.companiesSelect}]`;
         }
@@ -150,7 +151,6 @@ const getData = async () => {
             if (rows.value !== undefined) {
                 user = rows.value.find(({id}) => id === x.id)
             }
-            console.log(user)
             if (!user || user === undefined) {
                 userslist.push({
                     label: x.fullname,
@@ -201,12 +201,9 @@ const clearSearch = () => {
     clearTimeout(timer);
 };
 const deleteUser = (id: number) => {
-
-    console.log(props.companyData.users)
     let users = []
     let row = []
     props.companyData.users.map((x: any) => {
-        console.log(x)
         if (x === id) {
             return null
         } else {
@@ -226,11 +223,23 @@ const deleteUser = (id: number) => {
     rows.value = row
     props.companyData.users=users
     getData()
+    emit("updateUsers",users)
 
 };
 onMounted(async () => {
     await getData();
     rows.value = props.companyData.users_data ?? []
+    let option=[]
+    console.log(props.companyData.users.includes(2))
+    optionUsers.value.map((x: any) => {
+        if (props.companyData.users.includes(x.value)) {
+            return null
+        } else {
+            option.push(x)
+            return x
+        }
+    });
+    optionUsers.value = option
 });
 
 const redirectToCreate = () => {

@@ -5,13 +5,21 @@ const baseURL = 'https://apps.ejesatelital.com/api/'; // Reemplaza con la URL de
 
 export class API {
     private instance: AxiosInstance;
+    private instanceForm: AxiosInstance;
     constructor() {
         const userStore = useUserStore()
         if (userStore.api_token) {
             this.instance = axios.create({
                 baseURL,
                 headers: {
+                    Authorization: `Bearer ${userStore.api_token}`
+                },
+            });
+            this.instanceForm = axios.create({
+                baseURL,
+                headers: {
                     Authorization: `Bearer ${userStore.api_token}`,
+                    "Content-Type": "multipart/form-data"
                 },
             });
         }
@@ -47,7 +55,13 @@ export class API {
     put(url: string, data?: any) {
         return this.instance.put(url, data);
     }
+    postForm(url: string, data?: any) {
+        return this.instanceForm.post(url, data);
+    }
 
+    putForm(url: string, data?: any) {
+        return this.instanceForm.put(url, data);
+    }
     delete(url: string) {
         return this.instance.delete(url);
     }

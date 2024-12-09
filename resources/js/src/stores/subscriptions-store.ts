@@ -1,5 +1,5 @@
 import {defineStore} from 'pinia'
-import {API} from "../services/local";
+import {API} from "../services/api";
 
 // @ts-ignore
 export const useSubscriptionsStore = defineStore('subscriptions', {

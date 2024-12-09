@@ -44,30 +44,30 @@
                             <h5 class="ltr:ml-auto rtl:mr-auto text-2xl"><span class="text-white-light">$</span>0</h5>
                         </div>
                     </div>
-<!--                    <div class="-mt-12 px-8 grid grid-cols-2 gap-2">
-                        <div class="bg-white rounded-md shadow px-4 py-2.5 dark:bg-[#060818]">
-                            <span class="flex justify-between items-center mb-4 dark:text-white"
-                            >Received
-                                <svg class="w-4 h-4 text-success" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M19 15L12 9L5 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                </svg>
-                            </span>
-                            <div class="btn w-full py-1 text-base shadow-none border-0 bg-[#ebedf2] dark:bg-black text-[#515365] dark:text-[#bfc9d4]">
-                                $97.99
-                            </div>
-                        </div>
-                        <div class="bg-white rounded-md shadow px-4 py-2.5 dark:bg-[#060818]">
-                            <span class="flex justify-between items-center mb-4 dark:text-white"
-                            >Spent
-                                <svg class="w-4 h-4 text-danger" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M19 9L12 15L5 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                </svg>
-                            </span>
-                            <div class="btn w-full py-1 text-base shadow-none border-0 bg-[#ebedf2] dark:bg-black text-[#515365] dark:text-[#bfc9d4]">
-                                $53.00
-                            </div>
-                        </div>
-                    </div>-->
+                    <!--                    <div class="-mt-12 px-8 grid grid-cols-2 gap-2">
+                                            <div class="bg-white rounded-md shadow px-4 py-2.5 dark:bg-[#060818]">
+                                                <span class="flex justify-between items-center mb-4 dark:text-white"
+                                                >Received
+                                                    <svg class="w-4 h-4 text-success" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M19 15L12 9L5 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                                    </svg>
+                                                </span>
+                                                <div class="btn w-full py-1 text-base shadow-none border-0 bg-[#ebedf2] dark:bg-black text-[#515365] dark:text-[#bfc9d4]">
+                                                    $97.99
+                                                </div>
+                                            </div>
+                                            <div class="bg-white rounded-md shadow px-4 py-2.5 dark:bg-[#060818]">
+                                                <span class="flex justify-between items-center mb-4 dark:text-white"
+                                                >Spent
+                                                    <svg class="w-4 h-4 text-danger" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M19 9L12 15L5 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                                    </svg>
+                                                </span>
+                                                <div class="btn w-full py-1 text-base shadow-none border-0 bg-[#ebedf2] dark:bg-black text-[#515365] dark:text-[#bfc9d4]">
+                                                    $53.00
+                                                </div>
+                                            </div>
+                                        </div>-->
                     <div class="p-5">
                         <div class="mb-5">
                             <span
@@ -97,7 +97,7 @@
                 </div>
 
                 <div class="panel h-full sm:col-span-2 xl:col-span-1 pb-0">
-                    <h5 class="font-semibold text-lg dark:text-white-light mb-5">Recent Activities</h5>
+                    <h5 class="font-semibold text-lg dark:text-white-light mb-5">Actividad Reciente</h5>
 
                     <perfect-scrollbar
                         :options="{
@@ -106,7 +106,7 @@
                         }"
                         class="relative mb-4 h-[290px] ltr:pr-3 rtl:pl-3 ltr:-mr-3 rtl:-ml-3"
                     >
-                        <div class="text-sm cursor-pointer">
+<!--                        <div class="text-sm cursor-pointer">
                             <div class="flex items-center py-1.5 relative group">
                                 <div class="bg-primary w-1.5 h-1.5 rounded-full ltr:mr-1 rtl:ml-1.5"></div>
                                 <div class="flex-1">Updated Server Logs</div>
@@ -247,11 +247,11 @@
                                 >Pending</span
                                 >
                             </div>
-                        </div>
+                        </div>-->
                     </perfect-scrollbar>
                     <div class="border-t border-white-light dark:border-white/10">
                         <a href="javascript:;" class="font-semibold group hover:text-primary p-4 flex items-center justify-center group">
-                            View All
+                            Ver todos
                             <svg
                                 class="w-4 h-4 rtl:rotate-180 group-hover:translate-x-1 rtl:group-hover:-translate-x-1 transition duration-300 ltr:ml-1 rtl:mr-1"
                                 viewBox="0 0 24 24"
@@ -271,7 +271,7 @@
                 </div>
                 <div class="panel h-full">
                     <div class="flex items-center justify-between dark:text-white-light mb-5">
-                        <h5 class="font-semibold text-lg">Transactions</h5>
+                        <h5 class="font-semibold text-lg">Transacciones</h5>
                         <div class="dropdown ltr:ml-auto rtl:mr-auto">
                             <Popper :placement="store.rtlClass === 'rtl' ? 'bottom-start' : 'bottom-end'" offsetDistance="0" class="align-middle">
                                 <a href="javascript:;">
@@ -289,13 +289,10 @@
                                 <template #content="{ close }">
                                     <ul @click="close()">
                                         <li>
-                                            <a href="javascript:;">View Report</a>
+                                            <a href="javascript:;">Ver Reporte</a>
                                         </li>
                                         <li>
-                                            <a href="javascript:;">Edit Report</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:;">Mark as Done</a>
+                                            <a href="javascript:;">Facturación</a>
                                         </li>
                                     </ul>
                                 </template>
@@ -304,7 +301,7 @@
                     </div>
                     <div>
                         <div class="space-y-6">
-                            <div class="flex">
+<!--                            <div class="flex">
                                 <span
                                     class="shrink-0 grid place-content-center text-base w-9 h-9 rounded-md bg-success-light dark:bg-success text-success dark:text-success-light"
                                 >SP</span
@@ -417,7 +414,7 @@
                                     <div class="text-xs text-white-dark dark:text-gray-500">04 Jan 1:00PM</div>
                                 </div>
                                 <span class="text-danger text-base px-1 ltr:ml-auto rtl:mr-auto whitespace-pre">-$22.00</span>
-                            </div>
+                            </div>-->
                         </div>
                     </div>
                 </div>
@@ -425,7 +422,7 @@
 
             </div>
             <div class="grid sm:grid-cols-2 xl:grid-cols-3 gap-6 mb-6">
-                <div class="panel h-full sm:col-span-2 xl:col-span-1">
+<!--                <div class="panel h-full sm:col-span-2 xl:col-span-1">
                     <div class="flex items-center mb-5">
                         <h5 class="font-semibold text-lg dark:text-white-light">
                             Daily Sales <span class="block text-white-dark text-sm font-normal">Go to columns for details.</span>
@@ -446,7 +443,7 @@
                     </div>
                     <div>
                         <apexchart height="160" :options="dailySales" :series="dailySalesSeries" class="bg-white dark:bg-black rounded-lg overflow-hidden">
-                            <!-- loader -->
+                            &lt;!&ndash; loader &ndash;&gt;
                             <div class="min-h-[175px] grid place-content-center bg-white-light/30 dark:bg-dark dark:bg-opacity-[0.08]">
                                 <span
                                     class="animate-spin border-2 border-black dark:border-white !border-l-transparent rounded-full w-5 h-5 inline-flex"
@@ -454,11 +451,11 @@
                             </div>
                         </apexchart>
                     </div>
-                </div>
+                </div>-->
 
                 <div class="panel h-full">
                     <div class="flex items-center dark:text-white-light mb-5">
-                        <h5 class="font-semibold text-lg">Summary</h5>
+                        <h5 class="font-semibold text-lg">Aplicaciones Instaladas</h5>
                         <div class="dropdown ltr:ml-auto rtl:mr-auto">
                             <Popper :placement="store.rtlClass === 'rtl' ? 'bottom-start' : 'bottom-end'" offsetDistance="0" class="align-middle">
                                 <a href="javascript:;">
@@ -489,7 +486,7 @@
                             </Popper>
                         </div>
                     </div>
-                    <div class="space-y-9">
+<!--                    <div class="space-y-9">
                         <div class="flex items-center">
                             <div class="w-9 h-9 ltr:mr-3 rtl:ml-3">
                                 <div
@@ -582,10 +579,10 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div>-->
                 </div>
 
-                <div class="panel h-full p-0">
+<!--                <div class="panel h-full p-0">
                     <div class="flex items-center justify-between w-full p-5 absolute">
                         <div class="relative">
                             <div
@@ -625,14 +622,14 @@
                         </h5>
                     </div>
                     <apexchart height="290" :options="totalOrders" :series="totalOrdersSeries" class="bg-white dark:bg-black rounded-lg overflow-hidden">
-                        <!-- loader -->
+                        &lt;!&ndash; loader &ndash;&gt;
                         <div class="min-h-[290px] grid place-content-center bg-white-light/30 dark:bg-dark dark:bg-opacity-[0.08]">
                             <span class="animate-spin border-2 border-black dark:border-white !border-l-transparent rounded-full w-5 h-5 inline-flex"></span>
                         </div>
                     </apexchart>
-                </div>
+                </div>-->
             </div>
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+<!--            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <div class="panel h-full w-full">
                     <div class="flex items-center justify-between mb-5">
                         <h5 class="font-semibold text-lg dark:text-white-light">Recent Orders</h5>
@@ -940,7 +937,7 @@
                         </table>
                     </div>
                 </div>
-            </div>
+            </div>-->
         </div>
 
     </div>
@@ -1334,10 +1331,10 @@ const totalOrdersSeries = ref([
 ]);
 
 onMounted(() => {
-   if(!companyStore.id){
-       const company=companyStore.companies[0]
-       companyStore.setCompany(company)
-       companyStore.setCompaniesSelect([company.id])
-   }
+    if(!companyStore.id){
+        const company=companyStore.companies[0]
+        companyStore.setCompany(company)
+        companyStore.setCompaniesSelect([company.id])
+    }
 });
 </script>

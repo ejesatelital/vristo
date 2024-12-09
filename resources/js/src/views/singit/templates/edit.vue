@@ -209,7 +209,7 @@
     import { useMeta } from '@/composables/use-meta';
     import { quillEditor, Quill } from 'vue3-quill';
     import 'vue3-quill/lib/vue3-quill.css';
-    import { API } from '@/services/local';
+    import { API } from '@/services/api';
     import { NOTIFY } from '@/services/notify';
     import Select from '@/components/partials/Select.vue';
     import slugify from "slugify";

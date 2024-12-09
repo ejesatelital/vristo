@@ -26,7 +26,7 @@
                             <path d="M2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C22 4.92893 22 7.28595 22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12Z" stroke="currentColor" stroke-width="1.5"/>
                             <path d="M15 12L12 12M12 12L9 12M12 12L12 9M12 12L12 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
                         </svg>
-                        Nuevo usuario
+                        Nuevo Usuario
                     </button>
                 </template>
             </div>
@@ -69,7 +69,7 @@
                                         />
                                     </svg>
                                 </button>
-                                <tippy target="edit">edit</tippy>
+                                <tippy target="edit">Editar</tippy>
                             </template>
 
                             <template v-if="userStore.hasAccess('user.users.destroy')">
@@ -125,7 +125,7 @@
     const i18n = reactive(useI18n());
     const cols = ref([
         { field: 'id', title: 'Id' },
-        { field: 'fullname', title: 'Nombre' },
+        { field: 'full_name', title: 'Nombre' },
         { field: 'email', title: 'Correo' },
         { field: 'created_at', title: 'Creado el' },
         { field: 'actions', title: 'Actions', sort: false, headerClass: 'justify-center' },
@@ -150,11 +150,12 @@
     const getData = async () => {
         try {
             loading.value = true;
-            let companies: any = companyStore.companiesSelect;
-            if(userStore.hasAccess('sass.companies.indexall') && companies.length > 1){
+            let companies: any = `[${companyStore.companiesSelect}]`;
+
+            if(userStore.hasAccess('sass.companies.indexall') && companyStore.companiesSelect.length > 1){
                 companies = null
             }
-            const response = await api.get(`user/users?search=${params.search}&company_id=[${companies}]&page=${params.current_page}&per_page=${params.pagesize}`)
+            const response = await api.get(`user/users?search=${params.search}&company_id=${companies}&page=${params.current_page}&per_page=${params.pagesize}`)
             rows.value = response?.data;
             total_rows.value = response?.meta?.total;
         } catch (error) {

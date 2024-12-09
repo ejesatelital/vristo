@@ -108,7 +108,7 @@
     import { useMeta } from '@/composables/use-meta';
     import { useAppStore } from '@/stores/index';
     import { useI18n } from 'vue-i18n';
-    import { API } from '@/services/local';
+    import { API } from '@/services/api';
     import { NOTIFY } from '@/services/notify';
     import {useCompanyStore} from "@/stores/company-store";
     import { useRouter } from 'vue-router';

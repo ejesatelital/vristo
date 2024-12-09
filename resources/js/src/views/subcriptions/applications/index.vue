@@ -399,18 +399,18 @@
                                     class="text-lg font-medium bg-[#fbfbfb] dark:bg-[#121c2c] ltr:pl-5 rtl:pr-5 py-3 ltr:pr-[50px] rtl:pl-[50px]">
                                     {{ app.id ? 'Editar Aplicación' : 'Agregar Aplicación' }}
                                 </div>
-                                <div class="p-5">
-                                    <form @submit.prevent="saveApplication">
+                                <form @submit.prevent="saveApplication">
+                                    <div class="p-5">
                                         <div class="flex flex-col sm:flex-row">
                                             <div class="ltr:sm:mr-4 rtl:sm:ml-4 w-full sm:w-3/12 mb-5">
                                                 <div class="mb-5">
                                                     <label for="name">Logo</label>
-                                                    <img src="/assets//images/profile-34.jpeg" alt=""
+                                                    <img src="/assets/images/profile-34.jpeg" alt=""
                                                          class="w-20 h-20 md:w-32 md:h-32 rounded-full object-cover mx-auto"/>
                                                 </div>
                                                 <div class="mb-5">
                                                     <label for="name">Cover</label>
-                                                    <img src="/assets//images/profile-34.jpeg" alt=""
+                                                    <img src="/assets/images/profile-34.jpeg" alt=""
                                                          class="w-40 h-30 md:w-40 md:h-30 object-cover mx-auto"/>
                                                 </div>
                                                 <div class="mb-5 ">
@@ -444,86 +444,35 @@
                                                         v-model="app.description"
                                                     ></textarea>
                                                 </div>
-                                                <div class="mb-5">
-                                                    <label for="url">URL</label>
-                                                    <input id="url" type="text" placeholder="Enter url"
-                                                           class="form-input" v-model="app.url"/>
-                                                </div>
-                                                <div class="flex-1 grid grid-cols-2 sm:grid-cols-3 gap-5">
+                                                <div class="flex-1 grid grid-cols-2 sm:grid-cols-2 gap-5">
+                                                    <div class="mb-5">
+                                                        <label for="url">URL</label>
+                                                        <input id="url" type="text" placeholder="Enter url"
+                                                               class="form-input" v-model="app.url"/>
+                                                    </div>
+
                                                     <div class="mb-5">
                                                         <label for="number">Versión</label>
                                                         <input id="number" type="text"
                                                                placeholder="Enter version Number"
                                                                class="form-input" v-model="app.version"/>
                                                     </div>
-                                                    <div class="mb-5">
-                                                        <label for="number">Modulo</label>
-                                                        <input id="number" type="text" placeholder="Nombre del Modulo"
-                                                               class="form-input" v-model="app.model"/>
-                                                    </div>
-                                                    <div class="mb-5">
-                                                        <label for="number">Entidad</label>
-                                                        <input id="number" type="text" placeholder="Nombre del Modulo"
-                                                               class="form-input" v-model="app.entity"/>
-                                                    </div>
-                                                </div>
-                                                <div class="mb-5">
-                                                    <label for="dateEnd">Lista de Permisos</label>
-                                                    <div class="mb-5">
-                                                        <div class="flex">
-                                                            <input id="newCheckList" type="text"
-                                                                   v-model="newPermissionsList"
-                                                                   placeholder=""
-                                                                   class="form-input ltr:rounded-r-none rtl:rounded-l-none"/>
-                                                            <button type="button"
-                                                                    class="btn btn-secondary ltr:rounded-l-none rtl:rounded-r-none"
-                                                                    @click="addPermissionsList">Agregar
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                    <div
-                                                        class="flex flex-col rounded-md border border-[#e0e6ed] dark:border-[#1b2e4b]">
-                                                        <div v-for="(item , i) in app.permissions" :key="i"
-                                                             class="flex space-x-4 rtl:space-x-reverse border-b border-[#e0e6ed] dark:border-[#1b2e4b] px-4 py-2.5 hover:bg-[#eee] dark:hover:bg-[#eee]/10">
-                                                            <label for="tack_checkbox1" class="mb-0 cursor-pointer"
-                                                            >{{ item.label }}
-                                                                <button
-                                                                    class="badge bg-danger my-auto ltr:ml-auto rtl:mr-auto hover:top-0 align-content-between"
-                                                                    @click="deletePermissionsList(item.id)">
-                                                                    <svg
-                                                                        xmlns="http://www.w3.org/2000/svg"
-                                                                        width="24px"
-                                                                        height="24px"
-                                                                        viewBox="0 0 24 24"
-                                                                        fill="none"
-                                                                        stroke="currentColor"
-                                                                        stroke-width="1.5"
-                                                                        stroke-linecap="round"
-                                                                        stroke-linejoin="round"
-                                                                        class="w-6 h-6"
-                                                                    >
-                                                                        <line x1="18" y1="6" x2="6" y2="18"></line>
-                                                                        <line x1="6" y1="6" x2="18" y2="18"></line>
-                                                                    </svg>
-                                                                </button>
-                                                            </label
-                                                            >
-                                                        </div>
-                                                    </div>
-                                                    <div class="text-danger mt-2" id="endDateErr"></div>
                                                 </div>
                                             </div>
+                                            <div class="flex-1 grid grid-cols-1 gap-5">
+                                                <entity-component :permissions="app.permissions"/>
+                                            </div>
                                         </div>
-                                        <div class="flex justify-end items-center mt-8">
-                                            <button type="button" class="btn btn-outline-danger"
-                                                    @click="addApplicationModal = false">Cancelar
-                                            </button>
-                                            <button type="submit" class="btn btn-primary ltr:ml-4 rtl:mr-4">
-                                                Guardar
-                                            </button>
-                                        </div>
-                                    </form>
-                                </div>
+                                    </div>
+                                    <div class="flex justify-end items-center mt-8">
+                                        <button type="button" class="btn btn-outline-danger"
+                                                @click="addApplicationModal = false">Cancelar
+                                        </button>
+                                        <button type="submit" class="btn btn-primary ltr:ml-4 rtl:mr-4">
+                                            Guardar
+                                        </button>
+                                    </div>
+                                </form>
                             </DialogPanel>
                         </TransitionChild>
                     </div>
@@ -542,6 +491,7 @@ import {useAppStore} from '@/stores/index';
 import {useI18n} from 'vue-i18n';
 import {API} from '@/services/api';
 import {useCompanyStore} from "@/stores/company-store";
+import EntityComponent from "@/views/subcriptions/applications/components/EntityComponent.vue";
 
 const modal2 = ref(false);
 
@@ -582,52 +532,22 @@ const app = ref({
     name: '',
     description: '',
     media_single: [{zone: 'cover', image: {}}, {zone: 'logo', image: {}}],
-
     version: '',
-    model: '',
-    entity: '',
     color: '#2196f3',
     status: 1,
     url: '',
     logo: '/assets/images/file-preview.svg',
-    cover:'/assets/images/file-preview.svg',
+    cover: '/assets/images/file-preview.svg',
     permissions: [],
-
 });
 
 const displayType = ref('list');
 const addApplicationModal = ref(false);
-const newPermissionsList = ref()
-const addPermissionsList = () => {
-    if (!newPermissionsList.value) {
-        return true;
-    }
-    const data = {
-        id: app.value.permissions.length + 1,
-        label: `${app.value.model.toLowerCase()}.${app.value.entity.toLowerCase()}.${newPermissionsList.value.toLowerCase()}`
-    }
-    app.value.permissions.push(data)
-    newPermissionsList.value = null
-}
-const deletePermissionsList = (id) => {
-    const items = <any>[]
-    app.value.permissions.map(function (x: any) {
-        if (x.id === id) {
-            return null
-        } else {
-            items.push(x)
-            return x
-        }
-    })
-    app.value.permissions = items
-}
 
 const editApplication = (item: any = null) => {
     app.value = item;
     addApplicationModal.value = true;
 };
-
-
 const saveApplication = async () => {
     let application = {
         name: app.value.name,
@@ -775,37 +695,5 @@ const colorChange = () => {
     const color = document.getElementById('color');
     color.click();
 }
-watch(() => app.value.model, (value) => {
-    if (app.value.permissions.length < 1) {
-        app.value.permissions = [
-            {id: 1, label: `${app.value.model.toLowerCase()}.${app.value.entity.toLowerCase()}.index`},
-            {id: 2, label: `${app.value.model.toLowerCase()}.${app.value.entity.toLowerCase()}.create`},
-            {id: 3, label: `${app.value.model.toLowerCase()}.${app.value.entity.toLowerCase()}.edit`},
-            {id: 4, label: `${app.value.model.toLowerCase()}.${app.value.entity.toLowerCase()}.destroy`}
-        ]
-    } else {
-        app.value.permissions = app.value.permissions.map(x => {
-            const permission= x.label.split(".")
-            console.log(permission)
-            return {id: x.id, label: `${app.value.model.toLowerCase()}.${app.value.entity.toLowerCase()}.${permission[2]}`}
-        })
-    }
 
-});
-watch(() => app.value.entity, (value) => {
-    if (app.value.permissions.length < 1) {
-        app.value.permissions = [
-            {id: 1, label: `${app.value.model.toLowerCase()}.${app.value.entity.toLowerCase()}.index`},
-            {id: 2, label: `${app.value.model.toLowerCase()}.${app.value.entity.toLowerCase()}.create`},
-            {id: 3, label: `${app.value.model.toLowerCase()}.${app.value.entity.toLowerCase()}.edit`},
-            {id: 4, label: `${app.value.model.toLowerCase()}.${app.value.entity.toLowerCase()}.destroy`}
-        ]
-    } else {
-        app.value.permissions = app.value.permissions.map(x => {
-            const permission= x.label.split(".")
-            console.log(permission)
-            return {id: x.id, label: `${app.value.model.toLowerCase()}.${app.value.entity.toLowerCase()}.${permission[2]}`}
-        })
-    }
-});
 </script>

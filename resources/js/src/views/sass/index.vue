@@ -14,7 +14,7 @@
         <div class="panel pb-1.5 mt-6">
             <div class="flex justify-end mb-5 gap-3">
                 <div class="relative max-w-xs">
-                    <input v-model="params.search" type="text" class="form-input w-full pr-10" placeholder="Buscar..." @input="handleInput"/>
+                    <input v-model="params.search" type="text" class="form-input w-full pr-10" placeholder="Buscar..."/>
                     <button v-if="params.search" @click="clearSearch" class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500" >
                         ✕
                     </button>
@@ -51,10 +51,15 @@
                     previousArrow='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"> <path d="M15 5L9 12L15 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> </svg>'
                     nextArrow='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"> <path d="M9 5L15 12L9 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> </svg>'
                 >
+                    <template #parent="data">
+                        <div v-if="data.value.parent_id">
+                            <span class="badge badge-outline-success">{{data.value.parent.name}}</span>
+                        </div>
+                    </template>
                     <template #actions="data">
                         <div class="flex justify-center gap-3">
                             <template v-if="userStore.hasAccess('sass.companies.edit')">
-                                <button type="button" class="btn btn-sm btn-info" v-tippy:edit @click="redirectToShow(data.value.id)">
+                                <button type="button" class="btn btn-sm btn-info" v-if="data.value.parent_id" v-tippy:edit @click="redirectToEdit(data.value.id)">
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5">
                                         <path
                                             d="M15.2869 3.15178L14.3601 4.07866L5.83882 12.5999L5.83881 12.5999C5.26166 13.1771 4.97308 13.4656 4.7249 13.7838C4.43213 14.1592 4.18114 14.5653 3.97634 14.995C3.80273 15.3593 3.67368 15.7465 3.41556 16.5208L2.32181 19.8021L2.05445 20.6042C1.92743 20.9852 2.0266 21.4053 2.31063 21.6894C2.59466 21.9734 3.01478 22.0726 3.39584 21.9456L4.19792 21.6782L7.47918 20.5844L7.47919 20.5844C8.25353 20.3263 8.6407 20.1973 9.00498 20.0237C9.43469 19.8189 9.84082 19.5679 10.2162 19.2751C10.5344 19.0269 10.8229 18.7383 11.4001 18.1612L11.4001 18.1612L19.9213 9.63993L20.8482 8.71306C22.3839 7.17735 22.3839 4.68748 20.8482 3.15178C19.3125 1.61607 16.8226 1.61607 15.2869 3.15178Z"
@@ -69,7 +74,14 @@
                                         />
                                     </svg>
                                 </button>
-                                <tippy target="edit">edit</tippy>
+                                <tippy v-if="data.value.parent_id" target="edit">Editar Empresa</tippy>
+                                <button v-if="!data.value.parent_id" type="button" class="btn btn-sm btn-info" v-tippy:view @click="redirectToShow(data.value.id)" >
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5">
+                                        <path opacity="0.5" d="M3.27489 15.2957C2.42496 14.1915 2 13.6394 2 12C2 10.3606 2.42496 9.80853 3.27489 8.70433C4.97196 6.49956 7.81811 4 12 4C16.1819 4 19.028 6.49956 20.7251 8.70433C21.575 9.80853 22 10.3606 22 12C22 13.6394 21.575 14.1915 20.7251 15.2957C19.028 17.5004 16.1819 20 12 20C7.81811 20 4.97196 17.5004 3.27489 15.2957Z"  stroke="currentColor" stroke-width="1.5"/>
+                                        <path d="M15 12C15 13.6569 13.6569 15 12 15C10.3431 15 9 13.6569 9 12C9 10.3431 10.3431 9 12 9C13.6569 9 15 10.3431 15 12Z" stroke="currentColor" stroke-width="1.5"/>
+                                    </svg>
+                                </button>
+                                <tippy v-if="!data.value.parent_id" target="view">Ver Empresa</tippy>
                             </template>
 
                             <template v-if="userStore.hasAccess('sass.companies.destroy')">
@@ -119,7 +131,9 @@
     const redirectToShow = (id: number) => {
         router.push({ name: 'companies-show', params: { id } });
     };
-
+    const redirectToEdit = (id: number) => {
+        router.push({ name: 'companies-edit', params: { id } });
+    };
     // multi language
     const i18n = reactive(useI18n());
 
@@ -129,7 +143,8 @@
         { field: 'email', title: 'Correo' },
         { field: 'address', title: 'Dirección' },
         { field: 'phone', title: 'Teléfono' },
-        { field: 'updated_at', title: 'Creado el' },
+        { field: 'parent', title: 'Principal' },
+        { field: 'created_at', title: 'Creado el' },
         { field: 'actions', title: 'Actions', sort: false, headerClass: 'justify-center' },
     ]);
     let timer: any;

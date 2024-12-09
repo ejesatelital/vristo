@@ -147,7 +147,7 @@
                             <span>{{ $t('admin') }}</span>
                         </h2>
 
-                        <li class="menu nav-item" v-if="userStore.hasAccess('user.users.index')">
+                        <li class="menu nav-item" v-if="userStore.hasAccess('subscriptions.applications.index')">
                             <button
                                 type="button"
                                 class="nav-link group w-full"
@@ -180,7 +180,7 @@
                                     </svg>
 
                                     <span class="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">{{
-                                        $t('components')
+                                        $t('Suscripciones')
                                     }}</span>
                                 </div>
                                 <div class="rtl:rotate-180" :class="{ '!rotate-90': activeDropdown === 'components' }">
@@ -208,7 +208,7 @@
                         </li>
 
 
-                        <li class="menu nav-item relative" v-if="userStore.hasAccess('user.users.index')">
+                        <li class="menu nav-item relative" v-if="userStore.hasAccess('tickets.tickets.index')">
                             <router-link class="group" :to="{name:'tickets'}" @click="toggleMobileMenu">
                                 <div class="flex items-center">
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="group-hover:!text-primary shrink-0">
@@ -222,7 +222,7 @@
                         </li>
 
 
-                        <li class="menu nav-item relative" v-if="userStore.hasAccess('user.users.index')">
+                        <li class="menu nav-item relative" v-if="userStore.hasAccess('media.medias.index')">
                             <router-link class="group" :to="{name:'media'}" @click="toggleMobileMenu">
                                 <div class="flex items-center">
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="group-hover:!text-primary shrink-0">

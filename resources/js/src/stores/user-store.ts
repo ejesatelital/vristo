@@ -56,7 +56,7 @@ export const useUserStore = defineStore('user', {
                         companyStore.setCompanyOptions(companyStore.companies);
 
                     } else {
-                        if (user.companies.length === 1) {
+                        if (user.companies.length >= 1) {
                             companyStore.setCompany(user.companies[0]);
                             companyStore.setCompaniesSelect([user.companies[0].id]);
                         }
