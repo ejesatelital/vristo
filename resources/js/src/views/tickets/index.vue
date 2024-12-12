@@ -286,8 +286,8 @@
                         </template>
 
                         <template #actions="data">
-                            <div class="flex items-center justify-between w-max" v-if="data.value.status_id != 4">
-                                <ul class="flex items-center justify-center gap-2">
+                            <div class="flex items-end w-max" v-if="data.value.status_id != 4">
+                                <ul class="flex items-center justify-center gap-3">
                                     <li v-if="selectedTab === 'inbox' ">
                                         <a href="javascript:;" v-tippy:assigned_id
                                            @click="openResponsibleModal(data.value)">
@@ -332,9 +332,19 @@
                                     </li>
                                     <li v-if="data.value.user_id == userStore.id">
                                         <a href="javascript:;" v-tippy:close @click="setStatus(data.value.id, 4)">
-                                            <svg width="18" class="text-success" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                                                <path d="M16.1549 3.43415L18.5122 5.47712C20.1349 6.88345 20.9462 7.58662 20.9462 8.49988C20.9462 9.41314 20.1349 10.1163 18.5122 11.5226L16.1549 13.5656C15.4414 14.184 15.0846 14.4932 14.7923 14.3597C14.5 14.2262 14.5 13.7541 14.5 12.8099V11.2856C11.5 11.2856 8.25 12.6785 7 14.9999C7 7.57131 11.4444 5.71416 14.5 5.71416V4.18984C14.5 3.24562 14.5 2.77351 14.7923 2.64003C15.0846 2.50656 15.4414 2.81575 16.1549 3.43415Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" class="text-success"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                <path opacity="0.5" d="M12 2L12 10M12 10L15 7M12 10L9 7"
+                                                        stroke="currentColor" stroke-width="1.5"
+                                                        stroke-linecap="round" stroke-linejoin="round"/>
+                                                <path opacity="0.5"
+                                                        d="M2 13H5.16026C6.06543 13 6.51802 13 6.91584 13.183C7.31367 13.3659 7.60821 13.7096 8.19729 14.3968L8.80271 15.1032C9.39179 15.7904 9.68633 16.1341 10.0842 16.317C10.482 16.5 10.9346 16.5 11.8397 16.5H12.1603C13.0654 16.5 13.518 16.5 13.9158 16.317C14.3137 16.1341 14.6082 15.7904 15.1973 15.1032L15.8027 14.3968C16.3918 13.7096 16.6863 13.3659 17.0842 13.183C17.482 13 17.9346 13 18.8397 13H22"
+                                                        stroke="currentColor" stroke-width="1.5"
+                                                        stroke-linecap="round"/>
+                                                <path
+                                                    d="M17 2.12695C18.6251 2.28681 19.7191 2.64808 20.5355 3.46455C22 4.92902 22 7.28604 22 12.0001C22 16.7141 22 19.0712 20.5355 20.5356C19.0711 22.0001 16.714 22.0001 12 22.0001C7.28595 22.0001 4.92893 22.0001 3.46447 20.5356C2 19.0712 2 16.7141 2 12.0001C2 7.28604 2 4.92902 3.46447 3.46455C4.28094 2.64808 5.37486 2.28681 7 2.12695"
+                                                    stroke="currentColor" stroke-width="1.5"
+                                                    stroke-linecap="round"/>
                                             </svg>
                                         </a>
                                         <tippy target="close">Cerrar Ticket</tippy>
@@ -348,7 +358,6 @@
                                                 viewBox="0 0 24 24"
                                                 fill="none"
                                                 xmlns="http://www.w3.org/2000/svg"
-                                                class="w-5 h-5 ltr:mr-2 rtl:ml-2 shrink-0"
                                             >
                                                 <path
                                                     d="M20.5001 6H3.5"

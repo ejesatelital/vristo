@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<head lang="{{ LaravelLocalization::setLocale() }}">
+<head lang="{{LaravelLocalization::getCurrentLocale() }}">
     <meta charset="UTF-8">
     @section('meta')
         <meta name="description" content="@setting('core::site-description')"/>
@@ -9,11 +9,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="user-api-token" content="{{ $currentUser?$currentUser->getFirstApiKey():'' }}">
     <title>@section('title')@setting('core::site-name')@show</title>
-    @foreach($alternate as $alternateLocale=>$alternateSlug)
-        <link rel="alternate" hreflang="{{$alternateLocale}}" href="{{url($alternateLocale.'/'.$alternateSlug)}}">
-    @endforeach
     <link rel="canonical" href="{{url()->current()}}"/>
-    <link rel="shortcut icon" href="{{ Theme::url('favicon.ico') }}">
+    <link rel="shortcut icon" href="{{Theme::url('favicon.ico') }}">
     <link href="https://fonts.googleapis.com/css?family=Nunito:400,600,700" rel="stylesheet">
     @vite(['resources/js/src/main.ts'])
     @stack('css-stack')

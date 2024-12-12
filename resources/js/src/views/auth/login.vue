@@ -107,27 +107,33 @@
                                     </span>
                                 </div>
                             </div>
+
                             <div>
                                 <label for="Password">Contraseña</label>
                                 <div class="relative text-white-dark">
-                                    <div class="flex">
-                                        <input id="Password" name="password"
-                                               :type="showPasswords.password ? 'text' : 'password'"
-                                               placeholder="Enter Password"
-                                               class="form-input ps-10 placeholder:text-white-dark" v-model="password"
-                                               required/>
-                                        <div
-                                            class="bg-[#eee] flex justify-center items-center ltr:rounded-r-md rtl:rounded-l-md px-3 font-semibold border ltr:border-l-0 rtl:border-r-0 border-[#e0e6ed] dark:border-[#17263c] dark:bg-[#1b2e4b]">
-                                            <label
-                                                class="w-7 h-4 relative cursor-pointer mb-0">
-                                                <input type="checkbox"
-                                                       v-model="showPasswords.password"
-                                                       class="peer absolute w-full h-full opacity-0 z-10 focus:ring-0 focus:outline-none cursor-pointer"
-                                                       id="user_api_hash_check"/>
-                                                <span
-                                                    class="rounded-full border border-[#adb5bd] bg-white peer-checked:bg-primary peer-checked:border-primary dark:bg-dark block h-full before:absolute ltr:before:left-0.5 rtl:before:right-0.5 ltr:peer-checked:before:left-3.5 rtl:peer-checked:before:right-3.5 peer-checked:before:bg-white before:bg-[#adb5bd] dark:before:bg-white-dark before:bottom-[2px] before:w-3 before:h-3 before:rounded-full before:transition-all before:duration-300"></span>
-                                            </label>
-                                        </div>
+
+                                    <input
+                                        id="Password"
+                                        name="password"
+                                        :type="showPasswords.password ? 'text' : 'password'"
+                                        placeholder="Enter Password"
+                                        class="form-input ps-10 placeholder:text-white-dark"
+                                        v-model="password"
+                                        required
+                                    />
+
+                                    <div class="absolute top-1/2 right-3 -translate-y-1/2">
+                                        <label class="w-7 h-4 relative cursor-pointer mb-0">
+                                            <input
+                                                type="checkbox"
+                                                v-model="showPasswords.password"
+                                                class="peer absolute w-full h-full opacity-0 z-10 focus:ring-0 focus:outline-none cursor-pointer"
+                                                id="user_api_hash_check"
+                                            />
+                                            <span
+                                                class="rounded-full border border-[#adb5bd] bg-white peer-checked:bg-primary peer-checked:border-primary dark:bg-dark block h-full before:absolute ltr:before:left-0.5 rtl:before:right-0.5 ltr:peer-checked:before:left-3.5 rtl:peer-checked:before:right-3.5 peer-checked:before:bg-white before:bg-[#adb5bd] dark:before:bg-white-dark before:bottom-[2px] before:w-3 before:h-3 before:rounded-full before:transition-all before:duration-300">
+                                            </span>
+                                        </label>
                                     </div>
                                     <span class="absolute start-4 top-1/2 -translate-y-1/2">
                                         <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
@@ -154,6 +160,7 @@
                                             />
                                         </svg>
                                     </span>
+
                                 </div>
                             </div>
                             <!-- <div>
@@ -168,12 +175,12 @@
                                 Iniciar Sesión
                             </button>
                         </form>
-                        <div class="relative my-7 text-center md:mb-9">
+                        <!-- <div class="relative my-7 text-center md:mb-9">
                             <span
                                 class="absolute inset-x-0 top-1/2 h-px w-full -translate-y-1/2 bg-white-light dark:bg-white-dark"></span>
                             <span
                                 class="relative bg-white px-2 font-bold uppercase text-white-dark dark:bg-dark dark:text-white-light">o</span>
-                        </div>
+                        </div> -->
                         <!--  <div class="mb-10 md:mb-[60px]">
                              <ul class="flex justify-center gap-3.5">
                                  <li>
@@ -262,13 +269,13 @@
                                  </li>
                              </ul>
                          </div> -->
-                        <div class="text-center dark:text-white">
+                        <!-- <div class="text-center dark:text-white">
                             No tienes una cuenta?
                             <router-link to="/auth/register"
                                          class="uppercase text-primary underline transition hover:text-black dark:hover:text-white">
                                 REGÍSTRATE AHORA
                             </router-link>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>

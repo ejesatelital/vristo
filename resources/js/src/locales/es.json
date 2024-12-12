@@ -159,6 +159,7 @@
     "signit":"Fírmalo",
     "templates":"Plantillas",
     "contracts":"Contratos",
+    "contract":"Contrato",
     "media":"Medios",
     "tickets":"Tickets",
     "designer":"Diseñador",
@@ -176,6 +177,7 @@
     "create_ticket": "Crear ticket",
     "my_tickets": "Mis tickets",
     "requests": "Solicitudes",
-    "close_ticket": "Cerrar Ticket"
+    "close_ticket": "Cerrar Ticket",
+    "show_contract":"Ver Contrato"
 
 }

@@ -13,6 +13,8 @@
         :taggable="true"
         :preserve-search="true"
         :close-on-select="isCloseOnSelect"
+        :disabled="isDisabled"
+        :loading="isLoading"
         allow-empty="false"
       ></multiselect>
     </div>
@@ -20,8 +22,8 @@
 
   <script setup>
     import { ref, defineProps, defineEmits, watch } from 'vue';
-    import Multiselect from 'vue-multiselect';
-
+    import Multiselect from '@suadelabs/vue3-multiselect';
+    import '@suadelabs/vue3-multiselect/dist/vue3-multiselect.css';
     // Define props
     const props = defineProps({
         options: {
@@ -55,7 +57,15 @@
         value:{
             type: String,
             default: "value"
-        }
+        },
+        disabled: {
+            type: Boolean,
+            default: false
+        },
+        loading: {
+            type: Boolean,
+            default: false
+        },
     });
 
     // Define emits
@@ -69,7 +79,8 @@
     const isTitleSelect = ref(props.titleSelect);
     const isLabel = ref(props.label);
     const isValue = ref(props.value);
-
+    const isDisabled = ref(props.disabled);
+    const isLoading = ref(props.loading);
 
     // Watch for changes in modelValue prop
     watch(() => props.modelValue, (newValue) => {
@@ -79,6 +90,16 @@
     // Watch for changes in local value to update modelValue
     watch(optionsSelected, (newValue) => {
         emit('update:modelValue', newValue);
+    });
+
+    // Watch for changes in `disabled` prop
+    watch(() => props.disabled, (newValue) => {
+        isDisabled.value = newValue;
+    });
+
+    // Watch for changes in `loading` prop
+    watch(() => props.loading, (newValue) => {
+        isLoading.value = newValue;
     });
 
   </script>
