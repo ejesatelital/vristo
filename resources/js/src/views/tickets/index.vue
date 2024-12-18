@@ -93,134 +93,110 @@
 
                 <div class="xl:hidden h-px border-b border-[#e0e6ed] dark:border-[#1b2e4b]"></div>
 
-                <div class="flex flex-wrap items-center gap-4 mx-4 py-4 lg:justify-between">
+                <div class="flex flex-wrap items-center gap-4 mx-4 py-4">
+                    <!-- Select Check Status -->
                     <div class="dropdown">
-                        <Popper
-                            :placement="store.rtlClass === 'rtl' ? 'bottom-start' : 'bottom-end'"
-                            offsetDistance="0"
-                            class="align-middle"
-                        >
-                            <div>
-                                <button type="button" v-tippy:group
-                                        class="hover:text-white flex items-center btn btn-outline-info gap-3">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                         xmlns="http://www.w3.org/2000/svg" class="w-5 h-5">
-                                        <path
-                                            d="M22 5.81445V6.50427C22 7.54211 22 8.06103 21.7404 8.49121C21.4808 8.92139 21.0065 9.18837 20.058 9.72234L17.145 11.3622C16.5085 11.7204 16.1903 11.8996 15.9625 12.0974C15.488 12.5093 15.1959 12.9933 15.0636 13.587C15 13.872 15 14.2056 15 14.8727V17.5422C15 19.4517 15 20.4064 14.3321 20.8242C13.6641 21.242 12.7248 20.8748 10.8462 20.1404C9.95128 19.7905 9.50385 19.6156 9.25192 19.2611C9 18.9065 9 18.4518 9 17.5422L9 14.8727C9 14.2056 9 13.872 8.93644 13.587C8.80408 12.9933 8.51199 12.5093 8.03751 12.0974C7.80967 11.8996 7.49146 11.7204 6.85504 11.3622L3.94202 9.72234C2.99347 9.18837 2.5192 8.92139 2.2596 8.49121C2 8.06103 2 7.54211 2 6.50427V5.81445"
-                                            stroke="currentColor" stroke-width="1.5"/>
-                                        <path opacity="0.5"
-                                              d="M22 5.81466C22 4.48782 22 3.8244 21.5607 3.4122C21.1213 3 20.4142 3 19 3H5C3.58579 3 2.87868 3 2.43934 3.4122C2 3.8244 2 4.48782 2 5.81466"
-                                              stroke="currentColor" stroke-width="1.5"/>
-                                    </svg>
-                                    {{ $t('filter_by') }}
-                                </button>
-                                <tippy target="group">{{ $t('states') }}</tippy>
-                            </div>
-                            <template #content="{ close }">
-                                <ul @click="close()">
-                                    <li>
-                                        <a href="javascript:;" @click="filterByStatus([1,2,3])">
-                                            <div class="w-2 h-2 rounded-full bg-dark ltr:mr-3 rtl:ml-3 shrink-0"></div>
-                                            {{ $t('not_filter') }}
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:;" @click="filterByStatus(1)">
-                                            <div class="w-2 h-2 rounded-full bg-info ltr:mr-3 rtl:ml-3 shrink-0"></div>
-                                            {{ $t('open') }}
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:;" @click="filterByStatus(2)">
-                                            <div
-                                                class="w-2 h-2 rounded-full bg-primary ltr:mr-3 rtl:ml-3 shrink-0"></div>
-                                            {{ $t('in_progress') }}
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:;" @click="filterByStatus(3)">
-                                            <div
-                                                class="w-2 h-2 rounded-full bg-warning ltr:mr-3 rtl:ml-3 shrink-0"></div>
-                                            {{ $t('answered') }}
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:;" @click="filterByStatus(4)">
-                                            <div
-                                                class="w-2 h-2 rounded-full bg-success ltr:mr-3 rtl:ml-3 shrink-0"></div>
-                                            {{ $t('closed') }}
-                                        </a>
-                                    </li>
+                        <Popper :placement="store.rtlClass === 'rtl' ? 'bottom-end' : 'bottom-start'"
+                                offsetDistance="0" class="align-middle">
+                            <button
+                                type="button"
+                                class="flex items-center border font-semibold border-[#e0e6ed] dark:border-[#253b5c] rounded-md px-4 py-2 text-sm dark:bg-[#1b2e4b] dark:text-white-dark"
+                            >
+                                <span class="ltr:mr-1 rtl:ml-1">Estados</span>
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg" class="w-5 h-5">
+                                    <path d="M19 9L12 15L5 9" stroke="currentColor" stroke-width="1.5"
+                                            stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </button>
+                            <template #content>
+                                <ul class="whitespace-nowrap">
+                                    <template v-for="(state, i) in states" :key="i">
+                                        <li>
+                                            <div class="flex items-center px-4 py-1">
+                                                <label class="cursor-pointer mb-0">
+                                                    <input
+                                                        type="checkbox"
+                                                        class="form-checkbox"
+                                                        :class="`${state.class}`"
+                                                        :id="`chk-state-${state.id}`"
+                                                        :value="state.id"
+                                                        v-model="selectedStates"
+                                                    />
+                                                    <span :for="`chk-state-${state.id}`" class="ltr:ml-2 rtl:mr-2">{{ state.name }}</span>
+                                                </label>
+                                            </div>
+                                        </li>
+                                    </template>
                                 </ul>
                             </template>
                         </Popper>
-
                     </div>
 
-                    <div class="flex gap-3">
-                        <div class=" flex relative max-w-xs w-full md:flex-1" v-if="selectedTab === 'inbox' && userStore.hasAccess('tickets.tickets.indexall')">
-                            <label for="subject" class="me-3">Ver Todos los tickets</label>
-                            <label class="w-12 h-6 relative">
-                                <input type="checkbox" class="custom_switch absolute w-full h-full opacity-0 z-10 cursor-pointer peer" id="custom_switch_checkbox4" v-model="allTickets" />
-                                <span for="custom_switch_checkbox4" class="bg-[#ebedf2] dark:bg-dark block h-full rounded-full before:absolute before:left-1 before:bg-white dark:before:bg-white-dark dark:peer-checked:before:bg-white before:bottom-1 before:w-4 before:h-4 before:rounded-full peer-checked:before:left-7 peer-checked:bg-primary before:transition-all before:duration-300"></span>
-                            </label>
-                        </div>
-                        <!-- Campo de búsqueda -->
-                        <div class="relative max-w-xs w-full md:flex-1">
-                            <input v-model="params.search" type="text" class="form-input w-full pr-10"
-                                   placeholder="Buscar..."/>
-                            <button v-if="params.search" @click="clearSearch"
-                                    class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500">
-                                ✕
+                <!-- <div class="flex gap-3"> -->
+                    <div class="flex items-end justify-end" v-if="selectedTab === 'inbox' && userStore.hasAccess('tickets.tickets.indexall')">
+                        <label for="subject" class="me-3">Ver todos los tickets</label>
+                        <label class="w-12 h-6 relative">
+                            <input type="checkbox" class="custom_switch absolute w-full h-full opacity-0 z-10 cursor-pointer peer" id="custom_switch_checkbox4" v-model="allTickets" />
+                            <span for="custom_switch_checkbox4" class="bg-[#ebedf2] dark:bg-dark block h-full rounded-full before:absolute before:left-1 before:bg-white dark:before:bg-white-dark dark:peer-checked:before:bg-white before:bottom-1 before:w-4 before:h-4 before:rounded-full peer-checked:before:left-7 peer-checked:bg-primary before:transition-all before:duration-300"></span>
+                        </label>
+                    </div>
+                    <!-- Campo de búsqueda -->
+                    <div class="relative w-full md:w-auto md:flex-1">
+                        <input v-model="params.search" type="text" class="form-input w-full pr-10"
+                                placeholder="Buscar..."/>
+                        <button v-if="params.search" @click="clearSearch"
+                                class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500">
+                            ✕
+                        </button>
+                    </div>
+                    <!-- Campo de búsqueda por fecha -->
+                    <div class="w-full md:w-auto md:flex-1">
+                        <flat-pickr v-model="date" :config="rangeCalendar" @on-close="setRangeDate"
+                                    class="form-input lg:w-[266px]"
+                                    placeholder="Buscar por fecha..."></flat-pickr>
+                    </div>
+                    <!-- Select columns -->
+                    <div class="dropdown">
+                        <Popper :placement="store.rtlClass === 'rtl' ? 'bottom-end' : 'bottom-start'"
+                                offsetDistance="0" class="align-middle">
+                            <button
+                                type="button"
+                                class="flex items-center border font-semibold border-[#e0e6ed] dark:border-[#253b5c] rounded-md px-4 py-2 text-sm dark:bg-[#1b2e4b] dark:text-white-dark"
+                            >
+                                <span class="ltr:mr-1 rtl:ml-1">Columnas</span>
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg" class="w-5 h-5">
+                                    <path d="M19 9L12 15L5 9" stroke="currentColor" stroke-width="1.5"
+                                            stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
                             </button>
-                        </div>
-                        <!-- Campo de búsqueda por fecha -->
-                        <div class="w-full md:w-auto md:flex-1">
-                            <flat-pickr v-model="date" :config="rangeCalendar" @on-close="setRangeDate"
-                                        class="form-input lg:w-[266px] text-center"
-                                        placeholder="Buscar por fecha..."></flat-pickr>
-                        </div>
-                        <!-- Select columns -->
-                        <div class="dropdown">
-                            <Popper :placement="store.rtlClass === 'rtl' ? 'bottom-end' : 'bottom-start'"
-                                    offsetDistance="0" class="align-middle">
-                                <button
-                                    type="button"
-                                    class="flex items-center border font-semibold border-[#e0e6ed] dark:border-[#253b5c] rounded-md px-4 py-2 text-sm dark:bg-[#1b2e4b] dark:text-white-dark"
-                                >
-                                    <span class="ltr:mr-1 rtl:ml-1">Columnas</span>
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                         xmlns="http://www.w3.org/2000/svg" class="w-5 h-5">
-                                        <path d="M19 9L12 15L5 9" stroke="currentColor" stroke-width="1.5"
-                                              stroke-linecap="round" stroke-linejoin="round"/>
-                                    </svg>
-                                </button>
-                                <template #content>
-                                    <ul class="whitespace-nowrap">
-                                        <template v-for="(col, i) in cols" :key="i">
-                                            <li>
-                                                <div class="flex items-center px-4 py-1">
-                                                    <label class="cursor-pointer mb-0">
-                                                        <input
-                                                            type="checkbox"
-                                                            class="form-checkbox"
-                                                            :id="`chk-${i}`"
-                                                            :value="col.field"
-                                                            @change="col.hide = !$event.target.checked"
-                                                            :checked="!col.hide"
-                                                        />
-                                                        <span :for="`chk-${i}`" class="ltr:ml-2 rtl:mr-2">{{
-                                                                col.title
-                                                            }}</span>
-                                                    </label>
-                                                </div>
-                                            </li>
-                                        </template>
-                                    </ul>
-                                </template>
-                            </Popper>
-                        </div>
+                            <template #content>
+                                <ul class="whitespace-nowrap">
+                                    <template v-for="(col, i) in cols" :key="i">
+                                        <li>
+                                            <div class="flex items-center px-4 py-1">
+                                                <label class="cursor-pointer mb-0">
+                                                    <input
+                                                        type="checkbox"
+                                                        class="form-checkbox"
+                                                        :id="`chk-${i}`"
+                                                        :value="col.field"
+                                                        @change="col.hide = !$event.target.checked"
+                                                        :checked="!col.hide"
+                                                    />
+                                                    <span :for="`chk-${i}`" class="ltr:ml-2 rtl:mr-2">{{
+                                                            col.title
+                                                        }}</span>
+                                                </label>
+                                            </div>
+                                        </li>
+                                    </template>
+                                </ul>
+                            </template>
+                        </Popper>
                     </div>
+                <!-- </div> -->
                 </div>
 
                 <div class="h-px border-b border-[#e0e6ed] dark:border-[#1b2e4b]"></div>
@@ -283,6 +259,10 @@
                             <div class="flex items-center gap-2" v-if="data.value.responsible">
                                 <img :src="data.value.responsible?.avatar ?? ''" class="w-9 h-9 rounded-full max-w-none" alt="user-profile">
                                 <div class="font-semibold"> {{ data.value.responsible?.full_name ?? '' }}</div></div>
+                        </template>
+
+                        <template #created_at="data">
+                            {{ formatDate(data.value.created_at) }}
                         </template>
 
                         <template #actions="data">
@@ -518,10 +498,19 @@ import {API} from '@/services/api';
 import Select from '@/components/partials/Select.vue';
 import {useUserStore} from "@/stores/user-store";
 import {NOTIFY} from '@/services/notify';
-import moment from 'moment';
 import VueEasyLightbox from 'vue-easy-lightbox';
 import {useRouter} from 'vue-router';
 import {excludedEvents} from "vue-flatpickr-component/dist/types/events";
+import moment from 'moment';
+import 'moment/locale/es'
+moment.locale('es');
+moment.updateLocale('es', {
+    months: 'Enero_Febrero_Marzo_Abril_Mayo_Junio_Julio_Agosto_Septiembre_Octubre_Noviembre_Diciembre'.split('_'),
+    monthsShort: 'Ene_Feb_Mar_Abr_May_Jun_Jul_Ago_Sep_Oct_Nov_Dic'.split('_'),
+    weekdays: 'Domingo_Lunes_Martes_Miércoles_Jueves_Viernes_Sábado'.split('_'),
+    weekdaysShort: 'Dom_Lun_Mar_Mié_Jue_Vie_Sáb'.split('_'),
+    weekdaysMin: 'Do_Lu_Ma_Mi_Ju_Vi_Sá'.split('_'),
+});
 
 useMeta({title: 'Tickets'});
 const roles = ref();
@@ -541,6 +530,12 @@ const rangeCalendar = ref({
     position: store.rtlClass === 'rtl' ? 'auto right' : 'auto left'
 });
 const rows: any = ref(null);
+const states = ref([
+    {id: 1,  name: 'Abierto', class: 'text-info'},
+    {id: 2,  name: 'En proceso', class: 'text-primary'},
+    {id: 3,  name: 'Contestado', class: 'text-warning'},
+    {id: 4,  name: 'Cerrado', class: 'text-success'}
+])
 const cols = ref([
     {field: 'id', title: 'ID', sort: false, width: '20px', hide: false},
     {field: 'message', title: 'Solicitudes', width: '400px', headerClass: 'justify-center', hide: false},
@@ -548,7 +543,7 @@ const cols = ref([
     {field: 'area.name', title: 'Area asignada', headerClass: 'justify-center', hide: true},
     {field: 'responsible', title: 'Responsable', headerClass: 'justify-center', hide: false},
     {field: 'updated_at_text', title: 'Ultima actualización', headerClass: 'justify-center', hide: true},
-    {field: 'created_at', title: 'Creado el', headerClass: 'justify-center', hide: true},
+    {field: 'created_at', title: 'Creado el', headerClass: 'justify-center', hide: false},
     {field: 'actions', title: 'Acciones', sort: false, headerClass: 'justify-center', hide: false},
 ]);
 let timer: any;
@@ -569,7 +564,11 @@ const params = reactive({
     exclude_user_id: userStore.id,
     user_id: null
 });
-
+const selectedStates = ref([...params.status]);
+watch(selectedStates, (newValues) => {
+    params.status = newValues;
+    getData();
+});
 const isShowMailMenu = ref(false);
 const isEdit = ref(false);
 const selectedTab = ref('inbox');
@@ -812,6 +811,22 @@ const getUsersByRol = async () => {
         console.error('Error fetching data', error);
     }
 };
+
+function formatDate(date) {
+    const inputDate = moment(date);
+    const today = moment();
+
+    if (inputDate.isSame(today, 'day')) {
+        // If the date is equal to the current day, it returns only the time with am/pm
+        return inputDate.format('hh:mm A');
+    } else if (inputDate.isSame(today, 'year')) {
+        // If the date is within the current year, show day and month
+        return inputDate.format('DD-MMMM');
+    } else {
+        // If the date is more than a year ago or ahead, show day, month and year
+        return inputDate.format('DD-MM-YYYY');
+    }
+}
 
 // Lógica que corre cuando el componente es montado
 onMounted(async () => {

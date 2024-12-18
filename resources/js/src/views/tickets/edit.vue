@@ -1,24 +1,26 @@
 <template>
     <div>
-        <ul class="flex space-x-2 rtl:space-x-reverse">
-            <li>
-                <router-link :to="{ name: 'dashboard' }" class="text-primary hover:underline">
-                    Escritorio
-                </router-link>
-            </li>
-            <li class="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">
-                <router-link :to="{name:'tickets'}" class="text-primary hover:underline">
-                    <span>{{ $t('tickets') }}</span>
-                </router-link>
-            </li>
-            <li class="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">
-                <span>{{ $t('edit') }}</span>
-            </li>
-        </ul>
-        <div class="panel ">
-            <div class="flex items-center justify-between flex-wrap p-4"
+
+        <div class="panel">
+            <ul class="flex space-x-2 rtl:space-x-reverse mb-4">
+                <li>
+                    <router-link :to="{ name: 'dashboard' }" class="text-primary hover:underline">
+                        Escritorio
+                    </router-link>
+                </li>
+                <li class="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">
+                    <router-link :to="{name:'tickets'}" class="text-primary hover:underline">
+                        <span>{{ $t('tickets') }}</span>
+                    </router-link>
+                </li>
+                <li class="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">
+                    <span>{{ $t('edit') }}</span>
+                </li>
+            </ul>
+
+            <div class="flex items-center justify-between flex-wrap p-4 gap-4"
                  :class="`bg-${selectedTicket.status_class}-light`">
-                <div class="flex items-center">
+                <div class="flex items-center flex-wrap">
                     <button type="button" class="ltr:mr-2 rtl:ml-2 hover:text-primary">
                         <router-link :to="{ name: 'tickets' }">
                             <svg
@@ -41,35 +43,26 @@
                         {{ selectedTicket.status }}
                     </div>
                 </div>
-                <!-- <div>
-                    <button type="button" v-tippy:print>
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5">
+
+                <div v-if="selectedTicket.status_id != 4 && selectedTicket.user_id == userStore.id" class="flex items-center">
+                    <button type="button" class="btn btn-sm btn-outline-success"  @click="setStatus(selectedTicket.id, 4)">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"  class="w-5 h-5 ltr:mr-1.5 rtl:ml-1.5"
+                                xmlns="http://www.w3.org/2000/svg">
+                            <path opacity="0.5" d="M12 2L12 10M12 10L15 7M12 10L9 7"
+                                    stroke="currentColor" stroke-width="1.5"
+                                    stroke-linecap="round" stroke-linejoin="round"/>
+                            <path opacity="0.5"
+                                    d="M2 13H5.16026C6.06543 13 6.51802 13 6.91584 13.183C7.31367 13.3659 7.60821 13.7096 8.19729 14.3968L8.80271 15.1032C9.39179 15.7904 9.68633 16.1341 10.0842 16.317C10.482 16.5 10.9346 16.5 11.8397 16.5H12.1603C13.0654 16.5 13.518 16.5 13.9158 16.317C14.3137 16.1341 14.6082 15.7904 15.1973 15.1032L15.8027 14.3968C16.3918 13.7096 16.6863 13.3659 17.0842 13.183C17.482 13 17.9346 13 18.8397 13H22"
+                                    stroke="currentColor" stroke-width="1.5"
+                                    stroke-linecap="round"/>
                             <path
-                                d="M6 17.9827C4.44655 17.9359 3.51998 17.7626 2.87868 17.1213C2 16.2426 2 14.8284 2 12C2 9.17157 2 7.75736 2.87868 6.87868C3.75736 6 5.17157 6 8 6H16C18.8284 6 20.2426 6 21.1213 6.87868C22 7.75736 22 9.17157 22 12C22 14.8284 22 16.2426 21.1213 17.1213C20.48 17.7626 19.5535 17.9359 18 17.9827"
-                                stroke="currentColor"
-                                stroke-width="1.5"
-                            />
-                            <path opacity="0.5" d="M9 10H6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-                            <path d="M19 14L5 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-                            <path
-                                d="M18 14V16C18 18.8284 18 20.2426 17.1213 21.1213C16.2426 22 14.8284 22 12 22C9.17157 22 7.75736 22 6.87868 21.1213C6 20.2426 6 18.8284 6 16V14"
-                                stroke="currentColor"
-                                stroke-width="1.5"
-                                stroke-linecap="round"
-                            />
-                            <path
-                                opacity="0.5"
-                                d="M17.9827 6C17.9359 4.44655 17.7626 3.51998 17.1213 2.87868C16.2427 2 14.8284 2 12 2C9.17158 2 7.75737 2 6.87869 2.87868C6.23739 3.51998 6.06414 4.44655 6.01733 6"
-                                stroke="currentColor"
-                                stroke-width="1.5"
-                            />
-                            <circle opacity="0.5" cx="17" cy="10" r="1" fill="currentColor" />
-                            <path opacity="0.5" d="M15 16.5H9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-                            <path opacity="0.5" d="M13 19H9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-                        </svg>
+                                d="M17 2.12695C18.6251 2.28681 19.7191 2.64808 20.5355 3.46455C22 4.92902 22 7.28604 22 12.0001C22 16.7141 22 19.0712 20.5355 20.5356C19.0711 22.0001 16.714 22.0001 12 22.0001C7.28595 22.0001 4.92893 22.0001 3.46447 20.5356C2 19.0712 2 16.7141 2 12.0001C2 7.28604 2 4.92902 3.46447 3.46455C4.28094 2.64808 5.37486 2.28681 7 2.12695"
+                                stroke="currentColor" stroke-width="1.5"
+                                stroke-linecap="round"/>
+                        </svg>Cerrar ticket
                     </button>
-                    <tippy target="print">Print</tippy>
-                </div> -->
+                </div>
+
             </div>
             <div class="h-px border-b border-[#e0e6ed] dark:border-[#1b2e4b]"></div>
 
@@ -106,74 +99,16 @@
                                     ></div>
                                     <tippy target="priority" class="capitalize">{{ selectedTicket.priority }}</tippy>
                                 </div>
-                                <div class="text-white-dark whitespace-nowrap"> Creado {{ selectedTicket.created_at_text }} </div>
+                                <div class="text-white-dark whitespace-nowrap"> {{ formatDate(selectedTicket.created_at) }} </div>
                             </div>
                         </div>
                         <div class="text-white-dark flex items-center">
                             <div class="ltr:mr-1 rtl:ml-1">
                                 {{ selectedTicket.requester.email }}
                             </div>
-                            <!-- <div class="dropdown">
-                                <Popper
-                                    :placement="store.rtlClass === 'rtl' ? 'bottom-start' : 'bottom-end'"
-                                    offsetDistance="0"
-                                    class="align-middle"
-                                >
-                                    <button type="button" class="mt-1.5">
-                                        <svg
-                                            width="24"
-                                            height="24"
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            class="w-5 h-5"
-                                        >
-                                            <path
-                                                d="M19 9L12 15L5 9"
-                                                stroke="currentColor"
-                                                stroke-width="1.5"
-                                                stroke-linecap="round"
-                                                stroke-linejoin="round"
-                                            />
-                                        </svg>
-                                    </button>
-                                    <template #content>
-                                        <ul class="sm:w-80">
-                                            <li>
-                                                <div class="flex items-center px-4 py-2">
-                                                    <div class="text-white-dark ltr:mr-2 rtl:ml-2 w-1/4">Actualizado</div>
-                                                    <div class="flex-1">
-                                                        {{ selectedTicket.updated_at_text }}
-                                                    </div>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                    </template>
-                                </Popper>
-                            </div> -->
                         </div>
                     </div>
-                    <div v-if="selectedTicket.status_id != 4">
-                        <div class="flex items-center justify-center space-x-3 rtl:space-x-reverse" v-if="selectedTicket.user_id == userStore.id">
-                            <button type="button" class="btn btn-sm btn-outline-success"  @click="setStatus(selectedTicket.id, 4)">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"  class="w-5 h-5 ltr:mr-1.5 rtl:ml-1.5"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                    <path opacity="0.5" d="M12 2L12 10M12 10L15 7M12 10L9 7"
-                                            stroke="currentColor" stroke-width="1.5"
-                                            stroke-linecap="round" stroke-linejoin="round"/>
-                                    <path opacity="0.5"
-                                            d="M2 13H5.16026C6.06543 13 6.51802 13 6.91584 13.183C7.31367 13.3659 7.60821 13.7096 8.19729 14.3968L8.80271 15.1032C9.39179 15.7904 9.68633 16.1341 10.0842 16.317C10.482 16.5 10.9346 16.5 11.8397 16.5H12.1603C13.0654 16.5 13.518 16.5 13.9158 16.317C14.3137 16.1341 14.6082 15.7904 15.1973 15.1032L15.8027 14.3968C16.3918 13.7096 16.6863 13.3659 17.0842 13.183C17.482 13 17.9346 13 18.8397 13H22"
-                                            stroke="currentColor" stroke-width="1.5"
-                                            stroke-linecap="round"/>
-                                    <path
-                                        d="M17 2.12695C18.6251 2.28681 19.7191 2.64808 20.5355 3.46455C22 4.92902 22 7.28604 22 12.0001C22 16.7141 22 19.0712 20.5355 20.5356C19.0711 22.0001 16.714 22.0001 12 22.0001C7.28595 22.0001 4.92893 22.0001 3.46447 20.5356C2 19.0712 2 16.7141 2 12.0001C2 7.28604 2 4.92902 3.46447 3.46455C4.28094 2.64808 5.37486 2.28681 7 2.12695"
-                                        stroke="currentColor" stroke-width="1.5"
-                                        stroke-linecap="round"/>
-                                </svg>Cerrar ticket
-                            </button>
-                        </div>
 
-                    </div>
                 </div>
 
                 <div class="h-px border-b border-[#e0e6ed] dark:border-[#1b2e4b] mt-4"></div>
@@ -349,7 +284,7 @@
                                         {{ responseTicket.user.first_name + ' ' + responseTicket.user.last_name }}
                                     </div>
                                     <div class="text-white-dark whitespace-nowrap">
-                                        {{ responseTicket.created_at_text }}
+                                        {{ formatDate(responseTicket.created_at) }}
                                     </div>
                                 </div>
                                 <div class="text-white-dark flex items-center">
@@ -364,16 +299,6 @@
                             class="mt-4 prose dark:prose-p:text-white max-w-full prose-img:m-0"
                             v-html="responseTicket.message.description"
                             @click="handleImageClick"></div>
-                        <!-- Componente de Lightbox -->
-                        <vue-easy-lightbox
-                            escDisabled
-                            :visible="visible"
-                            :imgs="images"
-                            :index="currentImageIndex"
-                            @hide="visible = false"
-                            prevent-scroll
-                        />
-
                         <div class="mt-4" v-show="responseTicket.message.attachments">
                             <div class="text-base mb-4">Adjuntos</div>
                             <div class="h-px border-b border-[#e0e6ed] dark:border-[#1b2e4b]"></div>
@@ -386,7 +311,7 @@
                                         >
                                             <template v-if="attachment.type === 'image'">
                                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                                     xmlns="http://www.w3.org/2000/svg" class="w-5 h-5">
+                                                    xmlns="http://www.w3.org/2000/svg" class="w-5 h-5">
                                                     <path
                                                         d="M2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C22 4.92893 22 7.28595 22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12Z"
                                                         stroke="currentColor"
@@ -405,9 +330,9 @@
                                             </template>
                                             <template v-if="attachment.type === 'folder'">
                                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                                     xmlns="http://www.w3.org/2000/svg" class="w-5 h-5">
+                                                    xmlns="http://www.w3.org/2000/svg" class="w-5 h-5">
                                                     <path opacity="0.5" d="M18 10L13 10" stroke="currentColor"
-                                                          stroke-width="1.5" stroke-linecap="round"/>
+                                                        stroke-width="1.5" stroke-linecap="round"/>
                                                     <path
                                                         d="M2 6.94975C2 6.06722 2 5.62595 2.06935 5.25839C2.37464 3.64031 3.64031 2.37464 5.25839 2.06935C5.62595 2 6.06722 2 6.94975 2C7.33642 2 7.52976 2 7.71557 2.01738C8.51665 2.09229 9.27652 2.40704 9.89594 2.92051C10.0396 3.03961 10.1763 3.17633 10.4497 3.44975L11 4C11.8158 4.81578 12.2237 5.22367 12.7121 5.49543C12.9804 5.64471 13.2651 5.7626 13.5604 5.84678C14.0979 6 14.6747 6 15.8284 6H16.2021C18.8345 6 20.1506 6 21.0062 6.76946C21.0849 6.84024 21.1598 6.91514 21.2305 6.99383C22 7.84935 22 9.16554 22 11.7979V14C22 17.7712 22 19.6569 20.8284 20.8284C19.6569 22 17.7712 22 14 22H10C6.22876 22 4.34315 22 3.17157 20.8284C2 19.6569 2 17.7712 2 14V6.94975Z"
                                                         stroke="currentColor"
@@ -417,7 +342,7 @@
                                             </template>
                                             <template v-if="attachment.type === 'zip'">
                                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                                     xmlns="http://www.w3.org/2000/svg" class="w-5 h-5">
+                                                    xmlns="http://www.w3.org/2000/svg" class="w-5 h-5">
                                                     <path
                                                         d="M9.5 15.5V15.375C9.5 14.8918 9.89175 14.5 10.375 14.5H13.625C14.1082 14.5 14.5 14.8918 14.5 15.375V15.5C14.5 16.8807 13.3807 18 12 18C10.6193 18 9.5 16.8807 9.5 15.5Z"
                                                         stroke="#8E93A6"
@@ -454,15 +379,15 @@
                                             <template
                                                 v-if="attachment.type !== 'zip' && attachment.type !== 'image' && attachment.type !== 'folder'">
                                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                                     xmlns="http://www.w3.org/2000/svg" class="w-5 h-5">
+                                                    xmlns="http://www.w3.org/2000/svg" class="w-5 h-5">
                                                     <path
                                                         d="M15.3929 4.05365L14.8912 4.61112L15.3929 4.05365ZM19.3517 7.61654L18.85 8.17402L19.3517 7.61654ZM21.654 10.1541L20.9689 10.4592V10.4592L21.654 10.1541ZM3.17157 20.8284L3.7019 20.2981H3.7019L3.17157 20.8284ZM20.8284 20.8284L20.2981 20.2981L20.2981 20.2981L20.8284 20.8284ZM14 21.25H10V22.75H14V21.25ZM2.75 14V10H1.25V14H2.75ZM21.25 13.5629V14H22.75V13.5629H21.25ZM14.8912 4.61112L18.85 8.17402L19.8534 7.05907L15.8947 3.49618L14.8912 4.61112ZM22.75 13.5629C22.75 11.8745 22.7651 10.8055 22.3391 9.84897L20.9689 10.4592C21.2349 11.0565 21.25 11.742 21.25 13.5629H22.75ZM18.85 8.17402C20.2034 9.3921 20.7029 9.86199 20.9689 10.4592L22.3391 9.84897C21.9131 8.89241 21.1084 8.18853 19.8534 7.05907L18.85 8.17402ZM10.0298 2.75C11.6116 2.75 12.2085 2.76158 12.7405 2.96573L13.2779 1.5653C12.4261 1.23842 11.498 1.25 10.0298 1.25V2.75ZM15.8947 3.49618C14.8087 2.51878 14.1297 1.89214 13.2779 1.5653L12.7405 2.96573C13.2727 3.16993 13.7215 3.55836 14.8912 4.61112L15.8947 3.49618ZM10 21.25C8.09318 21.25 6.73851 21.2484 5.71085 21.1102C4.70476 20.975 4.12511 20.7213 3.7019 20.2981L2.64124 21.3588C3.38961 22.1071 4.33855 22.4392 5.51098 22.5969C6.66182 22.7516 8.13558 22.75 10 22.75V21.25ZM1.25 14C1.25 15.8644 1.24841 17.3382 1.40313 18.489C1.56076 19.6614 1.89288 20.6104 2.64124 21.3588L3.7019 20.2981C3.27869 19.8749 3.02502 19.2952 2.88976 18.2892C2.75159 17.2615 2.75 15.9068 2.75 14H1.25ZM14 22.75C15.8644 22.75 17.3382 22.7516 18.489 22.5969C19.6614 22.4392 20.6104 22.1071 21.3588 21.3588L20.2981 20.2981C19.8749 20.7213 19.2952 20.975 18.2892 21.1102C17.2615 21.2484 15.9068 21.25 14 21.25V22.75ZM21.25 14C21.25 15.9068 21.2484 17.2615 21.1102 18.2892C20.975 19.2952 20.7213 19.8749 20.2981 20.2981L21.3588 21.3588C22.1071 20.6104 22.4392 19.6614 22.5969 18.489C22.7516 17.3382 22.75 15.8644 22.75 14H21.25ZM2.75 10C2.75 8.09318 2.75159 6.73851 2.88976 5.71085C3.02502 4.70476 3.27869 4.12511 3.7019 3.7019L2.64124 2.64124C1.89288 3.38961 1.56076 4.33855 1.40313 5.51098C1.24841 6.66182 1.25 8.13558 1.25 10H2.75ZM10.0298 1.25C8.15538 1.25 6.67442 1.24842 5.51887 1.40307C4.34232 1.56054 3.39019 1.8923 2.64124 2.64124L3.7019 3.7019C4.12453 3.27928 4.70596 3.02525 5.71785 2.88982C6.75075 2.75158 8.11311 2.75 10.0298 2.75V1.25Z"
                                                         fill="currentColor"
                                                     />
                                                     <path opacity="0.5" d="M6 14.5H14" stroke="currentColor"
-                                                          stroke-width="1.5" stroke-linecap="round"/>
+                                                        stroke-width="1.5" stroke-linecap="round"/>
                                                     <path opacity="0.5" d="M6 18H11.5" stroke="currentColor"
-                                                          stroke-width="1.5" stroke-linecap="round"/>
+                                                        stroke-width="1.5" stroke-linecap="round"/>
                                                     <path
                                                         opacity="0.5"
                                                         d="M13 2.5V5C13 7.35702 13 8.53553 13.7322 9.26777C14.4645 10 15.643 10 18 10H22"
@@ -486,7 +411,7 @@
                                                 class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full p-1 btn btn-primary hidden group-hover:block z-10"
                                             >
                                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                                     xmlns="http://www.w3.org/2000/svg" class="w-5 h-5">
+                                                    xmlns="http://www.w3.org/2000/svg" class="w-5 h-5">
                                                     <path
                                                         opacity="0.5"
                                                         d="M3 15C3 17.8284 3 19.2426 3.87868 20.1213C4.75736 21 6.17157 21 9 21H15C17.8284 21 19.2426 21 20.1213 20.1213C21 19.2426 21 17.8284 21 15"
@@ -798,6 +723,15 @@
             </form>
         </div>
 
+        <!-- Componente de Lightbox -->
+        <vue-easy-lightbox
+            escDisabled
+            :visible="visible"
+            :imgs="images"
+            :index="currentImageIndex"
+            @hide="visible = false"
+            prevent-scroll
+        />
     </div>
 </template>
 
@@ -812,6 +746,16 @@ import {useRoute, useRouter} from 'vue-router';
 import {useMeta} from '@/composables/use-meta';
 import {useUserStore} from "@/stores/user-store";
 import {useAppStore} from '@/stores/index';
+import moment from 'moment';
+import 'moment/locale/es'
+moment.locale('es');
+moment.updateLocale('es', {
+    months: 'Enero_Febrero_Marzo_Abril_Mayo_Junio_Julio_Agosto_Septiembre_Octubre_Noviembre_Diciembre'.split('_'),
+    monthsShort: 'Ene_Feb_Mar_Abr_May_Jun_Jul_Ago_Sep_Oct_Nov_Dic'.split('_'),
+    weekdays: 'Domingo_Lunes_Martes_Miércoles_Jueves_Viernes_Sábado'.split('_'),
+    weekdaysShort: 'Dom_Lun_Mar_Mié_Jue_Vie_Sáb'.split('_'),
+    weekdaysMin: 'Do_Lu_Ma_Mi_Ju_Vi_Sá'.split('_'),
+});
 
 useMeta({title: 'Ticket Detail'});
 const route = useRoute();
@@ -1057,6 +1001,22 @@ const clearForm = () => {
 
     ticketResponseData.value.message.attachments = [];
 };
+
+function formatDate(date) {
+    const inputDate = moment(date);
+    const today = moment();
+
+    if (inputDate.isSame(today, 'day')) {
+        // If the date is equal to the current day, it returns only the time with am/pm
+        return inputDate.format('hh:mm A');
+    } else if (inputDate.isSame(today, 'year')) {
+        // If the date is within the current year, show day and month
+        return inputDate.format('DD-MMMM');
+    } else {
+        // If the date is more than a year ago or ahead, show day, month and year
+        return inputDate.format('DD-MM-YYYY');
+    }
+}
 
 // Lógica que corre cuando el componente es montado
 onMounted(async () => {
