@@ -49,14 +49,10 @@ import IndexMedia from '../views/media/index.vue';
 // import EditMedia from '../views/media/edit.vue';
 //Sigint
 import IndexTemplates from '../views/singit/templates/index.vue';
-import IndexTemplate from '../views/singit/templates/show.vue';
 import EditTemplates from '../views/singit/templates/edit.vue';
 import CreateTemplates from '../views/singit/templates/create.vue';
 import IndexContracts from '../views/singit/contracts/index.vue';
-import IndexContract from '../views/singit/contracts/show.vue';
-import EditContracts from '../views/singit/contracts/edit.vue';
 import SignatureContracts from '../views/singit/contracts/signature.vue';
-
 
 const routes: RouteRecordRaw[] = [
     // dashboard
@@ -318,11 +314,6 @@ const routes: RouteRecordRaw[] = [
                 component: IndexTemplates
             },
             {
-                path: ':id',
-                name: 'templates-show',
-                component: IndexTemplate
-            },
-            {
                 path: ':id/edit',
                 name: 'templates-edit',
                 component: EditTemplates
@@ -344,22 +335,6 @@ const routes: RouteRecordRaw[] = [
                 name: 'contracts',
                 component: IndexContracts
             },
-            {
-                path: ':id',
-                name: 'contracts-show',
-                component: IndexContract
-            },
-            {
-                path: ':id/edit',
-                name: 'contracts-edit',
-                component: EditContracts
-            },
-            // {
-            //     path: 'signature',
-            //     name: 'contracts-signature',
-            //     component: SignatureContracts
-            // },
-
         ],
 
         meta: {requiresAuth: true}
@@ -371,11 +346,6 @@ const routes: RouteRecordRaw[] = [
             {
                 path: 'firmar/:hash',
                 name: 'contracts-signature',
-                component: SignatureContracts
-            },
-            {
-                path: 'firmar/:id/edit',
-                name: 'contracts-signature-edit',
                 component: SignatureContracts
             },
         ],
