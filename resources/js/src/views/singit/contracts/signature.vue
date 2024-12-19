@@ -453,8 +453,6 @@ import { useRouter, useRoute } from 'vue-router';
 import axios from 'axios';
 import Vue3Signature from "vue3-signature";
 import { NOTIFY } from '@/services/notify';
-import { jsPDF } from "jspdf";
-import html2canvas from 'html2canvas';
 import moment from 'moment';
 import 'moment/locale/es'
 moment.locale('es');

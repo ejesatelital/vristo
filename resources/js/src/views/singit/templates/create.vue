@@ -1,23 +1,24 @@
 <template>
     <div>
-        <ul class="flex space-x-2 rtl:space-x-reverse">
-            <li>
-                <router-link :to="{ name: 'dashboard' }" class="text-primary hover:underline">
-                    Escritorio
-                </router-link>
-            </li>
-            <li class="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">
-                <router-link :to="{name:'templates'}" class="text-primary hover:underline">
-                    <span>{{ $t('templates') }}</span>
-                </router-link>
-            </li>
-            <li class="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">
-                <span>{{ $t('create') }}</span>
-            </li>
-        </ul>
+
         <!-- Line -->
         <div class="panel">
-            <TabGroup as="div" class="mb-5">
+            <ul class="flex space-x-2 rtl:space-x-reverse my-3">
+                <li>
+                    <router-link :to="{ name: 'dashboard' }" class="text-primary hover:underline">
+                        Escritorio
+                    </router-link>
+                </li>
+                <li class="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">
+                    <router-link :to="{name:'templates'}" class="text-primary hover:underline">
+                        <span>{{ $t('templates') }}</span>
+                    </router-link>
+                </li>
+                <li class="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">
+                    <span>{{ $t('create') }}</span>
+                </li>
+            </ul>
+            <TabGroup as="div">
                 <TabList class="flex flex-wrap mt-3 mb-5 border-b border-white-light dark:border-[#191e3a]">
                     <Tab as="template" v-slot="{ selected }">
                         <a href="javascript:;"
@@ -102,12 +103,11 @@
                                 </div>
                             </div>
 
-                            <div class="flex items-center ltr:ml-auto rtl:mr-auto mt-4">
-                                <button type="submit" class="btn btn-outline-success ltr:mr-3 rtl:ml-3"
-                                :disabled="loading">Guardar plantilla</button>
-                            </div>
-
                         </TabPanel>
+                        <div class="flex items-center ltr:ml-auto rtl:mr-auto">
+                            <button type="submit" class="btn btn-outline-success"
+                            :disabled="loading">Guardar plantilla</button>
+                        </div>
                     </form>
                 </TabPanels>
             </TabGroup>

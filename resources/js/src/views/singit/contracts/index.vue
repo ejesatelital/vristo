@@ -382,10 +382,13 @@
                                                     <input id="send_name" type="text" placeholder="Ingrese el nombre completo" class="form-input" v-model="contractData.options.send.name" required />
                                                 </div>
                                                 <div class="mt-3">
-                                                    <label for="send_email">Correo *</label>
+                                                    <label for="send_email">Correo </label>
                                                     <input id="send_email" type="email" placeholder="Ingrese el correo" class="form-input" v-model="contractData.options.send.email" required />
                                                 </div>
-
+                                                <div class="mt-3">
+                                                    <label for="send_phone">Teléfono </label>
+                                                    <input id="send_phone" type="text" placeholder="Ingrese el teléfono" class="form-input" v-model="contractData.options.send.phone" required />
+                                                </div>
                                             </tab-content>
 
                                         </form-wizard>
@@ -409,7 +412,7 @@
     import { useMeta } from '@/composables/use-meta';
     import { useAppStore } from '@/stores/index';
     import { useI18n } from 'vue-i18n';
-    import { API } from '@/services/api';
+    import { API } from '@/services/local';
     import { NOTIFY } from '@/services/notify';
     import {useCompanyStore} from "@/stores/company-store";
     import { useRouter } from 'vue-router';
@@ -484,7 +487,8 @@
         options:{
             send:{
                 name: '',
-                email: ''
+                email: '',
+                phone: ''
             },
             data:[]
         },
@@ -516,6 +520,7 @@
                     send: {
                         name: data.options.send.name||'',
                         email: data.options.send.email||'',
+                        phone: data.options.send.phone||'',
                     },
                 },
                 attachments: data.annexes||[],
@@ -531,7 +536,8 @@
                 options:{
                     send:{
                         name: '',
-                        email: ''
+                        email: '',
+                        phone: ''
                     },
                     data:[]
                 },
