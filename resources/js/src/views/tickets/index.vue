@@ -531,7 +531,7 @@ const rangeCalendar = ref({
 });
 const rows: any = ref(null);
 const states = ref([
-    {id: 1,  name: 'Abierto', class: 'text-info'},
+    {id: 1,  name: 'Nuevo', class: 'text-info'},
     {id: 2,  name: 'En proceso', class: 'text-primary'},
     {id: 3,  name: 'Contestado', class: 'text-warning'},
     {id: 4,  name: 'Cerrado', class: 'text-success'}
