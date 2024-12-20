@@ -12,7 +12,10 @@
                 <div class="ltr:text-right rtl:text-left px-4">
                     <div class="space-y-1 mt-6 text-white-dark">
                         <div>Se firmó en: {{ formatDate(contractData.updated_at) }}</div>
-                        <div>IP del registro: {{  contractData.logs.ip_address }}</div>
+                        <div>IP del registro: {{ contractData.logs.ip_address }}</div>
+                        <div>Navegador: {{ contractData.logs.navigator }}</div>
+                        <div>Sistema operativo: {{ contractData.logs.operating_system }}</div>
+                        <div>Hash: {{ contractData.hash }}</div>
                     </div>
                 </div>
             </div>
