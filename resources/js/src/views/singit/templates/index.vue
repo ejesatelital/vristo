@@ -103,7 +103,7 @@
 </template>
 
 <script setup lang="ts">
-    import { ref, onMounted, reactive} from 'vue';
+    import { ref, onMounted, reactive, watch } from 'vue';
     import Vue3Datatable from '@bhplugin/vue3-datatable';
     import { useMeta } from '@/composables/use-meta';
     import { useAppStore } from '@/stores/index';
@@ -165,9 +165,9 @@
     };
 
     const getData = async () => {
+        loading.value = true;
         try {
-            loading.value = true;
-            const response = await api.get(`singit/v1/templates?filter={"search":"${params.search}"}&page=${params.current_page}&take=${params.pagesize}`);
+            const response = await api.get(`singit/v1/templates?filter={"search":"${params.search}","company_id":[${companyStore.companiesSelect}]}&page=${params.current_page}&take=${params.pagesize}`);
             rows.value = response?.data;
             total_rows.value = response?.meta?.page?.total;
         } catch (error) {
@@ -206,6 +206,9 @@
         router.push({ name: 'templates-edit', params: { id } });
     };
 
+    watch(() => companyStore.id, (value) => {
+            getData();
+    });
     onMounted(async () => {
        await getData();
     });

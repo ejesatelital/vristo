@@ -56,18 +56,18 @@
                                 <input type="text" id="nametemplate" v-model="templateData.name" class="form-input mt-1 w-full" required />
                             </div>
 
-                            <div class="mb-4" v-if="userStore.hasAccess('sass.companies.indexall')">
+                            <div class="mb-4" v-if="userStore.hasAccess('sass.companies.indexall') || !companyStore.id">
                                 <Select
                                 :options="companies"
-                                v-model="companiesSelected"
+                                v-model="companySelected"
                                 :closeOnSelect="true"
                                 titleSelect="Empresa"
                                 name="companies"
                                 :allow-empty="false"
-                                />
+                                @update:modelValue="handleCompanySelect" />
                             </div>
 
-                            <div class="h-fit mb-8">
+                            <div class="h-fit mb-4">
                                 <quillEditor id="message" ref="editor" v-model:value="templateData.description"
                                     :options="editorOptions" style="min-height: 300px"
                                     @ready="quillEditorReady($event)"></quillEditor>
@@ -219,7 +219,7 @@
 
     const companyStore = useCompanyStore();
     const companies: any = ref(companyStore.companyOptions);
-    const companiesSelected = ref();
+    const companySelected = ref();
 
     useMeta({ title: 'Templates' });
 
@@ -313,13 +313,12 @@
             return false;
         }
 
-        if (companiesSelected.value === null || companiesSelected.value === undefined) {
+        if (companySelected.value === null || companySelected.value === undefined) {
             notify.showToast('Debes seleccionar una empresa!', 'warning');
             loading.value = false;
             return false;
         }
 
-        templateData.value.company_id = companiesSelected.value.value;
         templateData.value.attributes = attributes.value;
 
         try {
@@ -415,6 +414,9 @@
         }
     };
 
+    function handleCompanySelect() {
+        templateData.value.company_id = companySelected.value.value;
+    }
 
     // Lógica que corre cuando el componente es montado
     onMounted(async () => {

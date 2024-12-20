@@ -177,6 +177,7 @@
     "my_tickets": "Mis tickets",
     "requests": "Solicitudes",
     "close_ticket": "Cerrar Ticket",
-    "show_contract":"Ver Contrato"
+    "show_contract":"Ver Contrato",
+    "edit_contract":"Editar contrato"
 
 }

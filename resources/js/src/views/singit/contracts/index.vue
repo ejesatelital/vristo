@@ -174,7 +174,12 @@
                                     </svg>
                                 </button>
                                 <div class="text-lg rounded-lg font-semibold font-medium bg-[#fbfbfb] dark:bg-[#121c2c] ltr:pl-5 rtl:pr-5 py-3 ltr:pr-[50px] rtl:pl-[50px] dark:text-white-light">
-                                    {{$t("new_contract")}}
+                                    <span v-if="contractData.id">
+                                        {{$t("edit_contract")}}
+                                    </span>
+                                    <span v-else>
+                                        {{$t("new_contract")}}
+                                    </span>
                                 </div>
                                 <div class="p-5 mb-5">
                                     <div v-if="!contractData.signature">
@@ -441,7 +446,6 @@
     const companySelected = ref(companyStore.id);
     const templateSelected = ref();
     const btnModalOpen = ref(false);
-    const formTemplateValues = ref({});
     const step = ref(0);
     const beforeTabSwitch = async (tab) => {
         step.value = tab;
@@ -478,7 +482,7 @@
 
     let timer: any;
 
-    const defaultData = ref({
+    const contractData: any = ref({
         id: null,
         template_id: null,
         user_id: userStore.id,
@@ -496,16 +500,17 @@
         company_id: companyStore.id
     });
 
-    const contractData: any = ref(defaultData.value);
-
     const openModal = async (data?) =>{
         if (data){
-            console.log("estoy aqui");
-
             templateSelected.value = {
-                label: data.template.name,
-                value: data.template.id
+                label: data.template.name||'',
+                value: data.template.id||null
             };
+
+            companySelected.value = {
+                label: data.company.name||'',
+                value: data.company.id||null
+            }
 
             templateData.value.attributes = data.options.data;
             templateData.value.description = data.template.description;
@@ -520,29 +525,11 @@
                     send: {
                         name: data.options.send.name||'',
                         email: data.options.send.email||'',
-                        phone: data.options.send.phone||'',
+                        phone: data.options.send.phone||''
                     },
                 },
                 attachments: data.annexes||[],
                 company_id: data.company_id
-            }
-        }
-        else
-        {
-            contractData.value = {
-                template_id: null,
-                user_id: userStore.id,
-                data:[],
-                options:{
-                    send:{
-                        name: '',
-                        email: '',
-                        phone: ''
-                    },
-                    data:[]
-                },
-                attachments: [],
-                company_id: companyStore.id
             }
         }
         btnModalOpen.value = true;
@@ -646,7 +633,23 @@
     // Close the modal
     const closeModal = () => {
         btnModalOpen.value = false;
-        contractData.value = defaultData.value;
+        contractData.value = {
+            id: null,
+            template_id: null,
+            user_id: userStore.id,
+            data:[],
+            hash:null,
+            options:{
+                send:{
+                    name: '',
+                    email: '',
+                    phone: ''
+                },
+                data:[]
+            },
+            attachments: [],
+            company_id: companyStore.id
+        };
         templateData.value.attributes = [];
         templateData.value.description = null;
         templateSelected.value = null;
@@ -775,12 +778,13 @@
     });
 
     watch(() => contractData.value.company_id, (value) => {
-        templates.value = [];
         if(!contractData.value.company_id) return false;
+        templates.value = [];
         getTemplates();
     });
 
     function handleCompanySelect() {
+        templateSelected.value = null;
         contractData.value.company_id = companySelected.value.value;
     }
 
