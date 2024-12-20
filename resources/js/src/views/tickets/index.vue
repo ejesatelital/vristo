@@ -31,6 +31,7 @@
                                 :class="{
                                     'bg-gray-100 dark:text-primary text-primary dark:bg-[#181F32]': !isEdit && selectedTab === 'inbox',
                                 }"
+                                v-if="userStore.hasAccess('tickets.tickets.request')"
                                 @click="tabChanged('inbox')"
                             >
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -133,8 +134,8 @@
                         </Popper>
                     </div>
 
-                <!-- <div class="flex gap-3"> -->
-                    <div class="flex items-end justify-end" v-if="selectedTab === 'inbox' && userStore.hasAccess('tickets.tickets.indexall')">
+                    <!-- <div class="flex gap-3"> -->
+                    <div class="flex items-end justify-end" v-if="selectedTab === 'inbox' && userStore.hasAccess('tickets.tickets.indexall') && userStore.hasAccess('tickets.tickets.request')">
                         <label for="subject" class="me-3">Ver todos los tickets</label>
                         <label class="w-12 h-6 relative">
                             <input type="checkbox" class="custom_switch absolute w-full h-full opacity-0 z-10 cursor-pointer peer" id="custom_switch_checkbox4" v-model="allTickets" />
@@ -642,7 +643,7 @@ const tabChanged = (tabType: any) => {
 };
 
 const getTicketsTab = () => {
-    if (selectedTab.value === 'inbox') {
+    if (selectedTab.value === 'inbox' && userStore.hasAccess('tickets.tickets.request')) {
         params.user_id = null
         params.rol_id = userStore.roles.map((x) => x.id)
         params.assigned_id = userStore.id
@@ -653,11 +654,6 @@ const getTicketsTab = () => {
         params.assigned_id = null
         params.exclude_user_id =null
     }
-    changeServer(params);
-};
-
-const filterByStatus = (status: any) => {
-    params.status = status;
     changeServer(params);
 };
 
@@ -683,12 +679,12 @@ const changeServer = (data: any) => {
     params.pagesize = data.pagesize;
     params.sort_column = data.sort_column;
     params.sort_direction = data.sort_direction;
-    if(allTickets.value && selectedTab.value === 'inbox'){
+    if(allTickets.value && selectedTab.value === 'inbox' && userStore.hasAccess('tickets.tickets.request')){
         params.user_id = null;
         params.rol_id = null
         params.assigned_id = null
         params.exclude_user_id = userStore.id
-    }else if (selectedTab.value === 'inbox') {
+    }else if (selectedTab.value === 'inbox' && userStore.hasAccess('tickets.tickets.request')) {
         params.user_id = null
         params.rol_id = userStore.roles.map((x) => x.id)
         params.assigned_id = userStore.id
@@ -830,8 +826,13 @@ function formatDate(date) {
 
 // Lógica que corre cuando el componente es montado
 onMounted(async () => {
-    await getData();
+    if (!userStore.hasAccess('tickets.tickets.request')){
+        tabChanged('mytickets');
+    }else{
+        await getData();
+    }
     await getRoles();
+
 });
 </script>
 
