@@ -5,54 +5,65 @@ import {useUserStore} from '@/stores/user-store';
 import {useAppStore} from '@/stores/index';
 // @ts-ignore
 import appSetting from '@/app-setting';
+// Layouts
+import storeLayout from '@/layouts/store-layout.vue';
+import appLayout from '@/layouts/app-layout.vue';
+import authLayout from '@/layouts/auth-layout.vue';
 // Marketplace
-import HomeView from '../views/index.vue';
-import Detail from '../views/detail.vue';
+import HomeView from '@/views/index.vue';
+import Detail from '@/views/detail.vue';
 // Users
-import IndexUsers from '../views/users/index.vue';
-import EditUsers from '../views/users/edit.vue';
-import CreateUsers from '../views/users/create.vue';
-import ProfileUsers from '../views/users/profile.vue';
+import IndexUsers from '@/views/users/index.vue';
+import EditUsers from '@/views/users/edit.vue';
+import CreateUsers from '@/views/users/create.vue';
+import ProfileUsers from '@/views/users/profile.vue';
 // Sass
-import IndexSass from '../views/sass/index.vue';
-import EditSass from '../views/sass/edit.vue';
-import CreateSass from '../views/sass/create.vue';
-import IndexCompany from '../views/sass/company/index.vue';
+import IndexSass from '@/views/sass/index.vue';
+import EditSass from '@/views/sass/edit.vue';
+import CreateSass from '@/views/sass/create.vue';
+import IndexCompany from '@/views/sass/company/index.vue';
 // Roles
-import IndexRoles from '../views/roles/index.vue';
-import CreateRoles from '../views/roles/create.vue';
-import EditRoles from '../views/roles/edit.vue';
-import Device from '../views/devices/index.vue';
-import Error404 from '../views/pages/error404.vue';
-import Login from '../views/auth/login.vue';
-import Register from '../views/auth/register.vue';
-import DashBoard from '../views/dashboard.vue';
-import storeLayout from '../layouts/store-layout.vue';
-import appLayout from '../layouts/app-layout.vue';
-import authLayout from '../layouts/auth-layout.vue';
+import IndexRoles from '@/views/roles/index.vue';
+import CreateRoles from '@/views/roles/create.vue';
+import EditRoles from '@/views/roles/edit.vue';
+// Devices
+import Device from '@/views/devices/index.vue';
+import DriverReport from '@/views/devices/drivers/report.vue';
+// Error
+import Error404 from '@/views/pages/error404.vue';
+// Auth
+import Login from '@/views/auth/login.vue';
+import Register from '@/views/auth/register.vue';
+// Dashboard
+import DashBoard from '@/views/dashboard.vue';
 // Subcriptions
-import IndexSubcriptions from '../views/subcriptions/subcription/index.vue';
-import CreateSubcriptions from '../views/subcriptions/subcription/create.vue';
-import EditSubcriptions from '../views/subcriptions/subcription/edit.vue';
+import IndexSubcriptions from '@/views/subcriptions/subcription/index.vue';
+import CreateSubcriptions from '@/views/subcriptions/subcription/create.vue';
+import EditSubcriptions from '@/views/subcriptions/subcription/edit.vue';
 // Applications
-import IndexApplications from '../views/subcriptions/applications/index.vue';
+import IndexApplications from '@/views/subcriptions/applications/index.vue';
 // Orders
-import IndexOrders from '../views/subcriptions/orders/index.vue';
+import IndexOrders from '@/views/subcriptions/orders/index.vue';
 // Payments
-import IndexPayments from '../views/subcriptions/payments/index.vue';
+import IndexPayments from '@/views/subcriptions/payments/index.vue';
 // Tickets
-import IndexTickets from '../views/tickets/index.vue';
-import CreateTickets from '../views/tickets/create.vue';
-import EditTickets from '../views/tickets/edit.vue';
+import IndexTickets from '@/views/tickets/index.vue';
+import CreateTickets from '@/views/tickets/create.vue';
+import EditTickets from '@/views/tickets/edit.vue';
 // Media
-import IndexMedia from '../views/media/index.vue';
-// import EditMedia from '../views/media/edit.vue';
+import IndexMedia from '@/views/media/index.vue';
+// import EditMedia from '@/views/media/edit.vue';
 //Sigint
-import IndexTemplates from '../views/singit/templates/index.vue';
-import EditTemplates from '../views/singit/templates/edit.vue';
-import CreateTemplates from '../views/singit/templates/create.vue';
-import IndexContracts from '../views/singit/contracts/index.vue';
-import SignatureContracts from '../views/singit/contracts/signature.vue';
+import IndexTemplates from '@/views/singit/templates/index.vue';
+import EditTemplates from '@/views/singit/templates/edit.vue';
+import CreateTemplates from '@/views/singit/templates/create.vue';
+import IndexContracts from '@/views/singit/contracts/index.vue';
+import SignatureContracts from '@/views/singit/contracts/signature.vue';
+
+//Rh
+import IndexEmployees from '@/views/rh/employees/index.vue';
+import CreateEmployees from '@/views/rh/employees/create.vue';
+import EditEmployees from '@/views/rh/employees/edit.vue';
 
 const routes: RouteRecordRaw[] = [
     // dashboard
@@ -266,6 +277,18 @@ const routes: RouteRecordRaw[] = [
         meta: {requiresAuth: true}
     },
     {
+        path: '/drivers',
+        component: appLayout,
+        children: [
+            {
+                path: ':id/report',
+                name: 'driver-report',
+                component: DriverReport
+            },
+        ],
+        meta: {requiresAuth: true}
+    },
+    {
         path: '/tickets',
         component: appLayout,
         children: [
@@ -352,6 +375,27 @@ const routes: RouteRecordRaw[] = [
 
         meta: {requiresAuth: false}
     },
+    {
+        path: '/rh/employees',
+        component: appLayout,
+        children: [
+            {
+                path: '',
+                name: 'employees',
+                component: IndexEmployees
+            },
+            {
+                path: 'create',
+                name: 'employees-create',
+                component: CreateEmployees
+            },
+            {
+                path: ':id/edit',
+                name: 'employees-edit',
+                component: EditEmployees
+            }
+        ]
+    },
     {path: '/:pathMatch(.*)*', component: Error404},
 
 ];
@@ -374,13 +418,13 @@ router.beforeEach((to, from, next) => {
     const tokenElement = document.querySelector('meta[name="user-api-token"]');
     const token = tokenElement?.getAttribute('content');
 
-   /* if (to?.meta?.requiresAuth) {
-        if (token && !userStore.api_token) {
-            userStore.loginToken(token);
-        } else if (!token && userStore.api_token) {
-            userStore.logout().then(router.push({name:'login'}))
-        }
-    }*/
+    /* if (to?.meta?.requiresAuth) {
+         if (token && !userStore.api_token) {
+             userStore.loginToken(token);
+         } else if (!token && userStore.api_token) {
+             userStore.logout().then(router.push({name:'login'}))
+         }
+     }*/
     next(true);
 });
 router.afterEach((to, from, next) => {

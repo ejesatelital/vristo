@@ -6,6 +6,7 @@ export const useCompanyStore = defineStore('company', {
     state: () => ({
         id: null,
         name: null,
+        settings: <any>[],
         companies: <any>[],
         companyOptions: <any>[],
         companiesSelect: null
@@ -13,6 +14,7 @@ export const useCompanyStore = defineStore('company', {
     getters: {
         getId: (state) => state.id,
         getName: (state) => state.name,
+        getSettings: (state) => state.settings,
         getCompanies: state => state.companies,
         getCompanyOptions: state => state.companyOptions,
         getCompaniesSelect: state => state.companiesSelect
@@ -39,6 +41,10 @@ export const useCompanyStore = defineStore('company', {
         setCompany(payload: any) {
             if (payload.id) this.id = payload.id
             if (payload.name) this.name = payload.name
+            if (payload.settings) {
+                const {sync_driver, sync_time, sync_tracking, user_api_devices, last_sync} = payload.settings;
+                this.settings = {sync_driver, sync_time, sync_tracking, user_api_devices, last_sync};
+            }
         },
         setCompanyOptions(payload: []) {
             if (payload.length) {
@@ -56,6 +62,7 @@ export const useCompanyStore = defineStore('company', {
         clearCompany() {
             this.id = null
             this.name = null
+            this.settings = []
         },
         clearCompanies() {
             this.companies = []

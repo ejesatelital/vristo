@@ -1,11 +1,18 @@
 import { $themeConfig } from '../theme.config';
 // @ts-ignore
 import { useAppStore } from '@/stores/index';
-
+import moment, {locales} from "moment"
 export default {
     init() {
         const store = useAppStore();
-
+        moment.locale('es');
+        moment.updateLocale('es', {
+            months: 'Enero_Febrero_Marzo_Abril_Mayo_Junio_Julio_Agosto_Septiembre_Octubre_Noviembre_Diciembre'.split('_'),
+            monthsShort: 'Ene_Feb_Mar_Abr_May_Jun_Jul_Ago_Sep_Oct_Nov_Dic'.split('_'),
+            weekdays: 'Domingo_Lunes_Martes_Miércoles_Jueves_Viernes_Sábado'.split('_'),
+            weekdaysShort: 'Dom_Lun_Mar_Mié_Jue_Vie_Sáb'.split('_'),
+            weekdaysMin: 'Do_Lu_Ma_Mi_Ju_Vi_Sá'.split('_'),
+        });
         // set default styles
         let val: any = localStorage.getItem('theme'); // light, dark, system
         val = val || $themeConfig.theme;

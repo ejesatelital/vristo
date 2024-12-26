@@ -417,7 +417,7 @@
     import { useMeta } from '@/composables/use-meta';
     import { useAppStore } from '@/stores/index';
     import { useI18n } from 'vue-i18n';
-    import { API } from '@/services/local';
+    import { API } from '@/services/api';
     import { NOTIFY } from '@/services/notify';
     import {useCompanyStore} from "@/stores/company-store";
     import { useRouter } from 'vue-router';
@@ -503,13 +503,13 @@
     const openModal = async (data?) =>{
         if (data){
             templateSelected.value = {
-                label: data.template.name||'',
-                value: data.template.id||null
+                label: data.template?.name??'',
+                value: data.template?.id??null
             };
 
             companySelected.value = {
-                label: data.company.name||'',
-                value: data.company.id||null
+                label: data.company?.name??'',
+                value: data.company?.id??null
             }
 
             templateData.value.attributes = data.options.data;
@@ -523,9 +523,9 @@
                 options: {
                     data: data.options.data||[],
                     send: {
-                        name: data.options.send.name||'',
-                        email: data.options.send.email||'',
-                        phone: data.options.send.phone||''
+                        name: data.options?.send?.name??'',
+                        email: data.options?.send?.email??'',
+                        phone: data.options?.send?.phone??''
                     },
                 },
                 attachments: data.annexes||[],

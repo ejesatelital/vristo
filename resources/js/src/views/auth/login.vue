@@ -107,7 +107,6 @@
                                     </span>
                                 </div>
                             </div>
-
                             <div>
                                 <label for="Password">Contraseña</label>
                                 <div class="relative text-white-dark">
@@ -160,7 +159,6 @@
                                             />
                                         </svg>
                                     </span>
-
                                 </div>
                             </div>
                             <!-- <div>

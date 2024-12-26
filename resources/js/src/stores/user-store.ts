@@ -38,7 +38,7 @@ export const useUserStore = defineStore('user', {
             try {
                 const companyStore = useCompanyStore();
                 const subscriptionsStore = useSubscriptionsStore();
-                await axios.post('https://apps.ejesatelital.com/api/auth/login', {
+                await axios.post('/api/auth/login', {
                         email: email.value,
                         password: password.value
                     }, {
@@ -73,7 +73,7 @@ export const useUserStore = defineStore('user', {
         async loginToken(token: any) {
             try {
                 const companyStore = useCompanyStore();
-                await axios.post('https://apps.ejesatelital.com/api/auth/login-token', {
+                await axios.post('/api/auth/login-token', {
                         token: token
                     }, {
                         headers: {
