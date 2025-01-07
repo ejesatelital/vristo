@@ -44,8 +44,14 @@ import EditSubcriptions from '@/views/subcriptions/subcription/edit.vue';
 import IndexApplications from '@/views/subcriptions/applications/index.vue';
 // Orders
 import IndexOrders from '@/views/subcriptions/orders/index.vue';
+import ShowOrders from '@/views/subcriptions/orders/show.vue';
+import CreateOrders from '@/views/subcriptions/orders/create.vue';
+import EditOrders from '@/views/subcriptions/orders/edit.vue';
+
 // Payments
 import IndexPayments from '@/views/subcriptions/payments/index.vue';
+import CreatePayments from '@/views/subcriptions/payments/create.vue';
+
 // Tickets
 import IndexTickets from '@/views/tickets/index.vue';
 import CreateTickets from '@/views/tickets/create.vue';
@@ -204,7 +210,22 @@ const routes: RouteRecordRaw[] = [
                 path: '',
                 name: 'orders',
                 component: IndexOrders
-            }
+            },
+            {
+                path: 'create',
+                name: 'orders-create',
+                component: CreateOrders
+            },
+            {
+                path: ':id',
+                name: 'orders-show',
+                component: ShowOrders
+            },
+            {
+                path: ':id/edit',
+                name: 'orders-edit',
+                component: EditOrders
+            },
         ],
         meta: {requiresAuth: true}
     },
@@ -216,7 +237,7 @@ const routes: RouteRecordRaw[] = [
                 path: '',
                 name: 'payments',
                 component: IndexPayments
-            }
+            },
         ],
         meta: {requiresAuth: true}
     },

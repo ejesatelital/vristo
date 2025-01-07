@@ -231,7 +231,7 @@
                             </router-link>
                         </li>
 
-                        <li class="menu nav-item" v-if="userStore.hasAccess('singit.singit.index')">
+                        <li class="menu nav-item" v-if="userStore.hasAccess('singit.contracts.index')">
                             <button
                                 type="button"
                                 class="nav-link group w-full"

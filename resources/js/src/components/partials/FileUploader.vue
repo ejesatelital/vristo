@@ -18,7 +18,7 @@
             :accept="accept"
             @change="handleFileChange"
         />
-        <div class="mt-8" v-if="attachments.length">
+        <div class="mt-8" v-if="attachments">
             <div class="h-px border-b border-[#e0e6ed] dark:border-[#1b2e4b]"></div>
             <div class="flex items-center flex-wrap mt-6">
                 <template v-for="(attachment, i) in attachments" :key="i">
@@ -160,7 +160,7 @@ const props = defineProps({
 })
 const emit = defineEmits(['update:modelValue', 'files-added', 'file-removed']);
 const fileUploaderRef = ref(null);
-const attachments = ref(typeof props.modelValue === "object"?[props.modelValue]:props.modelValue);
+const attachments = ref(Array.isArray(props.modelValue) ? props.modelValue : [props.modelValue]);
 const filesSelect = ref([]);
 const handleFileChange = (event) => {
     const files = Array.from(event.target.files);
