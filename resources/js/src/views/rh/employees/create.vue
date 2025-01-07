@@ -16,7 +16,7 @@
             </li>
         </ul>
 
-        <div class="pt-5">
+        <div class="pt-5 panel">
             <TabGroup>
                 <TabList
                     class="flex font-semibold border-b border-[#ebedf2] dark:border-[#191e3a] mb-5 whitespace-nowrap overflow-y-auto">
@@ -52,34 +52,34 @@
                         </a>
                     </Tab>
 
-<!--                    <Tab as="template" v-slot="{ selected }">
-                        <a href="javascript:;"
-                           class="flex gap-2 p-4 border-b border-transparent hover:border-primary hover:text-primary !outline-none"
-                           :class="{ '!border-primary text-primary': selected }">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                 xmlns="http://www.w3.org/2000/svg" class="w-5 h-5">
-                                <circle cx="12" cy="6" r="4" stroke="currentColor" stroke-width="1.5"/>
-                                <ellipse opacity="0.5" cx="12" cy="17" rx="7" ry="4" stroke="currentColor"
-                                         stroke-width="1.5"/>
-                            </svg>
-                            Información Bancaria
-                        </a>
-                    </Tab>
-                    <Tab as="template" v-slot="{ selected }" disabled>
-                        <a href="javascript:;"
-                           class="flex gap-2 p-4 border-b border-transparent hover:border-primary hover:text-primary !outline-none"
-                           :class="{ '!border-primary text-primary': selected }">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                 xmlns="http://www.w3.org/2000/svg" class="w-5 h-5">
-                                <circle opacity="0.5" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/>
-                                <path d="M12 6V18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                                <path
-                                    d="M15 9.5C15 8.11929 13.6569 7 12 7C10.3431 7 9 8.11929 9 9.5C9 10.8807 10.3431 12 12 12C13.6569 12 15 13.1193 15 14.5C15 15.8807 13.6569 17 12 17C10.3431 17 9 15.8807 9 14.5"
-                                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                            </svg>
-                            Payment Details
-                        </a>
-                    </Tab>-->
+                    <!--                    <Tab as="template" v-slot="{ selected }">
+                                            <a href="javascript:;"
+                                               class="flex gap-2 p-4 border-b border-transparent hover:border-primary hover:text-primary !outline-none"
+                                               :class="{ '!border-primary text-primary': selected }">
+                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                                     xmlns="http://www.w3.org/2000/svg" class="w-5 h-5">
+                                                    <circle cx="12" cy="6" r="4" stroke="currentColor" stroke-width="1.5"/>
+                                                    <ellipse opacity="0.5" cx="12" cy="17" rx="7" ry="4" stroke="currentColor"
+                                                             stroke-width="1.5"/>
+                                                </svg>
+                                                Información Bancaria
+                                            </a>
+                                        </Tab>
+                                        <Tab as="template" v-slot="{ selected }" disabled>
+                                            <a href="javascript:;"
+                                               class="flex gap-2 p-4 border-b border-transparent hover:border-primary hover:text-primary !outline-none"
+                                               :class="{ '!border-primary text-primary': selected }">
+                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                                     xmlns="http://www.w3.org/2000/svg" class="w-5 h-5">
+                                                    <circle opacity="0.5" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/>
+                                                    <path d="M12 6V18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                                                    <path
+                                                        d="M15 9.5C15 8.11929 13.6569 7 12 7C10.3431 7 9 8.11929 9 9.5C9 10.8807 10.3431 12 12 12C13.6569 12 15 13.1193 15 14.5C15 15.8807 13.6569 17 12 17C10.3431 17 9 15.8807 9 14.5"
+                                                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                                                </svg>
+                                                Payment Details
+                                            </a>
+                                        </Tab>-->
                 </TabList>
                 <TabPanels>
 
@@ -96,14 +96,13 @@
                                                     <div class="mb-5">
                                                         <label for="file">Imagen</label>
                                                         <div>
-                                                            <input
-                                                                id="file"
-                                                                type="file"
-                                                                class="form-input file:py-2 file:px-4 file:border-0 file:font-semibold p-0 file:bg-primary/90 ltr:file:mr-5 rtl:file:ml-5 file:text-white file:hover:bg-primary"
-                                                                multiple
-                                                                accept="image/*"
-                                                                @change="handleFileUpload($event)"
-                                                            />
+                                                            <file-uploader
+                                                                v-model="employee.avatar"
+                                                                :accept="['image/*']"
+                                                                :max-size="2"
+                                                                :multiple="false"
+                                                                label="avatar"
+                                                                class="w-full"/>
                                                         </div>
                                                         <div class="text-center mt-6" v-if="loading">
                                                             <!-- custom loader -->
@@ -111,10 +110,6 @@
                                                                 class="animate-[spin_2s_linear_infinite] border-8 border-[#f1f2f3] border-l-primary border-r-primary rounded-full w-14 h-14 inline-block align-middle m-auto mb-10"></span>
                                                         </div>
                                                         <div class="text-danger mt-2" id="file"></div>
-                                                    </div>
-                                                    <div class="flex flex-col justify-center items-center">
-                                                        <img :src="employee.avatar" :alt="employee.avatar"
-                                                             class="w-100 h-100 object-cover mb-5 p-6"/>
                                                     </div>
                                                 </div>
                                             </div>
@@ -212,17 +207,17 @@
                                         <h6 class="text-lg font-bold mb-5">Información Empresarial</h6>
                                         <div class="flex flex-col sm:flex-row">
                                             <div class="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-5">
-                                                    <div v-if="positionOptions.length>1">
-                                                        <Select
-                                                            :options="positionOptions"
-                                                            v-model="positionSelected"
-                                                            :multiple="false"
-                                                            required
-                                                            :closeOnSelect="false"
-                                                            titleSelect="Cargo"
-                                                            name="position"
-                                                        />
-                                                    </div>
+                                                <div v-if="positionOptions.length>1">
+                                                    <Select
+                                                        :options="positionOptions"
+                                                        v-model="positionSelected"
+                                                        :multiple="false"
+                                                        required
+                                                        :closeOnSelect="false"
+                                                        titleSelect="Cargo"
+                                                        name="position"
+                                                    />
+                                                </div>
                                                 <div v-if="departmentOptions.length">
                                                     <Select
                                                         :options="departmentOptions"
@@ -253,7 +248,8 @@
                                                 </div>
                                                 <div>
                                                     <label for="key">Llave</label>
-                                                    <input id="key" type="text" placeholder="Llave" v-model="employee.key"
+                                                    <input id="key" type="text" placeholder="Llave"
+                                                           v-model="employee.key"
                                                            class="form-input"/>
                                                 </div>
                                             </div>
@@ -649,6 +645,8 @@ import flatPickr from 'vue-flatpickr-component';
 import 'flatpickr/dist/flatpickr.css';
 import {Spanish} from "flatpickr/dist/l10n/es.js"
 import {useAppStore} from "@/stores";
+import FileUploader from "@/components/partials/FileUploader.vue";
+
 const api = new API();
 const route = useRoute();
 const router = useRouter();
@@ -666,7 +664,7 @@ const rangeCalendar: any = ref({
 });
 const companyStore = useCompanyStore();
 const loading = ref(false);
-const companiesSelected = ref({label: companyStore.name??'', value: companyStore.id??null});
+const companiesSelected = ref({label: companyStore.name ?? '', value: companyStore.id ?? null});
 const companiesOptions = ref(companyStore.companyOptions);
 const positionSelected = ref({label: '', value: null});
 const positionOptions = ref([]);
@@ -697,7 +695,11 @@ const employee = ref(
         department: null,
         contract: null,
         roles: [],
-        avatar: '/assets/images/file-preview.svg',
+        avatar: {
+            name: 'avatar',
+            type: 'image',
+            url: '/assets/images/file-preview.svg',  // Assign the URL only if it is image
+        },
     }
 );
 /*const rules = {

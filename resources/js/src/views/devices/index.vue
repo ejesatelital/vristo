@@ -126,7 +126,7 @@
                 </template>
                 <template #time="data">
                     <div v-if="moment().diff(moment(data.value.device_data.time, 'DD-MM-YYYY hh:mm:ss A'),'hours')<=23">
-                        {{ moment(data.value.device_data.time, 'DD-MM-YYYY hh:mm:ss A').format('HH:mm a') }}
+                        {{ moment(data.value.device_data.time, 'DD-MM-YYYY hh:mm:ss A').format('h:mm a') }}
                     </div>
                     <div v-else>
                         {{ moment(data.value.device_data.time, 'DD-MM-YYYY hh:mm:ss A').format('MMM DD') }}
@@ -268,7 +268,7 @@ var pusher = new Pusher('1a3ed9fce586aff12654', {
     cluster: 'us2'
 });
 
-var channel = pusher.subscribe('device-user-' + userStore.id);
+var channel = pusher.subscribe('device-company-' + companyStore.id);
 channel.bind('update-devices', function (data) {
     getDevicesData()
 });

@@ -20,7 +20,7 @@
                         ✕
                     </button>
                 </div>
-                <template v-if="userStore.hasAccess('rh.employee.create')">
+                <template v-if="userStore.hasAccess('rh.employees.create')">
                     <div class="flex flex-wrap justify-end gap-2">
                         <button type="button" class="btn btn-sm btn-primary" v-tippy:edit @click="redirectToCreate()">
                             <svg width="24" height="24" viewBox="0 0 24 24" class="mr-3" fill="none"
@@ -63,8 +63,8 @@
                                         </template>-->
                     <template #actions="data">
                         <div class="flex justify-center gap-3">
-                            <template v-if="userStore.hasAccess('rh.employee.edit')">
-                                <button type="button" class="btn btn-sm btn-info" v-if="data.value.parent_id"
+                            <template v-if="userStore.hasAccess('rh.employees.edit')">
+                                <button type="button" class="btn btn-sm btn-info"
                                         v-tippy:edit @click="redirectToEdit(data.value.id)">
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                                          xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5">
@@ -82,23 +82,10 @@
                                     </svg>
                                 </button>
                                 <tippy target="edit">Editar Colaborador</tippy>
-                                <button type="button" class="btn btn-sm btn-info" v-tippy:view
-                                        @click="redirectToShow(data.value.id)">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                         xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5">
-                                        <path opacity="0.5"
-                                              d="M3.27489 15.2957C2.42496 14.1915 2 13.6394 2 12C2 10.3606 2.42496 9.80853 3.27489 8.70433C4.97196 6.49956 7.81811 4 12 4C16.1819 4 19.028 6.49956 20.7251 8.70433C21.575 9.80853 22 10.3606 22 12C22 13.6394 21.575 14.1915 20.7251 15.2957C19.028 17.5004 16.1819 20 12 20C7.81811 20 4.97196 17.5004 3.27489 15.2957Z"
-                                              stroke="currentColor" stroke-width="1.5"/>
-                                        <path
-                                            d="M15 12C15 13.6569 13.6569 15 12 15C10.3431 15 9 13.6569 9 12C9 10.3431 10.3431 9 12 9C13.6569 9 15 10.3431 15 12Z"
-                                            stroke="currentColor" stroke-width="1.5"/>
-                                    </svg>
-                                </button>
-                                <tippy target="view">Ver Colaborador</tippy>
                             </template>
-                            <template v-if="userStore.hasAccess('rh.employee.destroy')">
+                            <template v-if="userStore.hasAccess('rh.employees.destroy')">
                                 <button type="button" class="btn btn-sm btn-danger" v-tippy:delete
-                                        @click="deleteCompany(data.value.id)">
+                                        @click="deleteEmployee(data.value.id)">
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                                          xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5">
                                         <path d="M20.5001 6H3.5" stroke="currentColor" stroke-width="1.5"
@@ -148,10 +135,6 @@ const router = useRouter();
 const redirectToCreate = () => {
     router.push({name: 'employees-create'});
 };
-
-const redirectToShow = (id: number) => {
-    router.push({name: 'employees-show', params: {id}});
-};
 const redirectToEdit = (id: number) => {
     router.push({name: 'employees-edit', params: {id}});
 };
@@ -160,10 +143,10 @@ const i18n = reactive(useI18n());
 
 const cols = ref([
     {field: 'id', title: 'Id'},
-    {field: 'full_name', title: 'Nombre'},
-    {field: 'email', title: 'Correo'},
-    {field: 'company', title: 'Empresa'},
-    {field: 'position', title: 'Cargo'},
+    {field: 'user.full_name', title: 'Nombre'},
+    {field: 'user.email', title: 'Correo'},
+    {field: 'company.name', title: 'Empresa'},
+    {field: 'department.name', title: 'Area'},
     {field: 'address', title: 'Dirección'},
     {field: 'phone', title: 'Teléfono'},
     {field: 'created_at', title: 'Creado el'},
@@ -191,9 +174,11 @@ const getData = async () => {
         loading.value = true;
         let response: any = null;
         if (userStore.hasAccess('rh.employee.indexall')) {
-             response = await api.get(`rh/v1/employee?filter={"search":"${params.search}"}&page=${params.current_page}&take=${params.pagesize}`)
+             response = await api.get(`rh/v1/employees?filter={"search":"${params.search}"}&include=company,department&page=${params.current_page}&take=${params.pagesize}`)
         } else {
-             response = await api.get(`rh/v1/employee?filter={"search":"${params.search}",company_id=[${companyStore.companies}]}&page=${params.current_page}&take=${params.pagesize}`)
+            const companies = companyStore.companiesSelect;
+            console.log(companies);
+             response = await api.get(`rh/v1/employees?filter={"search":"${params.search}","company_id":[${companies}]}&include=company,department&page=${params.current_page}&take=${params.pagesize}`)
         }
         rows.value = response?.data;
         total_rows.value = response?.meta?.page?.total;
