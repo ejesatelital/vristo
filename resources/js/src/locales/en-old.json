@@ -215,6 +215,12 @@
     "wompi":"Wompi",
     "cash":"Cash",
     "save":"Save",
-    "payment_via":"Accept payment via"
+    "payment_via":"Accept payment via",
+    "new_order":"New order",
+    "percentage":"Percentage",
+    "email":"Email",
+    "item":"Item",
+    "items":"Items",
+    "sku":"SKU"
 
 }

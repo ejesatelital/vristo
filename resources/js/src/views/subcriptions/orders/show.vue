@@ -75,7 +75,7 @@
                 <div class="xl:1/3 lg:w-2/5 sm:w-1/2">
                     <div class="flex-1">
                         <div class="space-y-1 text-white-dark">
-                            <div>Bills to:</div>
+                            <div>{{ $t('bills_to') }}:</div>
                             <div class="text-black dark:text-white font-semibold">{{data?.payment_data?.name}}</div>
                             <div>{{data?.payment_data?.address}}</div>
                             <div>{{data?.payment_data?.email}}</div>

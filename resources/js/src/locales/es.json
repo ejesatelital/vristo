@@ -25,7 +25,7 @@
     "chat": "charlar",
     "mailbox": "buzón",
     "todo_list": "lista de quehaceres",
-    "notes": "Nota",
+    "notes": "Notas",
     "scrumboard": "tablero de scrum",
     "contacts": "Contactos",
     "invoice": "factura",
@@ -216,6 +216,12 @@
     "wompi":"Wompi",
     "cash":"Efectivo",
     "save":"Guardar",
-    "payment_via":"Metodo de pago"
+    "payment_via":"Metodo de pago",
+    "new_order":"Nueva orden",
+    "percentage":"Porcentaje",
+    "email":"Correo",
+    "item":"Artículo",
+    "items":"Artículos",
+    "sku":"SKU"
 
 }
