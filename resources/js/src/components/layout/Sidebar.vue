@@ -189,16 +189,16 @@
                             </button>
                             <vue-collapsible :isOpen="activeDropdown === 'components'">
                                 <ul class="sub-menu text-gray-500">
-                                    <li>
+                                    <li v-if="userStore.hasAccess('subscriptions.applications.index')">
                                         <router-link :to="{name:'applications'}" @click="toggleMobileMenu">{{ $t('applications') }}</router-link>
                                     </li>
-                                    <li>
+                                    <li v-if="userStore.hasAccess('subscriptions.subscriptions.index')">
                                         <router-link :to="{name:'subscriptions'}" @click="toggleMobileMenu">{{ $t('subscriptions') }}</router-link>
                                     </li>
-                                    <li>
+                                    <li v-if="userStore.hasAccess('subscriptions.orders.index')">
                                         <router-link :to="{name:'orders'}" @click="toggleMobileMenu">{{ $t('orders') }}</router-link>
                                     </li>
-                                    <li>
+                                    <li v-if="userStore.hasAccess('subscriptions.payments.index')">
                                         <router-link :to="{name:'payments'}" @click="toggleMobileMenu">{{ $t('payments') }}</router-link>
                                     </li>
                                 </ul>

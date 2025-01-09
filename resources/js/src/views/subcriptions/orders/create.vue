@@ -24,13 +24,11 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <label for="phone">Inicio de vigencia*</label>
-                        <input id="start_date" type="date" name="inv-date" class="form-input lg:w-[250px]" required
-                            v-model="params.start_date" />
+                        <flat-pickr v-model="params.start_date" class="form-input" :config="basic" readonly></flat-pickr>
                     </div>
                     <div>
                         <label for="due_date">Fecha de vencimiento</label>
-                        <input id="due_date" type="date" name="due-date" class="form-input lg:w-[250px]"
-                            v-model="params.due_date" />
+                        <flat-pickr v-model="params.due_date" class="form-input" :config="basic" readonly></flat-pickr>
                     </div>
                 </div>
                 <hr class="border-[#e0e6ed] dark:border-[#1b2e4b] my-6" />
@@ -79,7 +77,7 @@
 
                             <div class="my-2 sm:flex items-center">
                                 <label for="reciever-number" class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0">{{ $t('phone_number') }} *</label>
-                                <input  id="reciever-number" type="text" name="reciever-number" class="form-input flex-1" v-model="params.payment_data.phone" placeholder="Enter Phone number" :disabled="!btnBillTo" required />
+                                <input  id="reciever-number" type="text" name="reciever-number" class="form-input flex-1" v-model="params.payment_data.phone" placeholder="Enter Phone number" :disabled="!btnBillTo" v-maska="'##########'" required />
                             </div>
                         </div>
 
@@ -98,13 +96,13 @@
                             <div class="flex gap-4">
                                 <div class="mb-1">
                                     <label class="inline-flex mt-1 cursor-pointer">
-                                        <input type="radio" name="type_iva" class="form-radio" value="1" v-model="type_iva" />
+                                        <input type="radio" name="type_iva" class="form-radio" value="1" v-model="params.type_iva" />
                                         <span class="text-white-dark">Porcentual</span>
                                     </label>
                                 </div>
                                 <div>
                                     <label class="inline-flex mt-1 cursor-pointer">
-                                        <input type="radio" name="type_iva" class="form-radio text-secondary" value="2" v-model="type_iva" />
+                                        <input type="radio" name="type_iva" class="form-radio text-secondary" value="2" v-model="params.type_iva" />
                                         <span class="text-white-dark">Valor</span>
                                     </label>
                                 </div>
@@ -118,13 +116,13 @@
                             <div class="flex gap-4">
                                 <div class="mb-1">
                                     <label class="inline-flex mt-1 cursor-pointer">
-                                        <input type="radio" name="type_discount" class="form-radio" value="1" v-model="type_discount" />
+                                        <input type="radio" name="type_discount" class="form-radio" value="1" v-model="params.type_discount" />
                                         <span class="text-white-dark">Porcentual</span>
                                     </label>
                                 </div>
                                 <div>
                                     <label class="inline-flex mt-1 cursor-pointer">
-                                        <input type="radio" name="type_discount" class="form-radio text-secondary" value="2" v-model="type_discount" />
+                                        <input type="radio" name="type_discount" class="form-radio text-secondary" value="2" v-model="params.type_discount" />
                                         <span class="text-white-dark">Valor</span>
                                     </label>
                                 </div>
@@ -177,7 +175,7 @@
                                             <textarea class="form-textarea mt-3" placeholder="Enter Description" v-model="item.description"></textarea>
                                         </td>
                                         <td>
-                                            <input type="number" class="form-input w-32" placeholder="Cantidad" v-model="item.quantity" min="0" required />
+                                            <input type="number" class="form-input w-32" placeholder="Cantidad" v-model="item.quantity" min="0" step="1" required />
                                         </td>
                                         <td>
                                             <input type="number" class="form-input w-32" placeholder="Valor unitario" v-model="item.unit_value" min="0" required />
@@ -186,7 +184,7 @@
                                             <div class="flex">
                                                 <div
                                                     class="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-2 font-semibold border ltr:border-r-0 rtl:border-l-0 border-[#e0e6ed] dark:border-[#17263c] dark:bg-[#1b2e4b]">
-                                                    {{ type_iva == 1 ? '%' : '$' }}
+                                                    {{ params.type_iva == 1 ? '%' : '$' }}
                                                 </div>
                                                 <input type="number" placeholder="Iva" v-model="item.iva" min="0" class="form-input w-32 ltr:rounded-l-none rtl:rounded-r-none flex-1" />
                                             </div>
@@ -195,11 +193,11 @@
                                             <div class="flex">
                                                 <div
                                                     class="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-2 font-semibold border ltr:border-r-0 rtl:border-l-0 border-[#e0e6ed] dark:border-[#17263c] dark:bg-[#1b2e4b]">
-                                                    {{ type_discount == 1 ? '%' : '$' }}
+                                                    {{ params.type_discount == 1 ? '%' : '$' }}
                                                 </div>
                                                 <input type="number" placeholder="Descuento" v-model="item.discount" min="0"
-                                                :max="type_discount == 1 ? 100 : null"
-                                                :maxlength="type_discount == 1 ? 4 : 14"
+                                                :max="params.type_discount == 1 ? 100 : null"
+                                                :maxlength="params.type_discount == 1 ? 4 : 14"
                                                 class="form-input w-32 ltr:rounded-l-none rtl:rounded-r-none flex-1" />
                                             </div>
                                         </td>
@@ -267,10 +265,11 @@
     import { NOTIFY } from '@/services/notify';
     import Select from '@/components/partials/Select.vue';
     import { useRouter } from 'vue-router';
+    import moment from 'moment';
+    import flatPickr from 'vue-flatpickr-component';
+    import 'flatpickr/dist/flatpickr.css';
     useMeta({ title: 'Nuevo pedido' });
     const router = useRouter();
-    const type_iva = ref(1);
-    const type_discount = ref(2);
     const companyStore = useCompanyStore();
     const userStore = useUserStore();
     const api = new API();
@@ -279,6 +278,10 @@
     const companySelected = ref();
     const btnBillTo = ref(0);
     const items: any = ref([]);
+    const basic: any = ref({
+        dateFormat: 'Y-m-d',
+        position:'auto right',
+    });
     const params = ref({
         id: null,
         payment_data:{
@@ -288,12 +291,14 @@
             address: '',
             phone: ''
         },
-        start_date: '',
-        due_date: '',
+        start_date: moment().format('YYYY-MM-DD'),
+        due_date: moment().format('YYYY-MM-DD'),
         items:[],
         description: '',
         company_id: companyStore.id,
-        user_id: userStore.id
+        user_id: userStore.id,
+        type_iva: 1,
+        type_discount: 2
     });
     const loading = ref(false);
 
@@ -307,11 +312,14 @@
     // IVA calculation
     const ivaTotal = computed(() => {
         return items.value.reduce((sum, item) => {
-            if (type_iva.value == 1) {
-                const ivaRate = item.iva / 100; // Convert IVA to decimal if percentage
-                return sum + (item.unit_value * item.quantity * ivaRate);
+            const unitValue = parseFloat(item.unit_value) || 0; // Aseguramos que el valor unitario sea numérico
+            const quantity = parseInt(item.quantity, 10) || 0;  // Convertimos cantidad a entero
+            const iva = parseFloat(item.iva) || 0; // Aseguramos que el IVA sea numérico
+            if (params.value.type_iva == 1) {
+                const ivaRate = iva / 100; // Convert IVA to decimal if percentage
+                return sum + (unitValue * quantity * ivaRate);
             } else {
-                return sum + item.iva; // If iva is a fixed value
+                return sum + iva; // If iva is a fixed value
             }
         }, 0);
     });
@@ -319,11 +327,14 @@
     // Discount calculation
     const discountTotal = computed(() => {
         return items.value.reduce((sum, item) => {
-            if (type_discount.value == 1) {
-                const discountRate = item.discount / 100; // Convert discount to decimal if percentage
-                return sum + (item.unit_value * item.quantity * discountRate);
+            const discount = parseFloat(item.discount) || 0; // Aseguramos que sea un número válido
+            const unitValue = parseFloat(item.unit_value) || 0;
+            const quantity = parseInt(item.quantity, 10) || 0;
+            if (params.value.type_discount === 1) {
+                const discountRate = discount / 100;
+                return sum + (unitValue * quantity * discountRate);
             } else {
-                return sum + item.discount; // If discount is a fixed value
+                return sum + discount;
             }
         }, 0);
     });
@@ -340,15 +351,15 @@
 
     const calculateItemTotal = (item) => {
         let baseAmount = item.unit_value * item.quantity;
-        if (type_iva.value == 1) {
-            baseAmount += baseAmount * (item.iva / 100);
-        } else {
-            baseAmount += item.iva; // VAT as a fixed amount
-        }
-        if (type_discount.value == 1) {
+        if (params.value.type_discount == 1) {
             baseAmount -= baseAmount * (item.discount / 100);
         } else {
             baseAmount -= item.discount; // Discount as a fixed amount
+        }
+        if (params.value.type_iva == 1) {
+            baseAmount += baseAmount * (item.iva / 100);
+        } else {
+            baseAmount += item.iva; // VAT as a fixed amount
         }
         return baseAmount.toFixed(2);
     };
@@ -424,7 +435,7 @@
             );
             if (isConfirmed) {
                 await api.post('/subscriptions/v1/orders', params.value);
-                router.push({ name: 'orders' });
+                // router.push({ name: 'orders' });
                 notify.showToast('Registro guardado correctamente!', 'success');
             } else {
                 notify.showToast('Operación cancelada', 'info');
@@ -432,7 +443,6 @@
         } catch (error) {
             console.error(error);
             notify.showToast('Error al guardar el registro!', 'error');
-
         } finally {
             loading.value = false;
         }

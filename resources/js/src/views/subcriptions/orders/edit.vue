@@ -24,13 +24,11 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <label for="phone">Inicio de vigencia*</label>
-                        <input id="start_date" type="date" name="inv-date" class="form-input lg:w-[250px]" required
-                            v-model="params.start_date" />
+                        <flat-pickr v-model="params.start_date" class="form-input" :config="basic" readonly></flat-pickr>
                     </div>
                     <div>
                         <label for="due_date">Fecha de vencimiento</label>
-                        <input id="due_date" type="date" name="due-date" class="form-input lg:w-[250px]"
-                            v-model="params.due_date" />
+                        <flat-pickr v-model="params.due_date" class="form-input" :config="basic" readonly></flat-pickr>
                     </div>
                 </div>
                 <hr class="border-[#e0e6ed] dark:border-[#1b2e4b] my-6" />
@@ -79,7 +77,7 @@
 
                             <div class="my-2 sm:flex items-center">
                                 <label for="reciever-number" class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0">{{ $t('phone_number') }} *</label>
-                                <input  id="reciever-number" type="text" name="reciever-number" class="form-input flex-1" v-model="params.payment_data.phone" placeholder="Enter Phone number" :readonly="!btnBillTo" required />
+                                <input  id="reciever-number" type="text" name="reciever-number" class="form-input flex-1" v-model="params.payment_data.phone" placeholder="Enter Phone number" :disabled="!btnBillTo" v-maska="'##########'" required />
                             </div>
                         </div>
 
@@ -177,7 +175,7 @@
                                             <textarea class="form-textarea mt-3" placeholder="Enter Description" v-model="item.description"></textarea>
                                         </td>
                                         <td>
-                                            <input type="number" class="form-input w-32" placeholder="Cantidad" v-model="item.quantity" min="0" required />
+                                            <input type="number" class="form-input w-32" placeholder="Cantidad" v-model="item.quantity" min="0" step="1" required />
                                         </td>
                                         <td>
                                             <input type="number" class="form-input w-32" placeholder="Valor unitario" v-model="item.unit_value" min="0" required />
@@ -267,6 +265,9 @@
     import { NOTIFY } from '@/services/notify';
     import Select from '@/components/partials/Select.vue';
     import { useRouter, useRoute } from 'vue-router';
+    import moment from 'moment';
+    import flatPickr from 'vue-flatpickr-component';
+    import 'flatpickr/dist/flatpickr.css';
     useMeta({ title: 'Editar pedido' });
     const router = useRouter();
     const route = useRoute();
@@ -280,6 +281,10 @@
     const companySelected = ref();
     const btnBillTo = ref(0);
     const items: any = ref([]);
+    const basic: any = ref({
+        dateFormat: 'Y-m-d',
+        position:'auto right',
+    });
     const params = ref({
         id: null,
         payment_data:{
@@ -308,11 +313,14 @@
     // IVA calculation
     const ivaTotal = computed(() => {
         return items.value.reduce((sum, item) => {
+            const unitValue = parseFloat(item.unit_value) || 0; // Aseguramos que el valor unitario sea numérico
+            const quantity = parseInt(item.quantity, 10) || 0;  // Convertimos cantidad a entero
+            const iva = parseFloat(item.iva) || 0; // Aseguramos que el IVA sea numérico
             if (type_iva.value == 1) {
-                const ivaRate = item.iva / 100; // Convert IVA to decimal if percentage
-                return sum + (item.unit_value * item.quantity * ivaRate);
+                const ivaRate = iva / 100; // Convert IVA to decimal if percentage
+                return sum + (unitValue * quantity * ivaRate);
             } else {
-                return sum + item.iva; // If iva is a fixed value
+                return sum + iva; // If iva is a fixed value
             }
         }, 0);
     });
@@ -320,11 +328,17 @@
     // Discount calculation
     const discountTotal = computed(() => {
         return items.value.reduce((sum, item) => {
-            if (type_discount.value == 1) {
-                const discountRate = item.discount / 100; // Convert discount to decimal if percentage
-                return sum + (item.unit_value * item.quantity * discountRate);
+            const discount = parseFloat(item.discount) || 0; // Aseguramos que sea un número válido
+            const unitValue = parseFloat(item.unit_value) || 0;
+            const quantity = parseInt(item.quantity, 10) || 0;
+
+            if (type_discount.value === 1) {
+                // Descuento como porcentaje (asegúrate de que el valor sea entre 0 y 100)
+                const discountRate = discount / 100;
+                return sum + (unitValue * quantity * discountRate);
             } else {
-                return sum + item.discount; // If discount is a fixed value
+                // Descuento como valor fijo
+                return sum + discount;
             }
         }, 0);
     });
@@ -445,6 +459,9 @@
         try {
             const response = await api.get(`subscriptions/v1/orders/${route.params.id}`);
             params.value = response.data;
+            companySelected.value = { label: params?.value?.company?.name, value: params?.value?.company?.id } ?? null;
+            type_iva.value = response?.data?.type_iva;
+            type_discount.value = response?.data?.type_discount;
             items.value = params.value.items;
         } catch (error) {
             loading.value = true;
@@ -454,14 +471,6 @@
 
     onMounted(async () => {
         await getOrder();
-
-        if (companyStore.id) {
-            const selectedCompany = companyStore.companies.find(
-                (company) => company.id === companyStore.id
-            );
-            companySelected.value = { label: selectedCompany?.name, value: selectedCompany?.id } ?? null;
-            setCompanyDetails(selectedCompany);
-        }
     });
 
 </script>
