@@ -221,6 +221,8 @@
     "email":"Correo",
     "item":"Artículo",
     "items":"Artículos",
-    "sku":"SKU"
+    "sku":"SKU",
+    "total_debt":"Deuda Total",
+    "payment_reference":"Referencia de pago"
 
 }

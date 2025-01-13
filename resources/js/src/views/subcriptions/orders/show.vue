@@ -17,14 +17,16 @@
             </li>
         </ul>
 
-
         <!-- Current Statement -->
         <div class="panel overflow-hidden">
-            <div class="flex items-center">
+            <div class="flex items-center justify-between">
                 <div>
                     <div class="text-lg font-bold">{{ $t('current_statement') }}</div>
                     <div class="text-danger" v-if="data?.status===1">Debe pagarse antes de {{ data?.due_date }}</div>
                 </div>
+
+                <div ref="wompiContainer" v-if="data?.total_debt!==0"></div>
+
             </div>
             <div class="relative mt-4">
                 <div class="absolute -bottom-12 ltr:-right-12 rtl:-left-12 w-24 h-24">
@@ -44,7 +46,7 @@
 
                 </div>
 
-                <div class="grid grid-cols-2 md:grid-cols-5 gap-6">
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
                     <div>
                         <div class="text-primary">{{ $t('subtotal') }}</div>
                         <div class="mt-2 font-semibold text-2xl">${{data?.subtotal}}</div>
@@ -65,6 +67,10 @@
                         <div class="text-success">{{ $t('payment_total') }}</div>
                         <div class="mt-2 font-semibold text-2xl">${{data?.payment_total}}</div>
                     </div>
+                    <div>
+                        <div class="text-info">{{ $t('total_debt') }}</div>
+                        <div class="mt-2 font-semibold text-2xl">${{data?.total_debt}}</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -75,7 +81,7 @@
                 <div class="xl:1/3 lg:w-2/5 sm:w-1/2">
                     <div class="flex-1">
                         <div class="space-y-1 text-white-dark">
-                            <div>{{ $t('bills_to') }}:</div>
+                            <div>{{ $t('billed_to') }}:</div>
                             <div class="text-black dark:text-white font-semibold">{{data?.payment_data?.name}}</div>
                             <div>{{data?.payment_data?.address}}</div>
                             <div>{{data?.payment_data?.email}}</div>
@@ -183,20 +189,22 @@
                     <thead>
                         <tr>
                             <th class="ltr:rounded-l-md rtl:rounded-r-md">ID</th>
+                            <th>{{ $t('payment_reference') }}</th>
                             <th>{{ $t('date') }}</th>
-                            <th>{{ $t('currency') }}</th>
                             <th>{{ $t('amount') }}</th>
                             <th>{{ $t('gangway') }}</th>
+                            <th>{{ $t('currency') }}</th>
                         </tr>
                     </thead>
                     <tbody>
                         <!-- Recorremos data.payments -->
                         <tr v-for="(payment, i) in data?.payments" :key="i">
                             <td class="font-semibold">{{ payment.id }}</td>
+                            <td class="whitespace-nowrap">{{ payment.unique_reference }}</td>
                             <td class="whitespace-nowrap">{{ new Date(payment.payment_date).toLocaleDateString() }}</td>
-                            <td class="whitespace-nowrap">{{ payment.currency }}</td>
                             <td>${{ payment.amount_paid }}</td>
                             <td class="whitespace-nowrap">{{ payment.gangway }}</td>
+                            <td class="whitespace-nowrap">{{ payment.currency }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -322,15 +330,34 @@
         return baseAmount.toFixed(2); // Retornar con 2 decimales
     };
 
-
     const closeModal = () => {
         modalAddPayment.value = false;
         getOrder();
     }
+    const wompiContainer = ref(null);
+
+    const wompiPayment = async () => {
+        let valor_total: number = (data.value.total_debt) * 100;
+
+        const script = document.createElement("script");
+        script.src = "https://checkout.wompi.co/widget.js";
+        script.setAttribute("data-render", "button");
+        script.setAttribute("data-public-key", "pub_test_kBWrheDUf4eu26DtWsjk8Am3Fm44UXmi");
+        script.setAttribute("data-currency", "COP");
+        script.setAttribute("data-amount-in-cents", valor_total.toString());
+        script.setAttribute("data-reference", data.value.unique_reference);
+        script.setAttribute("data-customer-data:email", data.value.payment_data?.email);
+        script.setAttribute("data-customer-data:full-name",data.value.payment_data?.name);
+        script.setAttribute("data-signature:integrity", data.value.integrity_key);
+
+        if (wompiContainer.value) {
+            wompiContainer.value.appendChild(script);
+        }
+    }
 
     onMounted(async () => {
         await getOrder();
+        await wompiPayment();
     });
-
 
 </script>

@@ -200,7 +200,7 @@
     "subtotal":"Subtotal",
     "discount":"Descuento",
     "invoice_total":"Total de la factura",
-    "payment_total":"Total de pago",
+    "payment_total":"Total pago",
     "order_id":"ID de la orden",
     "issue_date":"Fecha de emisión",
     "due_date":"Fecha de vencimiento",
@@ -222,6 +222,9 @@
     "email":"Correo",
     "item":"Artículo",
     "items":"Artículos",
-    "sku":"SKU"
+    "sku":"SKU",
+    "total_debt":"Deuda Total",
+    "payment_reference":"Referencia de pago"
+
 
 }

@@ -105,7 +105,7 @@
         amount_paid:null,
         status:null,
         payment_date:moment().format('YYYY-MM-DD'),
-        currency:'COP - Peso colombiano',
+        currency:'COP',
         merchant_public_key:null,
         gangway:'',
         transaction_id:null,
@@ -120,9 +120,9 @@
     const loading = ref(false);
 
     const currencyList = ref([
-        'COP - Peso colombiano',
-        'USD - US Dollar',
-        'EUR - Germany (Euro)',
+        'COP',
+        'USD',
+        'EUR',
     ]);
 
     const emit = defineEmits(['close-modal']);

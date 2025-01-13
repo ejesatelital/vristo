@@ -221,6 +221,8 @@
     "email":"Email",
     "item":"Item",
     "items":"Items",
-    "sku":"SKU"
+    "sku":"SKU",
+    "total_debt":"Total debt",
+    "payment_reference":"Payment reference"
 
 }
