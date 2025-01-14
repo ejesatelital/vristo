@@ -76,7 +76,19 @@
         </div>
 
         <div class="panel p-5 mt-4">
-            <h6 class="text-lg font-bold">{{ $t('details') }}</h6>
+            <div class="flex justify-between items-center">
+                <div class="flex items-center">
+                    <img :src="`${data.company.logo}`" alt="Logo" class="h-24 w-auto">
+                </div>
+                <div class="text-right text-white-dark">
+                    <div class="text-black dark:text-white font-semibold text-xl">{{data?.company?.name}}</div>
+                    <div>{{data?.company?.address}}</div>
+                    <div>{{data?.company?.email}}</div>
+                    <div>{{data?.company?.phone}}</div>
+                </div>
+            </div>
+
+            <h6 class="text-lg font-bold my-2">{{ $t('details') }}</h6>
             <div class="flex justify-between sm:flex-row flex-col gap-6 lg:w-2/3">
                 <div class="xl:1/3 lg:w-2/5 sm:w-1/2">
                     <div class="flex-1">

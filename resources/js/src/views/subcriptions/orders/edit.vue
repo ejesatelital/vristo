@@ -23,11 +23,11 @@
             <form @submit.prevent="saveOrder" class="px-4">
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                        <label for="phone">Inicio de vigencia*</label>
+                        <label for="phone">{{ $t('issue_date') }}*</label>
                         <flat-pickr v-model="params.start_date" class="form-input" :config="basic" readonly></flat-pickr>
                     </div>
                     <div>
-                        <label for="due_date">Fecha de vencimiento</label>
+                        <label for="due_date">{{ $t('due_date') }}</label>
                         <flat-pickr v-model="params.due_date" class="form-input" :config="basic" readonly></flat-pickr>
                     </div>
                 </div>
@@ -51,7 +51,7 @@
                             <div class="my-2">
                                 <label class="flex items-center cursor-pointer">
                                     <input type="checkbox" class="form-checkbox" v-model="btnBillTo" :checked="btnBillTo" />
-                                    <span class=" text-white-dark">Facturar a</span>
+                                    <span class=" text-white-dark">{{ $t('bill_to') }}</span>
                                 </label>
                             </div>
 
@@ -86,50 +86,51 @@
 
                 <hr class="border-[#e0e6ed] dark:border-[#1b2e4b] my-6" />
 
-                <div class="flex lg:flex-row flex-col">
-                    <div class="lg:w-1/2 w-full">
-                        <div class="text-xl semibold">{{ $t('details_items') }}</div>
-                        <div class="my-2 sm:flex items-center">
-                            <label for="type_iva" class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0">Iva</label>
-                            <div class="flex-1 sm:flex-row flex-col">
-                                <div class="flex gap-4">
-                                    <div class="mb-1">
-                                        <label class="inline-flex mt-1 cursor-pointer">
-                                            <input type="radio" name="type_iva" class="form-radio" value="1" v-model="type_iva" />
-                                            <span class="text-white-dark">Porcentual</span>
-                                        </label>
-                                    </div>
-                                    <div>
-                                        <label class="inline-flex mt-1 cursor-pointer">
-                                            <input type="radio" name="type_iva" class="form-radio text-secondary" value="2" v-model="type_iva" />
-                                            <span class="text-white-dark">Valor</span>
-                                        </label>
-                                    </div>
+
+                <div class="text-xl semibold">{{ $t('details_items') }}</div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+                    <div class="my-2 sm:flex items-center">
+                        <label for="type_iva" class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0">IVA</label>
+                        <div class="flex-1 sm:flex-row flex-col">
+                            <div class="flex gap-4">
+                                <div class="mb-1">
+                                    <label class="inline-flex mt-1 cursor-pointer">
+                                        <input type="radio" name="type_iva" class="form-radio" value="1" v-model="params.type_iva" />
+                                        <span class="text-white-dark">{{ $t('percentage') }}</span>
+                                    </label>
+                                </div>
+                                <div>
+                                    <label class="inline-flex mt-1 cursor-pointer">
+                                        <input type="radio" name="type_iva" class="form-radio text-secondary" value="2" v-model="params.type_iva" />
+                                        <span class="text-white-dark">{{ $t('currency') }}</span>
+                                    </label>
                                 </div>
                             </div>
                         </div>
-
-                        <div class="my-2 sm:flex items-center">
-                            <label for="type_discount" class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0">Descuento</label>
-                            <div class="flex-1 sm:flex-row flex-col">
-                                <div class="flex gap-4">
-                                    <div class="mb-1">
-                                        <label class="inline-flex mt-1 cursor-pointer">
-                                            <input type="radio" name="type_discount" class="form-radio" value="1" v-model="type_discount" />
-                                            <span class="text-white-dark">Porcentual</span>
-                                        </label>
-                                    </div>
-                                    <div>
-                                        <label class="inline-flex mt-1 cursor-pointer">
-                                            <input type="radio" name="type_discount" class="form-radio text-secondary" value="2" v-model="type_discount" />
-                                            <span class="text-white-dark">Valor</span>
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
                     </div>
+
+                    <div class="my-2 sm:flex items-center">
+                        <label for="type_discount" class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0">{{ $t('discount') }}</label>
+                        <div class="flex-1 sm:flex-row flex-col">
+                            <div class="flex gap-4">
+                                <div class="mb-1">
+                                    <label class="inline-flex mt-1 cursor-pointer">
+                                        <input type="radio" name="type_discount" class="form-radio" value="1" v-model="params.type_discount" />
+                                        <span class="text-white-dark">{{ $t('percentage') }}</span>
+                                    </label>
+                                </div>
+                                <div>
+                                    <label class="inline-flex mt-1 cursor-pointer">
+                                        <input type="radio" name="type_discount" class="form-radio text-secondary" value="2" v-model="params.type_discount" />
+                                        <span class="text-white-dark">{{ $t('currency') }}</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
 
                 <div>
@@ -184,7 +185,7 @@
                                             <div class="flex">
                                                 <div
                                                     class="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-2 font-semibold border ltr:border-r-0 rtl:border-l-0 border-[#e0e6ed] dark:border-[#17263c] dark:bg-[#1b2e4b]">
-                                                    {{ type_iva == 1 ? '%' : '$' }}
+                                                    {{ params.type_iva == 1 ? '%' : '$' }}
                                                 </div>
                                                 <input type="number" placeholder="Iva" v-model="item.iva" min="0" class="form-input w-32 ltr:rounded-l-none rtl:rounded-r-none flex-1" />
                                             </div>
@@ -193,11 +194,11 @@
                                             <div class="flex">
                                                 <div
                                                     class="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-2 font-semibold border ltr:border-r-0 rtl:border-l-0 border-[#e0e6ed] dark:border-[#17263c] dark:bg-[#1b2e4b]">
-                                                    {{ type_discount == 1 ? '%' : '$' }}
+                                                    {{ params.type_discount == 1 ? '%' : '$' }}
                                                 </div>
                                                 <input type="number" placeholder="Descuento" v-model="item.discount" min="0"
-                                                :max="type_discount == 1 ? 100 : null"
-                                                :maxlength="type_discount == 1 ? 4 : 14"
+                                                :max="params.type_discount == 1 ? 100 : null"
+                                                :maxlength="params.type_discount == 1 ? 4 : 14"
                                                 class="form-input w-32 ltr:rounded-l-none rtl:rounded-r-none flex-1" />
                                             </div>
                                         </td>
@@ -219,11 +220,11 @@
                     </div>
                     <div class="flex justify-between sm:flex-row flex-col mt-6">
                         <div class="sm:mb-0 mb-6">
-                            <button type="button" class="btn btn-info" @click="addItem()">Add Item</button>
+                            <button type="button" class="btn btn-info" @click="addItem()">{{ $t('add_item') }}</button>
                         </div>
                         <div class="sm:w-2/5">
                             <div class="flex items-center justify-between">
-                                <div>Subtotal</div>
+                                <div>{{ $t('subtotal') }}</div>
                                 <div>${{ formatNumber(subtotal) }}</div>
                             </div>
                             <div class="flex items-center justify-between mt-4">
@@ -231,7 +232,7 @@
                                 <div>${{ formatNumber(ivaTotal) }}</div>
                             </div>
                             <div class="flex items-center justify-between mt-4">
-                                <div>Descuento</div>
+                                <div>{{ $t('discount') }}</div>
                                 <div>${{ formatNumber(discountTotal) }}</div>
                             </div>
                             <div class="flex items-center justify-between mt-4 font-semibold">
@@ -271,8 +272,6 @@
     useMeta({ title: 'Editar pedido' });
     const router = useRouter();
     const route = useRoute();
-    const type_iva = ref(1);
-    const type_discount = ref(2);
     const companyStore = useCompanyStore();
     const userStore = useUserStore();
     const api = new API();
@@ -299,7 +298,9 @@
         items:[],
         description: '',
         company_id: companyStore.id,
-        user_id: userStore.id
+        user_id: userStore.id,
+        type_iva: 1,
+        type_discount: 2
     });
     const loading = ref(false);
 
@@ -316,7 +317,7 @@
             const unitValue = parseFloat(item.unit_value) || 0; // Aseguramos que el valor unitario sea numérico
             const quantity = parseInt(item.quantity, 10) || 0;  // Convertimos cantidad a entero
             const iva = parseFloat(item.iva) || 0; // Aseguramos que el IVA sea numérico
-            if (type_iva.value == 1) {
+            if (params.value.type_iva == 1) {
                 const ivaRate = iva / 100; // Convert IVA to decimal if percentage
                 return sum + (unitValue * quantity * ivaRate);
             } else {
@@ -331,13 +332,10 @@
             const discount = parseFloat(item.discount) || 0; // Aseguramos que sea un número válido
             const unitValue = parseFloat(item.unit_value) || 0;
             const quantity = parseInt(item.quantity, 10) || 0;
-
-            if (type_discount.value === 1) {
-                // Descuento como porcentaje (asegúrate de que el valor sea entre 0 y 100)
+            if (params.value.type_discount === 1) {
                 const discountRate = discount / 100;
                 return sum + (unitValue * quantity * discountRate);
             } else {
-                // Descuento como valor fijo
                 return sum + discount;
             }
         }, 0);
@@ -355,15 +353,15 @@
 
     const calculateItemTotal = (item) => {
         let baseAmount = item.unit_value * item.quantity;
-        if (type_iva.value == 1) {
-            baseAmount += baseAmount * (item.iva / 100);
-        } else {
-            baseAmount += item.iva; // VAT as a fixed amount
-        }
-        if (type_discount.value == 1) {
+        if (params.value.type_discount == 1) {
             baseAmount -= baseAmount * (item.discount / 100);
         } else {
             baseAmount -= item.discount; // Discount as a fixed amount
+        }
+        if (params.value.type_iva == 1) {
+            baseAmount += baseAmount * (item.iva / 100);
+        } else {
+            baseAmount += item.iva; // VAT as a fixed amount
         }
         return baseAmount.toFixed(2);
     };
@@ -460,8 +458,6 @@
             const response = await api.get(`subscriptions/v1/orders/${route.params.id}`);
             params.value = response.data;
             companySelected.value = { label: params?.value?.company?.name, value: params?.value?.company?.id } ?? null;
-            type_iva.value = response?.data?.type_iva;
-            type_discount.value = response?.data?.type_discount;
             items.value = params.value.items;
         } catch (error) {
             loading.value = true;
