@@ -30,12 +30,12 @@
                 </template>
                 <template #start_date="data">
                     <div>
-                        {{ moment(data.value.start_date).format('MMM DD HH:mm a') }}
+                        {{ moment(data.value.start_date).format('YYYY-MM-DD hh:mm a') }}
                     </div>
                 </template>
                 <template #end_date="data">
                     <div>
-                        {{ moment(data.value.end_date).format('MMM DD HH:mm a') }}
+                        {{ moment(data.value.end_date).format('YYYY-MM-DD hh:mm a') }}
                     </div>
                 </template>
                 <template #total_time="data">

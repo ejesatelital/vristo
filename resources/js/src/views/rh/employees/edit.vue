@@ -67,11 +67,15 @@
                         <a href="javascript:;"
                            class="flex gap-2 p-4 border-b border-transparent hover:border-primary hover:text-primary !outline-none"
                            :class="{ '!border-primary text-primary': selected }">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                 xmlns="http://www.w3.org/2000/svg" class="w-5 h-5">
-                                <circle cx="12" cy="6" r="4" stroke="currentColor" stroke-width="1.5"/>
-                                <ellipse opacity="0.5" cx="12" cy="17" rx="7" ry="4" stroke="currentColor"
-                                         stroke-width="1.5"/>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M14.5 19.9815C16.0728 19.9415 17.1771 19.815 18 19.4151V20.9999C18 21.5522 17.5523 21.9999 17 21.9999H15.5C14.9477 21.9999 14.5 21.5522 14.5 20.9999V19.9815Z" stroke="currentColor"/>
+                                <path d="M6 19.415C6.82289 19.815 7.9272 19.9415 9.5 19.9815V20.9999C9.5 21.5522 9.05228 21.9999 8.5 21.9999H7C6.44772 21.9999 6 21.5522 6 20.9999V19.415Z" stroke="currentColor"/>
+                                <path opacity="0.5" fill-rule="evenodd" clip-rule="evenodd" d="M5.17157 3.17157C6.34315 2 8.22876 2 12 2C15.7712 2 17.6569 2 18.8284 3.17157C19.8915 4.23467 19.99 5.8857 19.9991 9L20 13C19.9909 16.1143 19.8915 17.7653 18.8284 18.8284C18.5862 19.0706 18.3136 19.2627 18 19.4151C17.1771 19.8151 16.0728 19.9415 14.5 19.9815C13.7729 19.9999 12.9458 20 12 20C11.0542 20 10.2271 20 9.5 19.9815C7.9272 19.9415 6.82289 19.815 6 19.415C5.68645 19.2626 5.41375 19.0706 5.17157 18.8284C4.10848 17.7653 4.00911 16.1143 4 13L4.00093 9C4.01004 5.8857 4.10848 4.23467 5.17157 3.17157Z" stroke="currentColor"/>
+                                <path d="M17.75 16C17.75 15.5858 17.4142 15.25 17 15.25H15.5C15.0858 15.25 14.75 15.5858 14.75 16C14.75 16.4142 15.0858 16.75 15.5 16.75H17C17.4142 16.75 17.75 16.4142 17.75 16Z" stroke="currentColor"/>
+                                <path d="M6.25 16C6.25 15.5858 6.58579 15.25 7 15.25H8.5C8.91421 15.25 9.25 15.5858 9.25 16C9.25 16.4142 8.91421 16.75 8.5 16.75H7C6.58579 16.75 6.25 16.4142 6.25 16Z" stroke="currentColor"/>
+                                <path d="M5.5 9.5C5.5 10.9142 5.5 11.6213 5.93934 12.0607C6.37868 12.5 7.08579 12.5 8.5 12.5H15.5C16.9142 12.5 17.6213 12.5 18.0607 12.0607C18.5 11.6213 18.5 10.9142 18.5 9.5V6.99998C18.5 5.58578 18.5 4.87868 18.0607 4.43934C17.6213 4 16.9142 4 15.5 4H8.5C7.08579 4 6.37868 4 5.93934 4.43934C5.5 4.87868 5.5 5.58579 5.5 7V9.5Z" stroke="currentColor"/>
+                                <path d="M2.4 11.8L4 13L4.00093 9H3C2.44772 9 2 9.44772 2 10V11C2 11.3148 2.14819 11.6111 2.4 11.8Z" fill="#1C274C"/>
+                                <path d="M21 9H19.999L20 13L21.6 11.8C21.8518 11.6111 22 11.3148 22 11V10C22 9.44772 21.5522 9 21 9Z" fill="#1C274C"/>
                             </svg>
                             Informe de Conducción
                         </a>
@@ -103,8 +107,9 @@
                                         <div class="ltr:sm:mr-4 rtl:sm:ml-4 w-full sm:w-2/12 mb-5">
                                             <div class="custom-file-container">
                                                 <div class="mb-5">
-                                                    <label for="file">Imagen</label>
+                                                    <label for="file">Avatar</label>
                                                     <div>
+                                                        <pre>{{employee.avatar}}</pre>
                                                         <file-uploader
                                                             v-model="employee.avatar"
                                                             :accept="['image/*']"
@@ -191,11 +196,12 @@
                                                     <Select
                                                         :options="companiesOptions"
                                                         v-model="companiesSelected"
-                                                        :multiple="true"
+                                                        :multiple="false"
                                                         required
                                                         :closeOnSelect="false"
                                                         titleSelect="Compañias"
                                                         name="companies"
+                                                        @update:modelValue="handleCompanySelect"
                                                     />
                                                 </div>
                                             </div>
@@ -221,11 +227,11 @@
                                                     name="department"
                                                 />
                                             </div>
-                                            <div>
-                                                <label for="contract">Contrato</label>
-                                                <input id="contract" type="text" placeholder="Contrato"
-                                                       class="form-input" v-model="employee.contract" required/>
-                                            </div>
+                                            <!--                                            <div>
+                                                                                            <label for="contract">Contrato</label>
+                                                                                            <input id="contract" type="text" placeholder="Contrato"
+                                                                                                   class="form-input" v-model="employee.contract" required/>
+                                                                                        </div>-->
                                             <div>
                                                 <label for="hire_date">Fecha de Contratación</label>
                                                 <flat-pickr v-model="employee.hire_date" class="form-input"
@@ -269,9 +275,11 @@
                                                     <input id="password" type="password" placeholder="Nueva Contraseña"
                                                            class="form-input" v-model="newPassword"
                                                            @input="validatePassword" required/>
-                                                    <span v-if="passwordError.length" class="text-red-500">{{
-                                                            passwordError
-                                                        }}</span>
+                                                    <ul v-if="passwordError.length" class="text-red-500">
+                                                        <li v-for="(item,i) in passwordError" :key="i">
+                                                            {{ item }}
+                                                        </li>
+                                                    </ul>
                                                 </div>
                                                 <div>
                                                     <label for="cpassword">Confirmar Contraseña *</label>
@@ -305,9 +313,9 @@
                                     </div>
                                 </form>
                             </div>
-                            <div class="panel pb-1.5 mt-6" v-if="tokenData-length">
-                                <label for="user_api_hash">User API Hash</label>
-<pre>{{tokenData}}</pre>
+                            <div class="panel pb-1.5 mt-6" v-if="tokenData.length">
+                                <h6 class="text-lg font-bold mb-5">User API Hash</h6>
+
                                 <div class="flex mt-3" v-for="token in tokenData" :key="token.id">
                                     <input :id="`user_api_hash_${token.id}`"
                                            :type="showPasswords[token.id] ? 'text' : 'password'"
@@ -746,7 +754,7 @@ const image = ref();
 const store = useAppStore();
 const userStore = useUserStore()
 const accordians: any = ref()
-useMeta({title: 'Crear Colaborador'});
+useMeta({title: 'Editar Colaborador'});
 const rangeCalendar: any = ref({
     locale: Spanish,
     dateFormat: 'Y-m-d',
@@ -754,7 +762,7 @@ const rangeCalendar: any = ref({
     position: store.rtlClass === 'rtl' ? 'auto right' : 'auto left',
 });
 const companyStore = useCompanyStore();
-const loading = ref(true);
+const loading = ref(false);
 const companiesSelected = ref({label: companyStore.name ?? '', value: companyStore.id ?? null});
 const companiesOptions = ref(companyStore.companyOptions);
 const positionSelected = ref({label: '', value: null});
@@ -766,7 +774,7 @@ const showPasswords = ref({});
 const newPassword = ref('');
 const confirmPassword = ref('');
 const passwordError = ref([]);
-const confirmPasswordError = ref([]);
+const confirmPasswordError = ref(null);
 const tokenData = ref([]);
 const error = ref(true)
 const employee = ref(
@@ -776,8 +784,6 @@ const employee = ref(
         last_name: null,
         email: null,
         is_activated: true,
-        password: null,
-        password_confirmation: null,
         identification: null,
         phone: null,
         address: null,
@@ -787,9 +793,8 @@ const employee = ref(
         status: null,
         key: null,
         company_id: null,
-        position: null,
-        department: null,
-        contract: null,
+        position_id: null,
+        department_id: null,
         roles: [],
         avatar: null,
     }
@@ -811,19 +816,25 @@ const getEmployee = async () => {
             employee.value.status = response.data.status ?? null;
             employee.value.key = response.data.key ?? null;
             employee.value.company_id = response.data.company_id ?? null;
-            employee.value.position = response.data.position ?? null;
-            employee.value.department = response.data.department ?? null;
-            employee.value.contract = response.data.contract ?? null;
+            employee.value.position_id = response.data.position_id ?? null;
+            employee.value.department_id = response.data.department_id ?? null;
             employee.value.roles = response.data.user?.roles ?? [3];
             employee.value.avatar = {
                 name: 'avatar',
                 type: 'image',
                 url: response.data.user?.avatar ?? '/assets/images/file-preview.svg',
             };
-            companiesSelected.value = {label: response.data.company?.name, value: response.data.company?.id};
-            positionSelected.value = {label: response.data.position.name, value: response.data.position.id};
-            departmentSelected.value = {label: response.data.department.name, value: response.data.department.id};
             tokenData.value = response.data.user?.api_token ?? [];
+            if (response.data.company_id !== undefined) {
+                companiesSelected.value = {label: response.data.company?.name, value: response.data.company?.id};
+            }
+            if (response.data.position_id !== undefined) {
+                positionSelected.value = {label: response.data.position.name, value: response.data.position.id};
+            }
+            if (response.data.department_id !== undefined) {
+                departmentSelected.value = {label: response.data.department.name, value: response.data.department.id};
+            }
+
             loading.value = false
         });
 
@@ -848,6 +859,7 @@ const getEmployee = async () => {
 
 const validatePassword = () => {
     error.value = true
+    passwordError.value = [];
     const hasMinimumLength = newPassword.value.length >= 8;
     const hasUppercase = /[A-Z]/.test(newPassword.value);
     const hasNumber = /\d/.test(newPassword.value);
@@ -865,7 +877,7 @@ const validatePassword = () => {
 const validateConfirmPassword = () => {
     error.value = true
     if (confirmPassword.value !== newPassword.value) {
-        confirmPasswordError.value = 'Passwords do not match.';
+        confirmPasswordError.value = 'Las contraseñas no coinciden.';
     } else {
         confirmPasswordError.value = '';
         error.value = false
@@ -876,34 +888,30 @@ const validate = () => {
     validateConfirmPassword()
 }
 const editEmployee = async () => {
-    loading.value = true;
-    validate();
-    // $v.value.employee.$touch();
-    if (!error) {
-        try {
-            const response = await api.put(`rh/v1/employees${route.params.id}`, employee.value);
-            loading.value = false;
-            Swal.fire({
-                icon: 'success',
-                title: 'Edicion Exitosa',
-                padding: '2em',
-                customClass: 'sweet-alerts',
-            }).then(() => {
-                router.push({name: 'employees'});
-            });
-        } catch (error) {
-            console.error(error.response)
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Error updating: ' + error.response,
-                padding: '2em',
-                customClass: 'sweet-alerts',
-            });
-            loading.value = false;
-        }
+    try {
+        loading.value = true;
+        console.log(employee.value)
+        const response = await api.putForm(`rh/v1/employees/${route.params.id}`, employee.value);
+        loading.value = false;
+        Swal.fire({
+            icon: 'success',
+            title: 'Edicion Exitosa',
+            padding: '2em',
+            customClass: 'sweet-alerts',
+        }).then(() => {
+            router.push({name: 'employees'});
+        });
+    } catch (error) {
+        console.error(error.response)
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Error updating: ' + error.response,
+            padding: '2em',
+            customClass: 'sweet-alerts',
+        });
+        loading.value = false;
     }
-    loading.value = false;
 };
 const userData = ref(
     {
@@ -978,6 +986,16 @@ const showMessage = (msg = '', type = 'success') => {
         padding: '10px 20px',
     });
 };
+watch(() => companyStore.companiesSelect, async (value) => {
+    if (companyStore.id !== undefined) {
+        companiesSelected.value = {label: companyStore.name, value: companyStore.id}
+    }
+    employee.value.company_id = companyStore.id
+});
+function handleCompanySelect() {
+    employee.value.company_id = companiesSelected.value.value;
+}
+
 onMounted(async () => {
     getEmployee();
     // getCompanies();

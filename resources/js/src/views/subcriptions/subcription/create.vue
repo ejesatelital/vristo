@@ -158,7 +158,7 @@
     import { ref, reactive, watch, onMounted } from 'vue';
     import { useI18n } from 'vue-i18n';
     import { useMeta } from '@/composables/use-meta';
-    import { API } from '@/services/local';
+    import { API } from '@/services/api';
     import {useCompanyStore} from "@/stores/company-store";
     import Select from '@/components/partials/Select.vue';
     import { NOTIFY } from '@/services/notify';

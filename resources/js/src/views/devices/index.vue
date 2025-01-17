@@ -125,12 +125,7 @@
                     </div>
                 </template>
                 <template #time="data">
-                    <div v-if="moment().diff(moment(data.value.device_data.time, 'DD-MM-YYYY hh:mm:ss A'),'hours')<=23">
-                        {{ moment(data.value.device_data.time, 'DD-MM-YYYY hh:mm:ss A').format('h:mm a') }}
-                    </div>
-                    <div v-else>
-                        {{ moment(data.value.device_data.time, 'DD-MM-YYYY hh:mm:ss A').format('MMM DD') }}
-                    </div>
+                        {{ moment(data.value.device_data.time, 'DD-MM-YYYY hh:mm:ss A').format('DD-MM-YYYY h:mm a') }}
                 </template>
                 <template #actions="data" v-if="companyStore.settings?.sync_driver">
                     <div class="flex justify-center gap-3">
@@ -188,11 +183,12 @@ watch(() => companyStore.companiesSelect, () => {
 const cols = ref([
     {field: 'name', title: 'Placa', hide: false},
     {field: 'odometer', title: 'Kilometraje', hide: false},
-    {field: 'last_driver', title: 'Ultímo conductor', hide: true},
+    {field: 'last_driver', title: 'Conductor anterior', hide: true},
     {field: 'driver_current', title: 'Conductor actual', hide: true},
     {field: 'engine_status', title: 'Estado del vehículo', hide: false},
     {field: 'time', title: 'Última actualización', type: 'date', hide: false},
-    {field: 'actions', title: 'Actions', sort: false, headerClass: 'justify-center'},
+    {field: 'device_id', title: 'Id Rastreo', hide: true},
+    {field: 'actions', title: 'Acciones', sort: false, headerClass: 'justify-center'},
 ]);
 const rows: any = ref(null);
 const total_rows = ref(0);
@@ -265,10 +261,14 @@ const syncData = async () => {
 Pusher.logToConsole = true;
 
 var pusher = new Pusher('1a3ed9fce586aff12654', {
+    channelAuthorization: {
+        endpoint: "/broadcasting/auth",
+        headers: { "authorization": userStore.api_token },
+    },
     cluster: 'us2'
 });
 
-var channel = pusher.subscribe('device-company-' + companyStore.id);
+var channel = pusher.subscribe('private-company-' + companyStore.id);
 channel.bind('update-devices', function (data) {
     getDevicesData()
 });
@@ -283,11 +283,11 @@ const colsHide = () => {
     if (companyStore.settings?.sync_driver) {
         cols.value[2].hide = false;
         cols.value[3].hide = false;
-        cols.value[6].hide = false;
+        cols.value[5].hide = false;
     } else {
         cols.value[2].hide = true;
         cols.value[3].hide = true;
-        cols.value[6].hide = true;
+        cols.value[5].hide = true;
     }
     console.log(cols.value);
 }

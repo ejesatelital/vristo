@@ -35,7 +35,6 @@
                             Información General
                         </a>
                     </Tab>
-
                     <Tab as="template" v-slot="{ selected }">
                         <a href="javascript:;"
                            class="flex gap-2 p-4 border-b border-transparent hover:border-primary hover:text-primary !outline-none"
@@ -156,7 +155,7 @@
                                                                                                             -->
                                                 </div>
                                                 <div
-                                                    :class="{ 'has-error': passwordError.length, 'has-success': !passwordError.length }">
+                                                    :class="{ 'has-error': passwordError.length}">
                                                     <label for="password">Contraseña *</label>
                                                     <input id="password" type="password" placeholder="New Password"
                                                            class="form-input" v-model="employee.password"
@@ -168,7 +167,7 @@
                                                     </ul>
                                                 </div>
                                                 <div
-                                                    :class="{ 'has-error': !confirmPasswordError, 'has-success': confirmPasswordError }">
+                                                    :class="{ 'has-error': confirmPasswordError}">
                                                     <label for="cpassword">Confirmar Contraseña *</label>
                                                     <input id="cpassword" type="password"
                                                            placeholder="Confirmar Contraseña"
@@ -183,11 +182,12 @@
                                                         <Select
                                                             :options="companiesOptions"
                                                             v-model="companiesSelected"
-                                                            :multiple="true"
+                                                            :multiple="false"
                                                             required
                                                             :closeOnSelect="false"
                                                             titleSelect="Compañias"
                                                             name="companies"
+                                                            @update:modelValue="handleCompanySelect"
                                                         />
                                                     </div>
                                                 </div>
@@ -207,6 +207,18 @@
                                         <h6 class="text-lg font-bold mb-5">Información Empresarial</h6>
                                         <div class="flex flex-col sm:flex-row">
                                             <div class="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-5">
+                                                <div v-if="companiesOptions.length>1">
+                                                    <Select
+                                                        :options="companiesOptions"
+                                                        v-model="companiesSelected"
+                                                        :multiple="false"
+                                                        required
+                                                        :closeOnSelect="false"
+                                                        titleSelect="Empresa"
+                                                        name="empresa"
+                                                        @update:modelValue="handleCompanySelect"
+                                                    />
+                                                </div>
                                                 <div v-if="positionOptions.length>1">
                                                     <Select
                                                         :options="positionOptions"
@@ -232,7 +244,7 @@
                                                 <div>
                                                     <label for="contract">Contrato</label>
                                                     <input id="contract" type="text" placeholder="Contrato"
-                                                           class="form-input" v-model="employee.contract" required/>
+                                                           class="form-input" v-model="employee.contract"/>
                                                 </div>
                                                 <div>
                                                     <label for="hire_date">Fecha de Contratación</label>
@@ -690,10 +702,9 @@ const employee = ref(
         emergency_contact: null,
         status: null,
         key: null,
-        company_id: null,
-        position: null,
-        department: null,
-        contract: null,
+        company_id: companyStore.id??null,
+        position_id: null,
+        department_id: 1,
         roles: [],
         avatar: {
             name: 'avatar',
@@ -717,6 +728,7 @@ const employee = ref(
 };*/
 
 const validatePassword = () => {
+    passwordError.value = [];
     error.value = true
     const hasMinimumLength = employee.value.password.length >= 8;
     const hasUppercase = /[A-Z]/.test(employee.value.password);
@@ -734,10 +746,11 @@ const validatePassword = () => {
 };
 const validateConfirmPassword = () => {
     error.value = true
+    confirmPasswordError.value = null;
     if (employee.value.password_confirmation !== employee.value.password) {
-        confirmPasswordError.value = 'Passwords do not match.';
+        confirmPasswordError.value = 'Las contraseñas no coinciden.';
     } else {
-        confirmPasswordError.value = '';
+        confirmPasswordError.value = null;
         error.value = false
     }
 };
@@ -745,35 +758,43 @@ const validate = () => {
     validatePassword()
     validateConfirmPassword()
 }
+watch(() => companyStore.companiesSelect, async (value) => {
+    if (companyStore.id !== undefined) {
+        companiesSelected.value = {label: companyStore.name, value: companyStore.id}
+    }
+    employee.value.company_id = companyStore.id
+});
 const createEmployee = async () => {
     loading.value = true;
-    validate();
     // $v.value.employee.$touch();
-    if (!error) {
+
         try {
-            const response = await api.postForm(`rh/v1/employees`, employee.value);
-            loading.value = false;
-            Swal.fire({
-                icon: 'success',
-                title: 'Creación Exitosa',
-                padding: '2em',
-                customClass: 'sweet-alerts',
-            }).then(() => {
-                router.push({name: 'employees'});
-            });
-        } catch (error) {
-            console.error(error.response)
+            console.log(error.value)
+            if (!error.value) {
+                const response = await api.postForm(`rh/v1/employees`, employee.value);
+                loading.value = false;
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Creación Exitosa',
+                    padding: '2em',
+                    customClass: 'sweet-alerts',
+                }).then(() => {
+                    router.push({name: 'employees'});
+                });
+            }else {
+                throw new Error('La contraseña es obligatoria');
+            }
+        } catch (e) {
+            console.error(e)
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
-                text: 'Error updating: ' + error.response,
+                text: 'Error en la creación: ' + e.message,
                 padding: '2em',
                 customClass: 'sweet-alerts',
             });
             loading.value = false;
         }
-    }
-    loading.value = false;
 };
 
 const uploadedFile = ref({
@@ -782,22 +803,9 @@ const uploadedFile = ref({
     pathOld: employee.value.avatar
 });
 
-const handleFileUpload = async (event) => {
-    try {
-        loading.value = true
-        uploadedFile.value.file = event.target.files[0];
-        let formData = new FormData();
-        formData.append('file', uploadedFile.value.file);
-        formData.append('employee_id', uploadedFile.value.employee_id);
-        formData.append('pathOld', uploadedFile.value.pathOld);
-        const response = await api.post(`rh/v1/employees/images`, formData);
-        employee.value.avatar = response.data.data.link;
-        image.value = response.data.data.url;
-        loading.value = false
-    } catch (e) {
-        console.log(e)
-        loading.value = false
-    }
-};
+function handleCompanySelect() {
+    employee.value.company_id = companiesSelected.value.value;
+}
+
 
 </script>
