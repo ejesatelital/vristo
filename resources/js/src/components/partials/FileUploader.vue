@@ -135,6 +135,8 @@
 
 <script lang="ts" setup>
 import {defineEmits, defineProps, ref} from "vue";
+import { NOTIFY } from '@/services/notify';
+const notify = new NOTIFY();
 
 const props = defineProps({
     id: {
@@ -163,8 +165,13 @@ const fileUploaderRef = ref(null);
 const attachments = ref(Array.isArray(props.modelValue) ? props.modelValue : [props.modelValue]);
 const filesSelect = ref([]);
 const handleFileChange = (event) => {
+    const maxFileSize = 2 * 1024 * 1024; // 2 MB en bytes
     const files = Array.from(event.target.files);
     files.map((file) => {
+        if (file.type.includes("image") && file.size > maxFileSize) {
+            notify.showToast(`El archivo "${file.name}" excede el tamaño máximo de 2 MB.`, 'error');
+            return null; // Retorna null si el archivo no es válido
+        }
         const fileOld = attachments.value.find((attachment) => attachment.name === file.name);
         if (!fileOld) {
             const isImage = file.type.includes("image");
