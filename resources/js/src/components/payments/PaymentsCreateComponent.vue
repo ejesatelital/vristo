@@ -99,10 +99,15 @@
             required: false,
             default: null
         },
+        total: {
+            type: Number,
+            required: false,
+            default: null
+        },
     })
     const params = ref({
         id: null,
-        amount_paid:null,
+        amount_paid:props.total,
         status:null,
         payment_date:moment().format('YYYY-MM-DD'),
         currency:'COP',

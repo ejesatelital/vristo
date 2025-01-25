@@ -78,11 +78,11 @@
         <div class="panel p-5 mt-4">
             <div class="flex justify-between items-center">
                 <div class="flex items-center">
-                    <img :src="`${data.company.logo}`" alt="Logo" class="h-24 w-auto">
+                    <img :src="`${data?.company?.logo}`" alt="Logo" class="h-24 w-auto">
                 </div>
                 <div class="text-right text-white-dark">
                     <div class="text-black dark:text-white font-semibold text-xl">{{data?.company?.name}}</div>
-                    <div>{{data?.company?.address}}</div>
+                    <div>{{data?.company?.address?.address}}</div>
                     <div>{{data?.company?.email}}</div>
                     <div>{{data?.company?.phone}}</div>
                 </div>
@@ -95,7 +95,7 @@
                         <div class="space-y-1 text-white-dark">
                             <div>{{ $t('billed_to') }}:</div>
                             <div class="text-black dark:text-white font-semibold">{{data?.payment_data?.name}}</div>
-                            <div>{{data?.payment_data?.address}}</div>
+                            <div>{{data?.payment_data?.address?.address}}</div>
                             <div>{{data?.payment_data?.email}}</div>
                             <div>{{data?.payment_data?.phone}}</div>
                         </div>
@@ -183,7 +183,7 @@
                     {{ $t('payments') }}
                 </h5>
                 <div>
-                    <template v-if="userStore.hasAccess('subscriptions.payments.create')">
+                    <template v-if="userStore.hasAccess('subscriptions.payments.create') && data?.total_debt!==0">
                         <button type="button" class="btn btn-info w-full gap-2"  @click="modalAddPayment = true" v-if="data?.status===1">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" fill="none"
                                 stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
@@ -212,7 +212,7 @@
                         <!-- Recorremos data.payments -->
                         <tr v-for="(payment, i) in data?.payments" :key="i">
                             <td class="font-semibold">{{ payment.id }}</td>
-                            <td class="whitespace-nowrap">{{ payment.unique_reference }}</td>
+                            <td class="whitespace-nowrap">{{ payment.transaction_id }}</td>
                             <td class="whitespace-nowrap">{{ new Date(payment.payment_date).toLocaleDateString() }}</td>
                             <td>${{ payment.amount_paid }}</td>
                             <td class="whitespace-nowrap">{{ payment.gangway }}</td>
@@ -277,7 +277,7 @@
                                     <h6 class="text-2xl font-bold">{{ $t('new_payment') }}</h6>
                                 </div>
                                 <div>
-                                    <payments-create-component :order-id="route.params.id" @close-modal="closeModal()"></payments-create-component>
+                                    <payments-create-component :order-id="route.params.id" :total="data?.total_debt" @close-modal="closeModal()"></payments-create-component>
                                 </div>
                             </DialogPanel>
                         </TransitionChild>
@@ -291,7 +291,7 @@
 <script lang="ts" setup>
     import { ref, onMounted } from 'vue';
     import { useMeta } from '@/composables/use-meta';
-    import { API } from '@/services/local';
+    import { API } from '@/services/api';
     import {  useRoute } from 'vue-router';
     import PaymentsCreateComponent from '@/components/payments/PaymentsCreateComponent.vue';
     import { TransitionRoot, TransitionChild, Dialog, DialogPanel, DialogOverlay } from '@headlessui/vue';

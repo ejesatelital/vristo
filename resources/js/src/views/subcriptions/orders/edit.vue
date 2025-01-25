@@ -21,23 +21,25 @@
             <h6 class="text-2xl font-bold mb-5">{{ $t('new_orders') }}</h6>
 
             <form @submit.prevent="saveOrder" class="px-4">
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                        <label for="phone">{{ $t('issue_date') }}*</label>
-                        <flat-pickr v-model="params.start_date" class="form-input" :config="basic" readonly></flat-pickr>
-                    </div>
-                    <div>
-                        <label for="due_date">{{ $t('due_date') }}</label>
-                        <flat-pickr v-model="params.due_date" class="form-input" :config="basic" readonly></flat-pickr>
-                    </div>
-                </div>
+
                 <hr class="border-[#e0e6ed] dark:border-[#1b2e4b] my-6" />
                 <div>
                     <div class="flex lg:flex-row flex-col">
-                        <div class="lg:w-2/3 w-full ltr:lg:mr-6 rtl:lg:ml-6">
-                            <div class="text-xl semibold">{{ $t('bill_to') }}</div>
+                        <div class="w-full ltr:lg:mr-6 rtl:lg:ml-6">
+                            <div class="text-xl semibold mb-2">{{ $t('bill_to') }}</div>
 
-                            <div class="mb-4" v-if="!companyStore.id">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 my-2">
+                                <div>
+                                    <label for="phone">{{ $t('issue_date') }}*</label>
+                                    <flat-pickr v-model="params.start_date" class="form-input" :config="basic" readonly></flat-pickr>
+                                </div>
+                                <div>
+                                    <label for="due_date">{{ $t('due_date') }}</label>
+                                    <flat-pickr v-model="params.due_date" class="form-input" :config="basic" readonly></flat-pickr>
+                                </div>
+                            </div>
+
+                            <div class="mb-2" v-if="!companyStore.id">
                                 <Select
                                 :options="companies"
                                 v-model="companySelected"
@@ -47,42 +49,104 @@
                                 :allow-empty="false"
                                 @update:modelValue="handleCompanySelect" />
                             </div>
-
-                            <div class="my-2">
+                            <div class="mb-4">
                                 <label class="flex items-center cursor-pointer">
-                                    <input type="checkbox" class="form-checkbox" v-model="btnBillTo" :checked="btnBillTo" />
+                                    <input type="checkbox" class="form-checkbox" v-model="btnBillTo"/>
                                     <span class=" text-white-dark">{{ $t('bill_to') }}</span>
                                 </label>
                             </div>
 
-                            <div class="my-2 sm:flex items-center">
-                                <label for="reciever-identification" class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0">{{ $t('identification') }} *</label>
-                                <input  id="reciever-identification" class="form-input flex-1" type="text" name="reciever-identification" v-model="params.payment_data.identification" placeholder="Enter Identification" :readonly="!btnBillTo" required />
+                            <div class="mb-2">
+                                <div class="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5">
+                                    <div>
+                                        <label for="name">Nombre *</label>
+                                        <input id="name" type="text" placeholder="Nombre" :disabled="!btnBillTo"
+                                            class="form-input" v-model="params.payment_data.name" required/>
+                                    </div>
+                                    <div>
+                                        <Select
+                                            :options="personTypes"
+                                            v-model="personTypeSelected"
+                                            required
+                                            titleSelect="Tipo de Empresa"
+                                            name="personType"
+                                            :disabled="!btnBillTo"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="flex-1 grid grid-cols-1 sm:grid-cols-3 gap-5 mb-5">
+                                    <div>
+                                        <Select
+                                            :options="documentTypes"
+                                            v-model="documentTypeSelected"
+                                            required
+                                            titleSelect="Tipo de Documento"
+                                            name="documentType"
+                                            :disabled="!btnBillTo"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label for="identification">{{ $t('identification') }} *</label>
+                                        <input id="identification" type="text" :disabled="!btnBillTo"
+                                            placeholder="Identificación"
+                                            class="form-input"
+                                            v-model="params.payment_data.identification.identification"
+                                            required/>
+                                    </div>
+                                    <div>
+                                        <label for="DV">DV</label>
+                                        <input id="dv" type="number" placeholder="dv" :disabled="!btnBillTo"
+                                            class="form-input"
+                                            v-model="params.payment_data.identification.check_digit"
+                                            required/>
+                                    </div>
+                                </div>
+                                <div class="mb-5">
+                                    <label for="address">Dirección *</label>
+                                    <input id="address" type="text" placeholder="Direccíón" :disabled="!btnBillTo"
+                                        class="form-input" v-model="params.payment_data.address.address"
+                                        required/>
+                                </div>
+                                <div class="flex-1 grid grid-cols-1 sm:grid-cols-3 gap-5 mb-5">
+                                    <div>
+                                        <label for="address">Ciudad *</label>
+                                        <input id="address" type="text" placeholder="Ciudad" :disabled="!btnBillTo"
+                                            class="form-input" v-model="params.payment_data.address.city"
+                                            required/>
+                                    </div>
+                                    <div>
+                                        <label for="address">Estado *</label>
+                                        <input id="address" type="text" placeholder="Estado" :disabled="!btnBillTo"
+                                            class="form-input" v-model="params.payment_data.address.state"
+                                            required/>
+                                    </div>
+                                    <div>
+                                        <label for="address">País *</label>
+                                        <input id="address" type="text" placeholder="País" :disabled="!btnBillTo"
+                                            class="form-input" v-model="params.payment_data.address.country"
+                                            required/>
+                                    </div>
+                                </div>
+                                <div class="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-5">
+                                    <div>
+                                        <label for="phone">Teléfono *</label>
+                                        <input id="phone" type="text" placeholder="+57 300 912-2995" :disabled="!btnBillTo"
+                                            class="form-input" v-model="params.payment_data.phone" required/>
+                                    </div>
+                                    <div>
+                                        <label for="email">Email *</label>
+                                        <input id="email" type="email" :disabled="!btnBillTo"
+                                            placeholder="info@ejesatelital.com"
+                                            class="form-input" v-model="params.payment_data.email" required/>
+                                    </div>
+                                </div>
                             </div>
 
-                            <div class="my-2 sm:flex items-center">
-                                <label for="reciever-name" class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0">{{ $t('name') }} *</label>
-                                <input  id="reciever-name" type="text" name="reciever-name" class="form-input flex-1" v-model="params.payment_data.name" placeholder="Enter Name" :readonly="!btnBillTo" required />
-                            </div>
-
-                            <div class="my-2 sm:flex items-center">
-                                <label for="reciever-email" class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0">{{ $t('email') }} *</label>
-                                <input  id="reciever-email" type="email" name="reciever-email" class="form-input flex-1" v-model="params.payment_data.email" placeholder="Enter Email" :readonly="!btnBillTo" required />
-                            </div>
-
-                            <div class="my-2 sm:flex items-center">
-                                <label for="reciever-address" class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0">{{ $t('address') }} *</label>
-                                <input  id="reciever-address" type="text" name="reciever-address" class="form-input flex-1" v-model="params.payment_data.address" placeholder="Enter Address" :readonly="!btnBillTo" required />
-                            </div>
-
-                            <div class="my-2 sm:flex items-center">
-                                <label for="reciever-number" class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0">{{ $t('phone_number') }} *</label>
-                                <input  id="reciever-number" type="text" name="reciever-number" class="form-input flex-1" v-model="params.payment_data.phone" placeholder="Enter Phone number" :disabled="!btnBillTo" v-maska="'##########'" required />
-                            </div>
-                        </div>
+                       </div>
 
                     </div>
                 </div>
+
 
                 <hr class="border-[#e0e6ed] dark:border-[#1b2e4b] my-6" />
 
@@ -244,13 +308,13 @@
                 </div>
 
                 <div class="mt-8">
-                    <label for="description">Notes</label>
+                    <label for="description">{{ $t('notes') }}</label>
                     <textarea id="description" name="description" class="form-textarea min-h-[130px]" placeholder="Notes...." v-model="params.description"></textarea>
                 </div>
 
                 <div class="flex justify-end items-center mt-4">
                     <!-- <button type="button" class="btn btn-outline-danger">Cancelar</button> -->
-                    <button type="submit" class="btn btn-primary ltr:ml-4 rtl:mr-4">Guardar</button>
+                    <button type="submit" class="btn btn-primary ltr:ml-4 rtl:mr-4">{{ $t('save') }}</button>
                 </div>
             </form>
 
@@ -262,7 +326,7 @@
     import { useMeta } from '@/composables/use-meta';
     import { useCompanyStore } from '@/stores/company-store';
     import { useUserStore } from '@/stores/user-store';
-    import { API } from '@/services/local';
+    import { API } from '@/services/api';
     import { NOTIFY } from '@/services/notify';
     import Select from '@/components/partials/Select.vue';
     import { useRouter, useRoute } from 'vue-router';
@@ -280,6 +344,17 @@
     const companySelected = ref();
     const btnBillTo = ref(0);
     const items: any = ref([]);
+    const personTypes = ref([{label: 'Persona Natural', value: 1}, {label: 'Persona Juridica', value: 2}]);
+    const personTypeSelected = ref({label: 'Persona Juridica', value: 2});
+    const documentTypes = ref([
+        {label: 'Cédula de ciudadanía', value: 1},
+        {label: 'NIT', value: 2},
+        {label: 'Cédula de extranjería', value: 3},
+        {label: 'Pasaporte', value: 4},
+        {label: 'NUIP', value: 5},
+
+    ]);
+    const documentTypeSelected = ref({label: 'Cédula de ciudadanía', value: 1});
     const basic: any = ref({
         dateFormat: 'Y-m-d',
         position:'auto right',
@@ -287,10 +362,20 @@
     const params = ref({
         id: null,
         payment_data:{
-            identification:null,
+            identification: {
+                person_type: null,
+                document_type: null,
+                identification: null,
+                check_digit: null,
+            },
+            address: {
+                address: null,
+                city: null,
+                state: null,
+                country: null
+            },
             name: '',
             email: '',
-            address: '',
             phone: ''
         },
         start_date: '',
@@ -314,9 +399,9 @@
     // IVA calculation
     const ivaTotal = computed(() => {
         return items.value.reduce((sum, item) => {
-            const unitValue = parseFloat(item.unit_value) || 0; // Aseguramos que el valor unitario sea numérico
-            const quantity = parseInt(item.quantity, 10) || 0;  // Convertimos cantidad a entero
-            const iva = parseFloat(item.iva) || 0; // Aseguramos que el IVA sea numérico
+            const unitValue = parseFloat(item.unit_value) || 0; // We assure that the unit value is numerical
+            const quantity = parseInt(item.quantity, 10) || 0;  // We convert quantity to whole
+            const iva = parseFloat(item.iva) || 0; // We assure that VAT is numerical
             if (params.value.type_iva == 1) {
                 const ivaRate = iva / 100; // Convert IVA to decimal if percentage
                 return sum + (unitValue * quantity * ivaRate);
@@ -329,7 +414,7 @@
     // Discount calculation
     const discountTotal = computed(() => {
         return items.value.reduce((sum, item) => {
-            const discount = parseFloat(item.discount) || 0; // Aseguramos que sea un número válido
+            const discount = parseFloat(item.discount) || 0; //We ensure that it is a valid number
             const unitValue = parseFloat(item.unit_value) || 0;
             const quantity = parseInt(item.quantity, 10) || 0;
             if (params.value.type_discount === 1) {
@@ -403,19 +488,39 @@
         setCompanyDetails(selectedCompany);
     });
 
-    /**
+    function getDocumentTypeById(id) {
+        return documentTypes.value.find(type => type.value ===  Number(id));
+    }
+
+    function getPersonTypeById(id) {
+        return personTypes.value.find(type => type.value ===  Number(id) );
+    }
+
+   /**
      * Update the company's details and assign them to Payment_Data.
      * @param {Object} company companySelected.
      */
     function setCompanyDetails(company) {
         params.value.company_id = company?.id;
         params.value.payment_data = {
-            address: company?.address ?? null,
-            phone: company?.phone ?? null,
+            identification: {
+                person_type: company?.identification.person_type ?? null,
+                document_type: company?.identification.document_type ?? null,
+                identification: company?.identification.identification ?? null,
+                check_digit: company?.identification.check_digit ?? null,
+            },
+            address: {
+                address: company?.address.address ?? null,
+                city: company?.address.city ?? null,
+                state: company?.address.state ?? null,
+                country: company?.address.country ?? null,
+            },
             name: company?.name ?? null,
             email: company?.email ?? null,
-            identification: company?.identification ?? null,
+            phone: company?.phone ?? null,
         }
+        personTypeSelected.value = getPersonTypeById(company?.identification.person_type);
+        documentTypeSelected.value= getDocumentTypeById(company?.identification.document_type);
     }
 
     const saveOrder = async () =>
@@ -457,7 +562,10 @@
         try {
             const response = await api.get(`subscriptions/v1/orders/${route.params.id}`);
             params.value = response.data;
+            params.value.payment_data = response.data.company;
             companySelected.value = { label: params?.value?.company?.name, value: params?.value?.company?.id } ?? null;
+            personTypeSelected.value = getPersonTypeById(response.data.company?.identification.person_type);
+            documentTypeSelected.value= getDocumentTypeById(response.data.company?.identification.document_type);
             items.value = params.value.items;
         } catch (error) {
             loading.value = true;
