@@ -489,6 +489,7 @@ import { useRouter, useRoute } from 'vue-router';
 import axios from 'axios';
 import Vue3Signature from "vue3-signature";
 import { NOTIFY } from '@/services/notify';
+import Swal from 'sweetalert2';
 import moment from 'moment';
 import 'moment/locale/es'
 moment.locale('es');
@@ -515,6 +516,7 @@ const state = reactive({
     },
     disabled: false
 });
+const modal3 = ref(false);
 
 const modalDocuments = ref(false);
 
@@ -549,6 +551,87 @@ let stream = null;
 let currentCamera = "environment";
 const uploadPhoto = ref(false);
 const acceptContract = ref(false);
+const generatedCode:any = ref(null);
+const validCode = ref(false);
+const userCode = ref('');
+const generateCode = async () => {
+    try {
+        const { data } = await axios.post('/contratos/generate-code', { contract_id: contractData.value.id });
+        generatedCode.value = data;
+        notify.showToast('Código generado exitosamente.', 'success');
+    } catch (error) {
+        notify.showToast('Error al generar el código.', 'error');
+    }
+};
+
+const validateCode = async () => {
+    try {
+        let timerInterval;
+        const expiresAtMs = generatedCode.value.expires_at * 1000; // Transformar el timestamp a milisegundos
+        const currentTimestampMs = Date.now(); // Timestamp actual en milisegundos
+        const remainingTimeMs = expiresAtMs - currentTimestampMs;
+        // Mostrar un cuadro de diálogo con SweetAlert para solicitar el código
+        const { value: userCode } = await Swal.fire({
+            title: 'Ingrese su código de verificación',
+            input: 'text',
+            html: 'Tiempo restante: <b>00:00</b>',
+            timer: remainingTimeMs, // Tiempo en milisegundos (por ejemplo, 100 segundos)
+            timerProgressBar: true,
+            allowOutsideClick: false,
+            didOpen: () => {
+                const b = Swal.getHtmlContainer().querySelector('b');
+                timerInterval = setInterval(() => {
+                    const timerLeft = Swal.getTimerLeft(); // Tiempo restante en milisegundos
+                    const minutes = Math.floor(timerLeft / 60000); // Minutos
+                    const seconds = Math.floor((timerLeft % 60000) / 1000); // Segundos
+                    b.textContent = `${minutes.toString().padStart(2, '0')}:${seconds
+                        .toString()
+                        .padStart(2, '0')}`; // Formatear como MM:SS
+                }, 1000);
+            },
+            willClose: () => {
+                clearInterval(timerInterval);
+            },
+            inputLabel: 'Código de verificación',
+            inputPlaceholder: 'Ingrese el código enviado a su email/teléfono',
+            inputValidator: (value) => {
+                if (!value) {
+                    return 'Por favor, ingrese un código.';
+                }
+            },
+            showCancelButton: true,
+            confirmButtonText: 'Validar',
+            cancelButtonText: 'Cancelar',
+        });
+
+        // Si el usuario cancela, no continúa
+        if (!userCode) return false;
+
+        // Realizar la consulta al backend para validar el código
+        const response = await axios.post('/contratos/validate-code', {
+            code: userCode,
+            contract_id: contractData.value.id, // Ajusta según tu contexto
+        });
+        const result = response.data;
+
+        if (result.success) {
+            // Código válido
+            validCode.value = true;
+            notify.showToast(result.message || 'Código correcto.', 'success');
+            return true;
+        } else {
+            // Código inválido
+            notify.showToast(result.message || 'El código es incorrecto.', 'warning');
+            return false;
+        }
+    } catch (error) {
+        // Manejar errores de red u otros problemas
+        console.error('Error validando el código:', error);
+        notify.showToast('Ocurrió un error al validar el código. Por favor, intenta de nuevo.', 'error');
+        return false;
+    }
+};
+
 const beforeTabSwitch = async (tab) => {
     step.value = tab;
 
@@ -556,6 +639,16 @@ const beforeTabSwitch = async (tab) => {
     if (!acceptContract.value) {
         notify.showToast('Por favor, acepte los términos y condiciones antes de continuar.', 'warning');
         return false; // Impide el cambio de tab
+    }
+
+    if(!validCode.value && tab == 1)
+    {
+        await generateCode();
+        const isValid = await validateCode();
+        if (!isValid) {
+            notify.showToast('Por favor, valide el código antes de continuar.', 'warning');
+            return false; // Bloquear cambio de tab
+        }
     }
 
     // Solo valida si se está intentando avanzar
@@ -572,6 +665,7 @@ const beforeTabSwitch = async (tab) => {
     // Permite el cambio
     return true;
 };
+
 const getContract = async () => {
     try {
         const response = await axios.get(`/api/singit/v1/contracts/${route.params.hash}/sign`);
