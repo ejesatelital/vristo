@@ -576,7 +576,7 @@ const validCode = ref(false);
 const userCode = ref('');
 const generateCode = async () => {
     try {
-        const { data } = await axios.post('/contratos/generate-code', { contract_id: contractData.value.id });
+        const { data } = await axios.post('/contract/generate-code', { contract_id: contractData.value.id });
         generatedCode.value = data;
         notify.showToast('Código generado exitosamente.', 'success');
     } catch (error) {
