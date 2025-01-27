@@ -37,30 +37,24 @@
                     <div class="flex items-center flex-wrap mt-6">
                         <template v-for="(attachment, i) in contractData.annex" :key="i">
                             <a :href="attachment.url" :download="attachment.name">
-                                <button type="button"
-                                    class="flex items-center ltr:mr-4 rtl:ml-4 mb-4 border border-[#e0e6ed] dark:border-[#1b2e4b] rounded-md hover:text-primary hover:border-primary transition-all duration-300 px-4 py-2.5 relative group">
-                                    <template v-if="attachment.type === 'image/jpeg'">
-                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                            xmlns="http://www.w3.org/2000/svg" class="w-5 h-5">
-                                            <path
-                                                d="M2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C22 4.92893 22 7.28595 22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12Z"
-                                                stroke="currentColor" stroke-width="1.5" />
-                                            <circle opacity="0.5" cx="16" cy="8" r="2" stroke="currentColor"
-                                                stroke-width="1.5" />
-                                            <path opacity="0.5"
-                                                d="M2 12.5001L3.75159 10.9675C4.66286 10.1702 6.03628 10.2159 6.89249 11.0721L11.1822 15.3618C11.8694 16.0491 12.9512 16.1428 13.7464 15.5839L14.0446 15.3744C15.1888 14.5702 16.7369 14.6634 17.7765 15.599L21 18.5001"
-                                                stroke="currentColor" stroke-width="1.5"
-                                                stroke-linecap="round" />
-                                        </svg>
+                                <button
+                                    type="button"
+                                    class="ltr:mr-4 rtl:ml-4 mb-4 border border-[#e0e6ed] dark:border-[#1b2e4b] rounded-md hover:text-primary hover:border-primary transition-all duration-300 px-4 py-2.5 relative group"
+                                    :class="!attachment.type.startsWith('image/')? 'flex items-center': ''"
+                                    >
+                                    <template v-if="attachment.type.startsWith('image/')">
+                                        <img :src="attachment.url" alt="Previsualización de la imagen" class="h-32 object-cover rounded-md"/>
                                     </template>
                                     <template v-if="attachment.type === 'folder'">
                                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                                             xmlns="http://www.w3.org/2000/svg" class="w-5 h-5">
                                             <path opacity="0.5" d="M18 10L13 10" stroke="currentColor"
-                                                stroke-width="1.5" stroke-linecap="round" />
+                                                stroke-width="1.5" stroke-linecap="round"/>
                                             <path
                                                 d="M2 6.94975C2 6.06722 2 5.62595 2.06935 5.25839C2.37464 3.64031 3.64031 2.37464 5.25839 2.06935C5.62595 2 6.06722 2 6.94975 2C7.33642 2 7.52976 2 7.71557 2.01738C8.51665 2.09229 9.27652 2.40704 9.89594 2.92051C10.0396 3.03961 10.1763 3.17633 10.4497 3.44975L11 4C11.8158 4.81578 12.2237 5.22367 12.7121 5.49543C12.9804 5.64471 13.2651 5.7626 13.5604 5.84678C14.0979 6 14.6747 6 15.8284 6H16.2021C18.8345 6 20.1506 6 21.0062 6.76946C21.0849 6.84024 21.1598 6.91514 21.2305 6.99383C22 7.84935 22 9.16554 22 11.7979V14C22 17.7712 22 19.6569 20.8284 20.8284C19.6569 22 17.7712 22 14 22H10C6.22876 22 4.34315 22 3.17157 20.8284C2 19.6569 2 17.7712 2 14V6.94975Z"
-                                                stroke="currentColor" stroke-width="1.5" />
+                                                stroke="currentColor"
+                                                stroke-width="1.5"
+                                            />
                                         </svg>
                                     </template>
                                     <template v-if="attachment.type === 'zip'">
@@ -68,41 +62,58 @@
                                             xmlns="http://www.w3.org/2000/svg" class="w-5 h-5">
                                             <path
                                                 d="M9.5 15.5V15.375C9.5 14.8918 9.89175 14.5 10.375 14.5H13.625C14.1082 14.5 14.5 14.8918 14.5 15.375V15.5C14.5 16.8807 13.3807 18 12 18C10.6193 18 9.5 16.8807 9.5 15.5Z"
-                                                stroke="#8E93A6" stroke-width="1.5" stroke-linecap="round" />
+                                                stroke="#8E93A6"
+                                                stroke-width="1.5"
+                                                stroke-linecap="round"
+                                            />
                                             <path
                                                 d="M9.5 3C9.5 2.5286 9.5 2.29289 9.64645 2.14645C9.79289 2 10.0286 2 10.5 2H11C11.4714 2 11.7071 2 11.8536 2.14645C12 2.29289 12 2.5286 12 3V3.5C12 3.9714 12 4.20711 11.8536 4.35355C11.7071 4.5 11.4714 4.5 11 4.5H10.5C10.0286 4.5 9.79289 4.5 9.64645 4.35355C9.5 4.20711 9.5 3.9714 9.5 3.5V3Z"
-                                                stroke="#8E93A6" stroke-width="1.5" />
+                                                stroke="#8E93A6"
+                                                stroke-width="1.5"
+                                            />
                                             <path
                                                 d="M9.5 8C9.5 7.5286 9.5 7.29289 9.64645 7.14645C9.79289 7 10.0286 7 10.5 7H11C11.4714 7 11.7071 7 11.8536 7.14645C12 7.29289 12 7.5286 12 8V8.5C12 8.9714 12 9.20711 11.8536 9.35355C11.7071 9.5 11.4714 9.5 11 9.5H10.5C10.0286 9.5 9.79289 9.5 9.64645 9.35355C9.5 9.20711 9.5 8.9714 9.5 8.5V8Z"
-                                                stroke="#8E93A6" stroke-width="1.5" />
+                                                stroke="#8E93A6"
+                                                stroke-width="1.5"
+                                            />
                                             <path
                                                 d="M12 5.5C12 5.0286 12 4.79289 12.1464 4.64645C12.2929 4.5 12.5286 4.5 13 4.5H13.5C13.9714 4.5 14.2071 4.5 14.3536 4.64645C14.5 4.79289 14.5 5.0286 14.5 5.5V6C14.5 6.4714 14.5 6.70711 14.3536 6.85355C14.2071 7 13.9714 7 13.5 7H13C12.5286 7 12.2929 7 12.1464 6.85355C12 6.70711 12 6.4714 12 6V5.5Z"
-                                                stroke="#8E93A6" stroke-width="1.5" />
+                                                stroke="#8E93A6"
+                                                stroke-width="1.5"
+                                            />
                                             <path
                                                 d="M12 10.5C12 10.0286 12 9.79289 12.1464 9.64645C12.2929 9.5 12.5286 9.5 13 9.5H13.5C13.9714 9.5 14.2071 9.5 14.3536 9.64645C14.5 9.79289 14.5 10.0286 14.5 10.5V11C14.5 11.4714 14.5 11.7071 14.3536 11.8536C14.2071 12 13.9714 12 13.5 12H13C12.5286 12 12.2929 12 12.1464 11.8536C12 11.7071 12 11.4714 12 11V10.5Z"
-                                                stroke="#8E93A6" stroke-width="1.5" />
+                                                stroke="#8E93A6"
+                                                stroke-width="1.5"
+                                            />
                                             <path
                                                 d="M3 10C3 6.22876 3 4.34315 4.17157 3.17157C5.34315 2 7.22876 2 11 2H13C16.7712 2 18.6569 2 19.8284 3.17157C21 4.34315 21 6.22876 21 10V14C21 17.7712 21 19.6569 19.8284 20.8284C18.6569 22 16.7712 22 13 22H11C7.22876 22 5.34315 22 4.17157 20.8284C3 19.6569 3 17.7712 3 14V10Z"
-                                                stroke="currentColor" stroke-width="1.5" />
+                                                stroke="currentColor"
+                                                stroke-width="1.5"
+                                            />
                                         </svg>
                                     </template>
                                     <template
-                                        v-if="attachment.type !== 'zip' && attachment.type !== 'image/jpeg' && attachment.type !== 'folder'">
+                                        v-if="attachment.type !== 'zip' && !attachment.type.startsWith('image/') && attachment.type !== 'folder'">
                                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                                             xmlns="http://www.w3.org/2000/svg" class="w-5 h-5">
                                             <path
                                                 d="M15.3929 4.05365L14.8912 4.61112L15.3929 4.05365ZM19.3517 7.61654L18.85 8.17402L19.3517 7.61654ZM21.654 10.1541L20.9689 10.4592V10.4592L21.654 10.1541ZM3.17157 20.8284L3.7019 20.2981H3.7019L3.17157 20.8284ZM20.8284 20.8284L20.2981 20.2981L20.2981 20.2981L20.8284 20.8284ZM14 21.25H10V22.75H14V21.25ZM2.75 14V10H1.25V14H2.75ZM21.25 13.5629V14H22.75V13.5629H21.25ZM14.8912 4.61112L18.85 8.17402L19.8534 7.05907L15.8947 3.49618L14.8912 4.61112ZM22.75 13.5629C22.75 11.8745 22.7651 10.8055 22.3391 9.84897L20.9689 10.4592C21.2349 11.0565 21.25 11.742 21.25 13.5629H22.75ZM18.85 8.17402C20.2034 9.3921 20.7029 9.86199 20.9689 10.4592L22.3391 9.84897C21.9131 8.89241 21.1084 8.18853 19.8534 7.05907L18.85 8.17402ZM10.0298 2.75C11.6116 2.75 12.2085 2.76158 12.7405 2.96573L13.2779 1.5653C12.4261 1.23842 11.498 1.25 10.0298 1.25V2.75ZM15.8947 3.49618C14.8087 2.51878 14.1297 1.89214 13.2779 1.5653L12.7405 2.96573C13.2727 3.16993 13.7215 3.55836 14.8912 4.61112L15.8947 3.49618ZM10 21.25C8.09318 21.25 6.73851 21.2484 5.71085 21.1102C4.70476 20.975 4.12511 20.7213 3.7019 20.2981L2.64124 21.3588C3.38961 22.1071 4.33855 22.4392 5.51098 22.5969C6.66182 22.7516 8.13558 22.75 10 22.75V21.25ZM1.25 14C1.25 15.8644 1.24841 17.3382 1.40313 18.489C1.56076 19.6614 1.89288 20.6104 2.64124 21.3588L3.7019 20.2981C3.27869 19.8749 3.02502 19.2952 2.88976 18.2892C2.75159 17.2615 2.75 15.9068 2.75 14H1.25ZM14 22.75C15.8644 22.75 17.3382 22.7516 18.489 22.5969C19.6614 22.4392 20.6104 22.1071 21.3588 21.3588L20.2981 20.2981C19.8749 20.7213 19.2952 20.975 18.2892 21.1102C17.2615 21.2484 15.9068 21.25 14 21.25V22.75ZM21.25 14C21.25 15.9068 21.2484 17.2615 21.1102 18.2892C20.975 19.2952 20.7213 19.8749 20.2981 20.2981L21.3588 21.3588C22.1071 20.6104 22.4392 19.6614 22.5969 18.489C22.7516 17.3382 22.75 15.8644 22.75 14H21.25ZM2.75 10C2.75 8.09318 2.75159 6.73851 2.88976 5.71085C3.02502 4.70476 3.27869 4.12511 3.7019 3.7019L2.64124 2.64124C1.89288 3.38961 1.56076 4.33855 1.40313 5.51098C1.24841 6.66182 1.25 8.13558 1.25 10H2.75ZM10.0298 1.25C8.15538 1.25 6.67442 1.24842 5.51887 1.40307C4.34232 1.56054 3.39019 1.8923 2.64124 2.64124L3.7019 3.7019C4.12453 3.27928 4.70596 3.02525 5.71785 2.88982C6.75075 2.75158 8.11311 2.75 10.0298 2.75V1.25Z"
-                                                fill="currentColor" />
-                                            <path opacity="0.5" d="M6 14.5H14" stroke="currentColor"
-                                                stroke-width="1.5" stroke-linecap="round" />
-                                            <path opacity="0.5" d="M6 18H11.5" stroke="currentColor"
-                                                stroke-width="1.5" stroke-linecap="round" />
-                                            <path opacity="0.5"
+                                                fill="currentColor"
+                                            />
+                                            <path opacity="0.5" d="M6 14.5H14" stroke="currentColor" stroke-width="1.5"
+                                                stroke-linecap="round"/>
+                                            <path opacity="0.5" d="M6 18H11.5" stroke="currentColor" stroke-width="1.5"
+                                                stroke-linecap="round"/>
+                                            <path
+                                                opacity="0.5"
                                                 d="M13 2.5V5C13 7.35702 13 8.53553 13.7322 9.26777C14.4645 10 15.643 10 18 10H22"
-                                                stroke="currentColor" stroke-width="1.5" />
+                                                stroke="currentColor"
+                                                stroke-width="1.5"
+                                            />
                                         </svg>
                                     </template>
-                                    <div class="ltr:ml-3 rtl:mr-3">
+                                    <div class="ltr:ml-3 rtl:mr-3" :class="attachment.type.startsWith('image/')?'':''">
                                         <p class="text-xs text-primary font-semibold">
                                             {{ attachment.name }}
                                         </p>
@@ -111,19 +122,28 @@
                                         </p>
                                     </div>
                                     <div
-                                        class="bg-dark-light/40 z-[5] w-full h-full absolute ltr:left-0 rtl:right-0 top-0 rounded-md hidden group-hover:block">
-                                    </div>
+                                        class="bg-dark-light/40 z-[5] w-full h-full absolute ltr:left-0 rtl:right-0 top-0 rounded-md hidden group-hover:block"
+                                    ></div>
                                     <div
-                                        class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full p-1 btn btn-primary hidden group-hover:block z-10">
+                                        class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full p-1 btn btn-primary hidden group-hover:block z-10"
+                                    >
                                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                                             xmlns="http://www.w3.org/2000/svg" class="w-5 h-5">
-                                            <path opacity="0.5"
+                                            <path
+                                                opacity="0.5"
                                                 d="M3 15C3 17.8284 3 19.2426 3.87868 20.1213C4.75736 21 6.17157 21 9 21H15C17.8284 21 19.2426 21 20.1213 20.1213C21 19.2426 21 17.8284 21 15"
-                                                stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                                stroke-linejoin="round" />
-                                            <path d="M12 3V16M12 16L16 11.625M12 16L8 11.625"
-                                                stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                                stroke-linejoin="round" />
+                                                stroke="currentColor"
+                                                stroke-width="1.5"
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                            />
+                                            <path
+                                                d="M12 3V16M12 16L16 11.625M12 16L8 11.625"
+                                                stroke="currentColor"
+                                                stroke-width="1.5"
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                            />
                                         </svg>
                                     </div>
                                 </button>
@@ -568,66 +588,72 @@ const validateCode = async () => {
     try {
         let timerInterval;
         const expiresAtMs = generatedCode.value.expires_at * 1000; // Transformar el timestamp a milisegundos
-        const currentTimestampMs = Date.now(); // Timestamp actual en milisegundos
-        const remainingTimeMs = expiresAtMs - currentTimestampMs;
+
         // Mostrar un cuadro de diálogo con SweetAlert para solicitar el código
         const { value: userCode } = await Swal.fire({
             title: 'Ingrese su código de verificación',
-            input: 'text',
+            input: 'number',
             html: 'Tiempo restante: <b>00:00</b>',
-            timer: remainingTimeMs, // Tiempo en milisegundos (por ejemplo, 100 segundos)
-            timerProgressBar: true,
             allowOutsideClick: false,
+            allowEscapeKey: false,
+            showCancelButton: true,
+            confirmButtonText: 'Validar',
+            cancelButtonText: 'Cancelar',
+            inputLabel: 'Código de verificación',
+            inputPlaceholder: 'Ingrese el código enviado a su email/teléfono',
             didOpen: () => {
                 const b = Swal.getHtmlContainer().querySelector('b');
                 timerInterval = setInterval(() => {
-                    const timerLeft = Swal.getTimerLeft(); // Tiempo restante en milisegundos
-                    const minutes = Math.floor(timerLeft / 60000); // Minutos
-                    const seconds = Math.floor((timerLeft % 60000) / 1000); // Segundos
-                    b.textContent = `${minutes.toString().padStart(2, '0')}:${seconds
-                        .toString()
-                        .padStart(2, '0')}`; // Formatear como MM:SS
+                    const timerLeftMs = expiresAtMs - Date.now(); // Tiempo restante en milisegundos
+                    if (timerLeftMs <= 0) {
+                        clearInterval(timerInterval);
+                        Swal.close();
+                        return;
+                    }
+                    const minutes = Math.floor(timerLeftMs / 60000); // Minutos
+                    const seconds = Math.floor((timerLeftMs % 60000) / 1000); // Segundos
+                    b.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
                 }, 1000);
             },
             willClose: () => {
                 clearInterval(timerInterval);
             },
-            inputLabel: 'Código de verificación',
-            inputPlaceholder: 'Ingrese el código enviado a su email/teléfono',
-            inputValidator: (value) => {
-                if (!value) {
-                    return 'Por favor, ingrese un código.';
+            preConfirm: async (inputCode) => {
+                if (!inputCode) {
+                    Swal.showValidationMessage('Por favor, ingresa un código.');
+                    return false;
+                }
+                try {
+                    // Realizar la consulta al backend para validar el código
+                    const response = await axios.post('/contract/validate-code', {
+                        code: inputCode,
+                        contract_id: contractData.value.id, // Ajusta según tu contexto
+                    });
+                    const result = response.data;
+
+                    if (result.success) {
+                        // Código válido
+                        validCode.value = true;
+                        notify.showToast(result.message || 'Código correcto.', 'success');
+                        return true; // Permite cerrar el cuadro
+                    } else {
+                        Swal.showValidationMessage(result.message || 'El código es incorrecto.');
+                        return false; // Mantener el cuadro abierto
+                    }
+                } catch (error) {
+                    Swal.showValidationMessage(error.response?.data?.message || 'Ocurrió un error al validar el código. Por favor, intenta de nuevo.');
+                    return false;
                 }
             },
-            showCancelButton: true,
-            confirmButtonText: 'Validar',
-            cancelButtonText: 'Cancelar',
         });
 
         // Si el usuario cancela, no continúa
         if (!userCode) return false;
 
-        // Realizar la consulta al backend para validar el código
-        const response = await axios.post('/contratos/validate-code', {
-            code: userCode,
-            contract_id: contractData.value.id, // Ajusta según tu contexto
-        });
-        const result = response.data;
-
-        if (result.success) {
-            // Código válido
-            validCode.value = true;
-            notify.showToast(result.message || 'Código correcto.', 'success');
-            return true;
-        } else {
-            // Código inválido
-            notify.showToast(result.message || 'El código es incorrecto.', 'warning');
-            return false;
-        }
+        return true; // Retornar éxito si el código es válido
     } catch (error) {
-        // Manejar errores de red u otros problemas
-        console.error('Error validando el código:', error);
-        notify.showToast('Ocurrió un error al validar el código. Por favor, intenta de nuevo.', 'error');
+        console.error('Error general:', error);
+        notify.showToast('Ocurrió un error inesperado. Por favor, intenta de nuevo.', 'error');
         return false;
     }
 };
@@ -641,10 +667,10 @@ const beforeTabSwitch = async (tab) => {
         return false; // Impide el cambio de tab
     }
 
-    if(!validCode.value && tab == 1)
-    {
+    if (!validCode.value && tab == 1) {
         await generateCode();
         const isValid = await validateCode();
+
         if (!isValid) {
             notify.showToast('Por favor, valide el código antes de continuar.', 'warning');
             return false; // Bloquear cambio de tab
@@ -657,7 +683,7 @@ const beforeTabSwitch = async (tab) => {
         return false; // Impide el cambio de tab
     }
 
-    if (signature1.value.isEmpty() && tab == 4  ) {
+    if (signature1.value.isEmpty() && tab == 4) {
         notify.showToast('Por favor, firme el contrato.', 'warning');
         return false;
     }
@@ -674,6 +700,7 @@ const getContract = async () => {
         console.error('Error fetching data', error);
     }
 };
+
 // Función para manejar la selección de archivos y subirlos al servidor
 const handleFileResponseChange = async (event) => {
     const files = event.target.files;  // Obtener los archivos seleccionados
