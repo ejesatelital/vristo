@@ -15,7 +15,6 @@
                         <div>IP del registro: {{ contractData.logs.ip_address }}</div>
                         <div>Navegador: {{ contractData.logs.navigator }}</div>
                         <div>Sistema operativo: {{ contractData.logs.operating_system }}</div>
-                        <div>Hash: {{ contractData.hash }}</div>
                     </div>
                 </div>
             </div>
