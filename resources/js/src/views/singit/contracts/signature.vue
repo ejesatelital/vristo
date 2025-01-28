@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div v-if="contractData.signature">
+        <div v-if="contractData.signature && !loading">
             <div class="panel p-5 my-5">
                 <div class="flex justify-between flex-wrap gap-4">
                     <div class="text-3xl font-semibold uppercase">{{contractData.company?.name || 'Contrato' }}</div>
@@ -190,7 +190,7 @@
                         <div v-if="currentStep <= 2 ">
                             <h5 class="font-semibold text-lg dark:text-white-light">Verificación de documentos</h5>
 
-                            <p class="dark:text-white-light mt-4">Toma fotos de ambos lados de tu documento de identidad emitido por el gobierno</p>
+                            <p class="dark:text-white-light mt-4">Toma fotos de ambos lados de tu documento de identidad emitido por el gobierno (Cédula de ciudadania, Licencia de tránsito, Pasaporte u Otros.)</p>
 
                             <div class="flex flex-col rounded-md border border-[#e0e6ed] dark:border-[#1b2e4b] my-4">
                                 <div class="border-b border-[#e0e6ed] dark:border-[#1b2e4b] px-4 py-2.5">Carga una imagen completa de tu documento de identidad.</div>
@@ -432,16 +432,20 @@
                                     <div
                                         class="text-2xl font-bold bg-[#fbfbfb] dark:bg-[#121c2c] ltr:pl-5 rtl:pr-5 py-3 ltr:pr-[50px] rtl:pl-[50px]"
                                     >
-                                        Cargar documentos
+                                        Tomar foto
                                     </div>
                                     <div class="p-5">
                                         <div v-if="currentStep === 1" class="mb-1">
-                                            <h3><span class="font-semibold text-2xl text-primary dark:text-white">Paso 1:</span>  <span class="text-xl text-dark dark:text-white-light">Tomar foto frontal del documento.</span> </h3>
+                                            <h3><span class="font-semibold text-2xl text-primary dark:text-white">Foto frontal </span>  <span class="text-xl text-dark dark:text-white-light">del documento.</span> </h3>
                                         </div>
 
                                         <div v-if="currentStep === 2" class="mb-1">
-                                            <h3><span class="font-semibold text-2xl text-primary dark:text-white">Paso 2:</span> <span class="text-xl text-dark dark:text-white-light">Tomar foto de la parte posterior del documento.</span></h3>
+                                            <h3><span class="font-semibold text-2xl text-primary dark:text-white">Foto parte posterior </span> <span class="text-xl text-dark dark:text-white-light">del documento.</span></h3>
                                         </div>
+
+                                        <p  class="mb-1">
+                                            Carga una imagen completa de tu documento de identidad, asegúrate que todos los detalles sean legibles en la imagen, asegúrate de que el documento sea original y esté vigente, los documentos deben estar sobre un fondo unicolor.
+                                        </p>
 
                                         <div v-if="currentStep <= 2" v-show="!capturedPhoto">
                                             <video ref="video" autoplay></video>
@@ -468,19 +472,21 @@
                                                 <img :src="capturedPhoto" alt="Foto capturada" />
                                                 <div class="flex items-center justify-end gap-3">
                                                     <button @click="acceptPhotoAndNextStep"
-                                                    class="btn btn-outline-success" :disabled="uploadPhoto">
+                                                    class="btn btn-outline-success gap-2" :disabled="uploadPhoto">
                                                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                             <path d="M22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
                                                             <path d="M13 7L15 9L20 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                                                             <path d="M2 12.5001L3.75159 10.9675C4.66286 10.1702 6.03628 10.2159 6.89249 11.0721L11.1822 15.3618C11.8694 16.0491 12.9512 16.1428 13.7464 15.5839L14.0446 15.3744C15.1888 14.5702 16.7369 14.6634 17.7765 15.599L21 18.5001" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
                                                         </svg>
+                                                        Aceptar y continuar
                                                     </button>
-                                                    <button @click="discardPhoto" class="btn btn-outline-danger" :disabled="uploadPhoto">
+                                                    <button @click="discardPhoto" class="btn btn-outline-danger gap-2" :disabled="uploadPhoto">
                                                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                             <path d="M22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
                                                             <path d="M2 12.5001L3.75159 10.9675C4.66286 10.1702 6.03628 10.2159 6.89249 11.0721L11.1822 15.3618C11.8694 16.0491 12.9512 16.1428 13.7464 15.5839L14.0446 15.3744C15.1888 14.5702 16.7369 14.6634 17.7765 15.599L21 18.5001" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
                                                             <path d="M22 2.00002L16 8M16 2L21.9999 7.99998" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
                                                         </svg>
+                                                        Volver a tomar
                                                     </button>
                                                 </div>
                                             </div>
@@ -535,7 +541,8 @@ const state = reactive({
     },
     disabled: false
 });
-const modal3 = ref(false);
+
+const location = ref();
 
 const modalDocuments = ref(false);
 
@@ -572,7 +579,6 @@ const uploadPhoto = ref(false);
 const acceptContract = ref(false);
 const generatedCode:any = ref(null);
 const validCode = ref(false);
-const userCode = ref('');
 const generateCode = async () => {
     try {
         const { data } = await axios.post('/contract/generate-code', { contract_id: contractData.value.id });
@@ -660,26 +666,26 @@ const validateCode = async () => {
 const beforeTabSwitch = async (tab) => {
     step.value = tab;
 
-    // Solo valida si se está intentando avanzar
+    // Only validates if you are trying to advance
     if (!acceptContract.value) {
         notify.showToast('Por favor, acepte los términos y condiciones antes de continuar.', 'warning');
-        return false; // Impide el cambio de tab
+        return false; // Prevents Tab change
     }
 
-    if (!validCode.value && tab == 1) {
-        await generateCode();
-        const isValid = await validateCode();
+    // if (!validCode.value && tab == 1) {
+    //     await generateCode();
+    //     const isValid = await validateCode();
 
-        if (!isValid) {
-            notify.showToast('Por favor, valide el código antes de continuar.', 'warning');
-            return false; // Bloquear cambio de tab
-        }
-    }
+    //     if (!isValid) {
+    //         notify.showToast('Por favor, valide el código antes de continuar.', 'warning');
+    //         return false; // Prevents Tab change
+    //     }
+    // }
 
     // Solo valida si se está intentando avanzar
     if (contractData.value.template?.settings?.[0]?.document_photo && tab == 2 && currentStep.value < 3) {
         notify.showToast('Por favor, termine el proceso de verificación de documentos.', 'warning');
-        return false; // Impide el cambio de tab
+        return false; // Prevents Tab change
     }
 
     if (signature1.value.isEmpty() && tab == 4) {
@@ -687,7 +693,7 @@ const beforeTabSwitch = async (tab) => {
         return false;
     }
 
-    // Permite el cambio
+    // Allows change
     return true;
 };
 
@@ -921,9 +927,54 @@ const cerrarModalDocumentsPhoto = async () => {
     modalDocuments.value = false;
 };
 
+const getGeolocation = () => {
+    return new Promise((resolve, reject) => {
+        if ("geolocation" in navigator) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    resolve({
+                        latitude: position.coords.latitude,
+                        longitude: position.coords.longitude
+                    });
+                },
+                (error) => {
+                    console.error("Error obteniendo geolocalización:", error);
+                    resolve(null); // Bloquear la firma
+                }
+            );
+        } else {
+            Swal.fire({
+                title: "Geolocalización no disponible",
+                text: "Tu navegador no soporta la geolocalización, por favor usa otro dispositivo.",
+                icon: "error",
+                confirmButtonText: "Aceptar"
+            });
+            resolve(null);
+        }
+    });
+};
+
 // Finalize The Process
 const saveContract = async () => {
     try {
+        loading.value = true;
+
+        location.value  = await getGeolocation();
+
+        if (!location.value ) {
+            Swal.fire({
+                title: "Permiso de ubicación requerido",
+                text: "Debes activar la geolocalización para firmar el contrato.",
+                icon: "error",
+                confirmButtonText: "Intentar de nuevo"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                   return false;
+                }
+            });
+            return false; // Prevents Tab change
+        }
+
         const { browser, os } = getBrowserInfo();
         const ipAddress = await getIpAddress();
 
@@ -931,7 +982,8 @@ const saveContract = async () => {
         contractData.value.logs = {
             navigator: browser,
             ip_address: ipAddress,
-            operating_system: os
+            operating_system: os,
+            geolocation: location.value
         };
 
         // Here you can implement the contract sending if the signature is valid
@@ -958,7 +1010,6 @@ const saveContract = async () => {
 
     } catch (error) {
         notify.showToast('Error al guardar el contrato.', 'error');
-        console.error("Error al guardar el contrato:", error);
     } finally {
         loading.value = false;
     }
