@@ -2,21 +2,61 @@
     <div>
         <div v-if="contractData.signature && !loading">
             <div class="panel">
-                <div class="flex justify-between flex-wrap gap-4">
-                    <div class="text-3xl font-semibold uppercase">{{contractData.company?.name || 'Contrato' }}</div>
-                    <div class="shrink-0"  >
-                        <img v-if="contractData.company?.avatar || contractData.company?.logo" :src="`${contractData.company?.avatar || contractData.company?.logo}`" alt="Logo de la empresa" class="w-20 ltr:ml-auto rtl:mr-auto" />
-                        <img v-else src="/assets/images/logo.png" alt="Logo de la empresa" class="w-20 ltr:ml-auto rtl:mr-auto" />
+                <div class="flex flex-col items-center md:flex-row md:justify-between md:items-start flex-wrap gap-4">
+
+                    <!-- Bloque Izquierdo -->
+                    <div class="flex flex-col items-center md:items-start text-center md:text-left">
+                        <img
+                            v-if="contractData.company?.avatar || contractData.company?.logo"
+                            :src="contractData.company?.avatar || contractData.company?.logo"
+                            alt="Logo de la empresa"
+                            class="h-20 w-auto object-contain"
+                        />
+                        <img
+                            v-else
+                            src="/assets/images/logo.png"
+                            alt="Logo de la empresa"
+                            class="h-20 w-auto object-contain"
+                        />
+
+                        <div class="text-xl font-semibold uppercase mt-2">
+                            {{ contractData.company?.name || 'Contrato' }}
+                        </div>
                     </div>
-                </div>
-                <div class="ltr:text-right rtl:text-left px-4">
-                    <div class="space-y-1 mt-6 text-white-dark">
+
+                    <!-- Bloque Derecho -->
+                    <div class="mt-4 md:mt-0 text-center md:text-right space-y-1 text-white-dark px-4">
                         <div>Se firmó en: {{ formatDate(contractData.updated_at) }}</div>
                         <div>IP del registro: {{ contractData.logs.ip_address }}</div>
                         <div>Navegador: {{ contractData.logs.navigator }}</div>
                         <div>Sistema operativo: {{ contractData.logs.operating_system }}</div>
+
+                        <div class="flex justify-center md:justify-end items-center">
+                            <span class="mr-2">Ubicación aproximada:</span>
+                            <a
+                                :href="`https://maps.google.com/?q=${contractData.logs.geolocation.latitude},${contractData.logs.geolocation.longitude}`"
+                                target="_blank"
+                                class="inline-flex items-center text-blue-500 underline hover:text-blue-700"
+                            >
+                            <svg
+                                width="16"
+                                height="16"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.5"
+                                viewBox="0 0 24 24"
+                                class="mr-1"
+                            >
+                                <path d="M18 8L18.9487 8.31623C19.9387 8.64624 20.4337 8.81124 20.7169 9.20407C21 9.5969 21 10.1187 21 11.1623V16.829C21 18.1199 21 18.7653 20.6603 19.18C20.5449 19.3208 20.4048 19.4394 20.247 19.5301C19.7821 19.797 19.1455 19.6909 17.8721 19.4787C16.6157 19.2693 15.9875 19.1646 15.3648 19.2167C15.1463 19.235 14.9292 19.2676 14.715 19.3144C14.1046 19.4477 13.5299 19.735 12.3806 20.3097C10.8809 21.0596 10.131 21.4345 9.33284 21.5501C9.09242 21.5849 8.8498 21.6021 8.60688 21.6016C7.80035 21.6001 7.01186 21.3373 5.43488 20.8116L5.05132 20.6838C4.06129 20.3538 3.56627 20.1888 3.28314 19.7959C3 19.4031 3 18.8813 3 17.8377V12.908C3 11.2491 3 10.4197 3.48841 9.97358C3.57388 9.89552 3.66809 9.82762 3.76917 9.77122C4.34681 9.44894 5.13369 9.71123 6.70746 10.2358" stroke="currentColor" stroke-width="1.5"/>
+                                    <path d="M6 7.70031C6 4.55211 8.68629 2 12 2C15.3137 2 18 4.55211 18 7.70031C18 10.8238 16.085 14.4687 13.0972 15.7721C12.4007 16.076 11.5993 16.076 10.9028 15.7721C7.91499 14.4687 6 10.8238 6 7.70031Z" stroke="currentColor" stroke-width="1.5"/>
+                                    <circle cx="12" cy="8" r="2" stroke="currentColor" stroke-width="1.5"/>
+                            </svg>
+                            <span>Ver en mapa</span>
+                            </a>
+                        </div>
                     </div>
                 </div>
+
             </div>
 
             <div class="panel h-screen my-5">
@@ -693,7 +733,6 @@ const contractData: any = ref({
     company: [],
 });
 const step = ref(0);
-// variables For The Document Verification
 const video = ref(null);
 const photos = ref([]);
 const capturedPhoto = ref(null);
@@ -708,19 +747,19 @@ const validCode = ref(false);
 const fileInputs = ref(null);
 const selectedDocumentIndex = ref(null);
 
-// Función para abrir el selector de archivos cuando se marca un checkbox
+// Function to open the file selector when a checkbox is marked
 const openFilePicker = (index) => {
     selectedDocumentIndex.value = index;
     fileInputs.value.click();
 };
 
-// Función para manejar la subida del archivo
+// Function to handle the file up
 const uploadFileFromInput = async (event) => {
     const file = event.target.files[0];
     if (!file || selectedDocumentIndex.value === null) return;
     try {
         const uploadedFile = await uploadFile(file, contractData.value.id, 2);
-        // Asigna la URL devuelta al objeto correspondiente en documents
+        // Assigns the URL returned to the corresponding object in Documents
         contractData.value.options.documents[selectedDocumentIndex.value].value = uploadedFile.url;
         contractData.value.attachments = uploadedFile;
 
@@ -729,7 +768,7 @@ const uploadFileFromInput = async (event) => {
         console.error("Error al subir el archivo:", error);
         notify.showToast("Hubo un error al subir el archivo. Por favor, intenta de nuevo.", "error");
     } finally {
-        // Resetea la selección del input file
+        // Input File selection reset
         selectedDocumentIndex.value = null;
         fileInputs.value.value = "";
     }
@@ -838,13 +877,12 @@ const beforeTabSwitch = async (tab) => {
         }
     }
 
-    // Solo valida si se está intentando avanzar
     if (tab == 2) {
-           // Validar si el contrato requiere fotos de documentos o selfie
+        // Validate whether the contract requires photos of documents or selfie
         const requiresDocumentPhotos = contractData.value.template?.settings?.[0]?.document_photo ?? false;
         const requiresFacePhoto = contractData.value.template?.settings?.[0]?.face_photo ?? false;
 
-        // Bloquear avance si no se han completado los pasos necesarios
+        // Block advance if the necessary steps have not been completed
         if ((requiresDocumentPhotos && currentStep.value < 3) || (requiresFacePhoto && currentStep.value < 4)) {
             notify.showToast('Por favor, termine el proceso de verificación de identidad antes de continuar.', 'warning');
             return false;
@@ -852,8 +890,10 @@ const beforeTabSwitch = async (tab) => {
     }
 
     if (tab == 3) {
-        // validamos si del listado no falta ningun value para subir
-        const hasEmptyValues = contractData.value.options.documents.some(doc => doc.value.isEmpty());
+        // We validate whether any value is missing from the list to go up
+        const hasEmptyValues = contractData.value.options.documents.some(doc => {
+            return !doc.value || doc.value.trim() === '' || doc.value == false;
+        });
 
         if (hasEmptyValues) {
             notify.showToast('Por favor, complete todos los documentos.', 'warning');
@@ -879,21 +919,21 @@ const getContract = async () => {
     }
 };
 
-// Función para manejar la selección de archivos y subirlos al servidor
+// Function to handle files and upload them to the server
 const handleFileResponseChange = async (event) => {
-    const files = event.target.files;  // Obtener los archivos seleccionados
-    if (files.length === 0) return;  // Verificar si hay archivos seleccionados
+    const files = event.target.files;
+    if (files.length === 0) return;
 
     try {
-        // Crear un array de promesas para subir todos los archivos
+        // Create an array of promises to raise all files
         const uploadPromises = Array.from(files).map(file =>
             uploadFile(file, contractData.value.id, 2)
         );
 
-        // Esperar que todos los archivos se suban
+        // Wait for all files to go up
         const uploadedFiles = await Promise.all(uploadPromises);
 
-        // Almacenar las URLs de los archivos subidos (puedes ajustar lo que necesitas)
+        // Store the URLs of the uploaded files (you can adjust what you need)
         contractData.value.attachments = uploadedFiles;
 
         // Opcional: Mostrar un mensaje o actualizar la UI
@@ -904,7 +944,7 @@ const handleFileResponseChange = async (event) => {
     }
 };
 
-// Función para manejar la firma
+// Function to handle the firm
 const clear = () => {
     signature1.value.clear()
 };
@@ -968,7 +1008,7 @@ const getBrowserInfo = () => {
     return { browser, os };
 };
 
-// Abrir modal y activar la cámara
+// Open modal and activate the camera
 const openModal = async (step) => {
     modalDocuments.value = true; // Mostrar modal
     await startCamera(); // Iniciar la cámara
