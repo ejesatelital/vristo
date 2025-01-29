@@ -90,6 +90,12 @@
                                     </div>
                                     <div>
                                         <label class="inline-flex">
+                                            <input type="checkbox" v-model="templateData.settings[0].face_photo" class="form-checkbox outline-primary"  />
+                                            <span>Foto del rostro.</span>
+                                        </label>
+                                    </div>
+                                    <div>
+                                        <label class="inline-flex">
                                             <input type="checkbox" v-model="templateData.settings[0].attachments" class="form-checkbox outline-primary" />
                                             <span>Anexar documentos.</span>
                                         </label>
@@ -209,7 +215,6 @@
     import { useMeta } from '@/composables/use-meta';
     import { quillEditor, Quill } from 'vue3-quill';
     import 'vue3-quill/lib/vue3-quill.css';
-    import { API } from '@/services/api';
     import { NOTIFY } from '@/services/notify';
     import Select from '@/components/partials/Select.vue';
     import slugify from "slugify";
@@ -241,6 +246,7 @@
             document_photo:false,
             attachments: false,
             signature: true,
+            face_photo:false,
         }],
         attributes: [],
     });
