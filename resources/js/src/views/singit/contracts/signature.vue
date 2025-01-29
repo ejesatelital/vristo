@@ -180,6 +180,7 @@
                         <div class="output ql-snow my-2">
                             <div v-html="contractData.data"></div>
                         </div>
+
                         <div class="flex justify-end">
                             <label class="inline-flex items-center mt-1 cursor-pointer">
                                 <input type="checkbox" class="form-checkbox" v-model="acceptContract"/>
@@ -268,7 +269,7 @@
                                 </button>
                             </div>
 
-                            <div v-if="contractData.annex.length" class="mt-8">
+                            <!-- <div v-if="contractData.annex.length" class="mt-8">
                                 <h5 class="font-semibold text-lg text-gray-700">📂 Documentos cargados con éxito</h5>
                                 <p class="text-gray-500 text-sm mb-4">Se te notificará en caso de requerir información adicional.</p>
 
@@ -281,7 +282,7 @@
                                         </div>
                                     </template>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                     </tab-content>
 
@@ -291,6 +292,38 @@
                                             <path opacity="0.5" d="M19.0105 13.0996L19.5291 13.6414L19.0105 13.0996ZM11.0624 20.7076L10.5438 20.1658L11.0624 20.7076ZM4.54388 14.4679L5.0625 15.0097L4.54388 14.4679ZM12.3776 6.9694L11.859 6.4276L12.3776 6.9694ZM19.5291 3.3625C19.2299 3.07608 18.7551 3.08646 18.4687 3.38568C18.1823 3.68491 18.1927 4.15967 18.4919 4.44609L19.5291 3.3625ZM18.4919 12.5578L10.5438 20.1658L11.581 21.2494L19.5291 13.6414L18.4919 12.5578ZM5.0625 15.0097L12.8962 7.51119L11.859 6.4276L4.02527 13.9262L5.0625 15.0097ZM16.327 6.4276C15.0896 5.24313 13.0964 5.24313 11.859 6.4276L12.8962 7.51119C13.5536 6.88194 14.6324 6.88194 15.2898 7.51119L16.327 6.4276ZM5.0625 20.1658C3.57096 18.7381 3.57096 16.4375 5.0625 15.0097L4.02527 13.9262C1.91671 15.9445 1.91671 19.2311 4.02527 21.2494L5.0625 20.1658ZM10.5438 20.1658C9.03379 21.6112 6.57253 21.6112 5.0625 20.1658L4.02527 21.2494C6.11533 23.25 9.49098 23.25 11.581 21.2494L10.5438 20.1658ZM18.4919 4.44609C20.8361 6.68999 20.8361 10.3139 18.4919 12.5578L19.5291 13.6414C22.4903 10.8069 22.4903 6.19703 19.5291 3.3625L18.4919 4.44609Z" fill="currentColor"/>
                                             </svg>'>
                         <div>
+                            <div class="flex flex-col rounded-md border border-[#e0e6ed] dark:border-[#1b2e4b] max-h-60 overflow-y-auto">
+                                <div v-for="(item, i) in contractData.options?.documents" :key="i" class="border-b px-4 py-3 hover:bg-gray-100">
+                                    <label :for="`checklist${i}`" class="inline-flex items-center w-full cursor-pointer">
+                                        <input
+                                            type="checkbox"
+                                            class="form-checkbox"
+                                            :class="item.value?'text-success':'' "
+                                            :id="`checklist${i}`"
+                                            :disabled="item.value"
+                                            :checked="item.value"
+                                            @change="openFilePicker(i)"
+                                        />
+                                        <span class="ml-2 text-gray-800"> {{ item.label }}</span>
+                                    </label>
+
+                                    <!-- Si el documento ya tiene una URL, muestra el archivo -->
+                                    <span v-if="item.value" class="text-green-500 text-sm ml-2">Archivo subido</span>
+                                </div>
+                            </div>
+
+                            <!-- Input de archivo oculto para cada checkbox -->
+                            <input
+                                ref="fileInputs"
+                                type="file"
+                                class="hidden"
+                                :multiple="false"
+                                accept="image/*,.zip,.pdf,.xls,.xlsx,.txt,.doc,.docx"
+                                @change="uploadFileFromInput"
+                            />
+                        </div>
+
+                        <div class="mt-4">
                             <label for="file" class="text-xl text-bold">Adjuntar archivos</label>
                             <input id="file" type="file"
                                 class="form-input file:py-2 file:px-4 file:border-0 file:font-semibold p-0 file:bg-primary/90 ltr:file:mr-5 rtl:file:ml-5 file:text-white file:hover:bg-primary"
@@ -671,6 +704,37 @@ const uploadPhoto = ref(false);
 const acceptContract = ref(false);
 const generatedCode:any = ref(null);
 const validCode = ref(false);
+
+const fileInputs = ref(null);
+const selectedDocumentIndex = ref(null);
+
+// Función para abrir el selector de archivos cuando se marca un checkbox
+const openFilePicker = (index) => {
+    selectedDocumentIndex.value = index;
+    fileInputs.value.click();
+};
+
+// Función para manejar la subida del archivo
+const uploadFileFromInput = async (event) => {
+    const file = event.target.files[0];
+    if (!file || selectedDocumentIndex.value === null) return;
+    try {
+        const uploadedFile = await uploadFile(file, contractData.value.id, 2);
+        // Asigna la URL devuelta al objeto correspondiente en documents
+        contractData.value.options.documents[selectedDocumentIndex.value].value = uploadedFile.url;
+        contractData.value.attachments = uploadedFile;
+
+        await axios.put(`/contract/${contractData.value.id}/document`, contractData.value.options.documents);
+    } catch (error) {
+        console.error("Error al subir el archivo:", error);
+        notify.showToast("Hubo un error al subir el archivo. Por favor, intenta de nuevo.", "error");
+    } finally {
+        // Resetea la selección del input file
+        selectedDocumentIndex.value = null;
+        fileInputs.value.value = "";
+    }
+};
+
 const generateCode = async () => {
     try {
         const { data } = await axios.post('/contract/generate-code', { contract_id: contractData.value.id });
@@ -764,15 +828,15 @@ const beforeTabSwitch = async (tab) => {
         return false; // Prevents Tab change
     }
 
-    // if (!validCode.value && tab == 1) {
-    //     await generateCode();
-    //     const isValid = await validateCode();
+    if (!validCode.value && tab == 1) {
+        await generateCode();
+        const isValid = await validateCode();
 
-    //     if (!isValid) {
-    //         notify.showToast('Por favor, valide el código antes de continuar.', 'warning');
-    //         return false; // Prevents Tab change
-    //     }
-    // }
+        if (!isValid) {
+            notify.showToast('Por favor, valide el código antes de continuar.', 'warning');
+            return false; // Prevents Tab change
+        }
+    }
 
     // Solo valida si se está intentando avanzar
     if (tab == 2) {
@@ -783,6 +847,16 @@ const beforeTabSwitch = async (tab) => {
         // Bloquear avance si no se han completado los pasos necesarios
         if ((requiresDocumentPhotos && currentStep.value < 3) || (requiresFacePhoto && currentStep.value < 4)) {
             notify.showToast('Por favor, termine el proceso de verificación de identidad antes de continuar.', 'warning');
+            return false;
+        }
+    }
+
+    if (tab == 3) {
+        // validamos si del listado no falta ningun value para subir
+        const hasEmptyValues = contractData.value.options.documents.some(doc => doc.value.isEmpty());
+
+        if (hasEmptyValues) {
+            notify.showToast('Por favor, complete todos los documentos.', 'warning');
             return false;
         }
     }
@@ -968,7 +1042,7 @@ const acceptPhotoAndNextStep = async () => {
 
             // Guardar la foto en la lista local después de enviarla
             photos.value.push(capturedPhoto.value);
-            
+
             // Limpiar el estado de la foto actual
             capturedPhoto.value = null;
 
@@ -1133,7 +1207,14 @@ const removeFile = async (attachmentToRemove) => {
             await axios.delete(`/contract/annexes/${attachmentToRemove.id}`);
         }
         contractData.value.annex = Array.from(contractData.value.annex).filter(file => file !== attachmentToRemove);
+        // Buscar si el archivo eliminado está asociado a un documento específico
+        const documentIndex = contractData.value.options.documents.findIndex(doc => doc.value === attachmentToRemove.url);
 
+        if (documentIndex !== -1) {
+            // Limpiar el valor del documento para permitir nueva carga
+            contractData.value.options.documents[documentIndex].value = null;
+            await axios.put(`/contract/${contractData.value.id}/document`, contractData.value.options.documents);
+        }
     //     }
     // });
 };
@@ -1144,18 +1225,41 @@ onUnmounted(() => {
 
 onMounted(async () => {
     await getContract();
-    // Determinar si se requieren fotos del documento y/o selfie
-    const requiresDocumentPhotos = contractData.value.template?.settings?.[0]?.document_photo ?? false;
-    const requiresFacePhoto = contractData.value.template?.settings?.[0]?.face_photo ?? false;
+    // 1. Determinar si el contrato requiere fotos de documento y/o selfie:
+  const requiresDocumentPhotos = contractData.value.template?.settings?.[0]?.document_photo ?? false;
+  const requiresFacePhoto = contractData.value.template?.settings?.[0]?.face_photo ?? false;
 
-    // Definir el paso inicial basado en los requerimientos
-    if (requiresDocumentPhotos) {
-        currentStep.value = 1; // Iniciar en 1 si se requiere documento
-    } else if (requiresFacePhoto) {
-        currentStep.value = 3; // Si no necesita documento pero sí selfie, empezar en 3
+  // 2. Revisar qué fotos ya existen (si es que hay anexos subidos):
+  //    Ajusta la detección según tu naming, IDs, etc.
+  const frontExists = contractData.value.annex.some(a => a.name.includes('photo-step-1'));
+  const backExists  = contractData.value.annex.some(a => a.name.includes('photo-step-2'));
+  const faceExists  = contractData.value.annex.some(a => a.name.includes('photo-step-3'));
+  if (!requiresDocumentPhotos && !requiresFacePhoto) {
+    // No se necesitan fotos, saltar a firma
+    currentStep.value = 4;
+  } else if (requiresDocumentPhotos) {
+    // Si se requieren fotos del documento
+    if (!frontExists) {
+      currentStep.value = 1; // Falta foto frontal
+    } else if (!backExists) {
+      currentStep.value = 2; // Falta foto posterior
     } else {
-        currentStep.value = 4; // Si no necesita fotos, saltar a la firma
+      // Completadas las 2 del documento
+      if (requiresFacePhoto && !faceExists) {
+        currentStep.value = 3; // Toca la selfie
+      } else {
+        // O ya no se requiere selfie, o ya la subió
+        currentStep.value = 4; // Directo a firma
+      }
     }
+  } else if (requiresFacePhoto) {
+    // Solo se requiere la selfie (no documento)
+    if (!faceExists) {
+      currentStep.value = 3; // Toca la selfie
+    } else {
+      currentStep.value = 4; // Si ya está subida la selfie
+    }
+  }
 });
 </script>
 

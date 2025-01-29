@@ -68,7 +68,7 @@ const addCheckList = () => {
     const data = {
         id: props.modelValue.length + 1,
         label: newCheckList.value,
-        value: false
+        value: null
     };
 
     emit("update:modelValue", [...props.modelValue, data]); // Actualiza la lista
