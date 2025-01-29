@@ -1109,7 +1109,7 @@ const uploadFile = async (file, contract_id, type_id) => {
     formData.append("type_id", type_id);
     try {
       // Enviar archivo al servidor
-      let response = await axios.post('/contratos/annexes', formData, {
+      let response = await axios.postForm('/contratos/annexes', formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },

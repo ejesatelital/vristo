@@ -649,7 +649,7 @@
 
         try {
         // Enviar archivo al servidor
-        let response = await api.post('singit/v1/annexes', formData, {
+        let response = await api.postForm('singit/v1/annexes', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
@@ -688,7 +688,7 @@
             if (contractData.value.id) {
                 await api.put(`singit/v1/contracts/${contractData.value.id}`, contractData.value);
             } else {
-                await api.post('singit/v1/contracts', contractData.value, {
+                await api.postForm('singit/v1/contracts', contractData.value, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                     }
